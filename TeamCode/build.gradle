@@ -25,4 +25,12 @@ android {
 
 dependencies {
     implementation project(':FtcRobotController')
+    implementation "org.solverslib:core:SNAPSHOT-7cdcc66"
+    implementation "org.solverslib:pedroPathing:SNAPSHOT-7cdcc66"
+}
+
+repositories {
+    mavenCentral()
+    maven {url = "https://repo.dairy.foundation/releases"}
+    maven {url = "https://repo.dairy.foundation/snapshots"}
 }
