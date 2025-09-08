@@ -19,6 +19,6 @@ public class TAuto extends CommandOpMode {
     public void initialize() {
         //stuff here (template command will be init'd here for now)
         tempCommand = new TCommand(tempSubsystem = new TSub());
-        schedule(tempCommand); //add whatever commands here
+        schedule(tempCommand); //add whatever commands here blah blah blah
     }
 }
