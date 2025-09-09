@@ -1,7 +1,5 @@
 package org.firstinspires.ftc.teamcode.resources.subsystems;
 
-import android.os.strictmode.DiskReadViolation;
-
 import com.seattlesolvers.solverslib.command.SubsystemBase;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -35,6 +33,10 @@ public class Drivetrain extends SubsystemBase {
      imu.initialize(new IMU.Parameters(robotOrientation));
     }
 
+    /**
+     * Sets power for all drive motors at once, allows for instant brake if needed.
+     * @param power - The raw motor power in percentage in decimal from 0 - 1 (Ex. 50% - 0.5)
+     */
     public void setGlobalPowers(double power) {
      rightFront.setPower(power);
      leftFront.setPower(power);
@@ -42,11 +44,15 @@ public class Drivetrain extends SubsystemBase {
      leftRear.setPower(power);
     }
 
+    /**
+     * Sets up power settings for each wheel so that the mecanum can drive
+     * @param power
+     */
     public void drive(double power) {
      rightFront.setPower(power);
-     leftFront.setPower(-1 * power);
+     leftFront.setPower(-power);
      rightRear.setPower(power);
-     leftRear.setPower(-1 * power);
+     leftRear.setPower(-power);
     }
 
     public void strafe(double power) {
