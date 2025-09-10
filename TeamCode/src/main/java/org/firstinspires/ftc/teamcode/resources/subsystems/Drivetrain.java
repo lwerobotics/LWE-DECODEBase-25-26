@@ -1,7 +1,5 @@
 package org.firstinspires.ftc.teamcode.resources.subsystems;
 
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
-import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.seattlesolvers.solverslib.command.SubsystemBase;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.hardware.HardwareMap;
@@ -12,7 +10,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 
 
 public class Drivetrain extends SubsystemBase {
-    private final DcMotor rightFront, leftFront, rightRear, leftRear;
+    private DcMotor rightFront, leftFront, rightRear, leftRear;
     private IMU imu;
 
     public void init(HardwareMap hMap) {
@@ -22,10 +20,10 @@ public class Drivetrain extends SubsystemBase {
         rightRear = hMap.get(DcMotor.class, "rightRear");
         leftRear = hMap.get(DcMotor.class, "leftRear");
         /* motor directions */
-        leftFront.setDirection(DcMotorSimple.Direction.REVERSE);
-        leftRear.setDirection(DcMotorSimple.Direction.REVERSE);
-        rightFront.setDirection(DcMotorSimple.Direction.FORWARD);
-        rightRear.setDirection(DcMotorSimple.Direction.FORWARD);
+        leftFront.setDirection(DcMotor.Direction.REVERSE);
+        leftRear.setDirection(DcMotor.Direction.REVERSE);
+        rightFront.setDirection(DcMotor.Direction.FORWARD);
+        rightRear.setDirection(DcMotor.Direction.FORWARD);
         /* encoder directions */
 
     }
