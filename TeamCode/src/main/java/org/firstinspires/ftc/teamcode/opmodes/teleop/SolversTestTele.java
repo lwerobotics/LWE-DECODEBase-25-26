@@ -3,21 +3,31 @@ package org.firstinspires.ftc.teamcode.opmodes.teleop;
 import com.seattlesolvers.solverslib.command.CommandOpMode;
 import com.seattlesolvers.solverslib.drivebase.MecanumDrive;
 import com.seattlesolvers.solverslib.gamepad.GamepadEx;
+import com.seattlesolvers.solverslib.hardware.motors.Motor;
+import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
-
-//import these things as needed in the future
-import org.firstinspires.ftc.teamcode.resources.commands.drive.SetGlobalPowers;
-import org.firstinspires.ftc.teamcode.resources.subsystems.drive.Drivetrain;
+import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
 @TeleOp(group = "TeleOP", name = "CompTOp")
-@Disabled
-public class SolversTestTele extends CommandOpMode {
-    private final MecanumDrive drivetrain;
-    private final GamepadEx gamepad1;
+public class SolversTestTele extends OpMode {
+    private Motor rightFront, rightRear, leftFront, leftRear;
+    private MecanumDrive drivetrain;
+    private Gamepad gamepad1;
+    private GamepadEx driverOp;
+    private GamepadEx toolOp;
 
     @Override
-    public void initialize() {
+    public void init() {
+        drivetrain = new MecanumDrive(leftFront, rightFront, leftRear, rightRear);
+        driverOp = new GamepadEx(gamepad1);
+    }
 
+    @Override
+    public void loop() {
+        drivetrain.driveRobotCentric(
+                driverOp.getLeftX(),
+                driverOp.getLeftY(),
+                driverOp.getRightY()
+        );
     }
 }
