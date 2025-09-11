@@ -6,7 +6,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
 //import these things as needed in the future
 import org.firstinspires.ftc.teamcode.resources.commands.drive.SetGlobalPowers;
-import org.firstinspires.ftc.teamcode.resources.subsystems.*;
+import org.firstinspires.ftc.teamcode.resources.subsystems.drive.Drivetrain;
 
 @TeleOp(group = "TestOps", name = "TestTeleOp")
 @Disabled
