@@ -11,14 +11,9 @@ import org.firstinspires.ftc.teamcode.resources.subsystems.drive.Drivetrain;
 @TeleOp(group = "TestOps", name = "TestTeleOp")
 @Disabled
 public class TempTestOp extends CommandOpMode {
-    //vars here (template command var will be here for now)
-    private SetGlobalPowers tempCommand;
-    private Drivetrain tempSubsystem;
 
     @Override
     public void initialize() {
-        //stuff here (template command will be init'd here for now)
-        tempCommand = new SetGlobalPowers(tempSubsystem = new Drivetrain());
-        schedule(tempCommand); //add whatever commands here
+
     }
 }

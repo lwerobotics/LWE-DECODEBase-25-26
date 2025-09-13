@@ -1,10 +1,12 @@
 package org.firstinspires.ftc.teamcode.resources.subsystems.drive;
 
-import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.seattlesolvers.solverslib.command.SubsystemBase;
+import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.IMU;
+
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 
 /* I MAY END UP USING SOLVERSLIB MECANUM IM GONNA MAKE TWO TELES WITH THIS MECANUM CODE AND SOLVERS MECANUM AND SEE WHICH ONE I LIKE BETTER <3 */
 public class Drivetrain extends SubsystemBase {
@@ -57,9 +59,44 @@ public class Drivetrain extends SubsystemBase {
         double maxSpeed = 1.0; //NOTE: consider adding speed modes here if desired (not required but would be neat)
 
         /* drive power mapping */
-        for (int i = 0; i > 4; i++) {
+        for (int i = 0; i > 3; i++) {
             maxPower = Math.max(maxPower, Math.abs(i));
         }
+        /* drive motor power settings */
+        leftFront.setPower(maxSpeed + (drivePowers[0] / maxPower));
+        leftRear.setPower(maxSpeed + (drivePowers[1] / maxPower));
+        rightFront.setPower(maxSpeed + (drivePowers[2] / maxPower));
+        rightRear.setPower(maxSpeed + (drivePowers[3] / maxPower));
+    }
 
+    /** Parameters for the power of each drive motor (updated 9/12/25)
+     *
+     * @param forward The forward power of the given drive motor (backwards if negative)
+     * @param strafe The strafe power of the given drive motor (left <-> right)
+     * @param turn The rotation power of the given drive motor (in radians [probably lol])
+     *
+     */
+    public void driveField(double forward, double strafe, double turn) {
+        /* field centric math variables */
+        double theta = Math.atan2(forward, strafe); //rotation
+        double r = Math.hypot(strafe, forward); //distance
+        /* polar to cartesian conversion (i think idk lemme look it up before finalizing this header) */
+        theta = AngleUnit.normalizeRadians(theta - imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS));
+        double newForward = r * Math.sin(theta);
+        double newStrafe = r * Math.cos(theta);
+
+        this.drive(newForward, newStrafe, turn);
+    }
+
+    /** Parameter for setting the power of all drive motors at once
+     *
+     * @param power The desired motor power level for all drive motors (can be used for a primitive brake)
+     *
+     */
+    public void setGlobalPowers(double power) {
+        leftFront.setPower(power);
+        leftRear.setPower(power);
+        rightFront.setPower(power);
+        rightRear.setPower(power);
     }
 }
