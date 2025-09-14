@@ -17,10 +17,16 @@ public class SetGlobalPowers extends CommandBase {
     public SetGlobalPowers(Drivetrain subsystem, DoubleSupplier powerSupplier) {
         drivetrain = subsystem;
         power = powerSupplier;
+        addRequirements(subsystem);
     }
 
     @Override
     public void execute() {
         drivetrain.setGlobalPowers(power.getAsDouble());
+    }
+
+    @Override
+    public boolean isFinished() {
+        return true;
     }
 }

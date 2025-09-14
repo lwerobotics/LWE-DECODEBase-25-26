@@ -24,6 +24,7 @@ public class DriveField extends CommandBase {
         forward = forwardSupplier;
         strafe = strafeSupplier;
         turn = turnSupplier;
+        addRequirements(subsystem);
     }
 
     @Override

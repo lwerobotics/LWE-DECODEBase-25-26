@@ -8,13 +8,11 @@ import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
-@TeleOp(group = "TeleOp", name = "CompTOp")
+@TeleOp(group = "TeleOp", name = "SolverTOp")
 public class SolversTestTele extends OpMode {
     private Motor rightFront, rightRear, leftFront, leftRear;
     private MecanumDrive drivetrain;
-    private Gamepad gamepad1;
     private GamepadEx driverOp;
-    private GamepadEx toolOp;
 
     @Override
     public void init() {

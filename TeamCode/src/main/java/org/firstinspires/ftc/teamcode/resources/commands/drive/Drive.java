@@ -25,6 +25,7 @@ public class Drive extends CommandBase {
         forward = forwardSupplier;
         strafe = strafeSupplier;
         turn = turnSupplier;
+        addRequirements(subsystem);
     }
 
     @Override

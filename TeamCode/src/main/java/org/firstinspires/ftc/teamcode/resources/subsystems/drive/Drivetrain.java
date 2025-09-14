@@ -40,7 +40,7 @@ public class Drivetrain extends SubsystemBase {
         imu.initialize(new IMU.Parameters(cHubOrientation));
     }
 
-    /** Parameters for the power of each drive motor. (updated 9/12/25)
+    /** Parameters for the power of each drive motor. (updated 9/13/25)
      *
      * @param forward The forward power of the given drive motor (backwards if negative)
      * @param strafe The strafe power of the given drive motor (left <-> right)
@@ -48,6 +48,7 @@ public class Drivetrain extends SubsystemBase {
      *
      */
     public void drive(double forward, double strafe, double turn) {
+        /* mecanum math variables */
         double[] drivePowers = { //a few magic numbers here refer to the comments (sorry!)
                 forward + strafe + turn, //leftFront
                 forward - strafe + turn, //leftRear
@@ -69,7 +70,7 @@ public class Drivetrain extends SubsystemBase {
         rightRear.setPower(maxSpeed + (drivePowers[3] / maxPower));
     }
 
-    /** Parameters for the power of each drive motor (updated 9/12/25)
+    /** Parameters for the power of each drive motor (updated 9/13/25)
      *
      * @param forward The forward power of the given drive motor (backwards if negative)
      * @param strafe The strafe power of the given drive motor (left <-> right)
