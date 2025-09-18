@@ -7,10 +7,11 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.firstinspires.ftc.teamcode.resources.commands.drive.DriveField;
 import org.firstinspires.ftc.teamcode.resources.commands.drive.SetGlobalPowers;
 import org.firstinspires.ftc.teamcode.resources.subsystems.drive.Drivetrain;
+import org.firstinspires.ftc.teamcode.resources.util.FilterStickInput;
 
 @TeleOp(group = "TeleOp", name = "MecanumTOp")
 public class MecanumTeleOp extends CommandOpMode {
-    /* hardware */
+    /* hardware+utilities */
     private Drivetrain drivetrain; //ONLY USE THIS FOR "init()", NOTHING ELSE !!!
     private GamepadEx driverOp;
     private GamepadEx toolOp;
@@ -30,5 +31,6 @@ public class MecanumTeleOp extends CommandOpMode {
         toolOp = new GamepadEx(gamepad2);
 
         drivetrain.init(hardwareMap);
+        schedule(driveField);
     }
 }

@@ -3,11 +3,13 @@ package org.firstinspires.ftc.teamcode.resources.commands.drive;
 import com.seattlesolvers.solverslib.command.CommandBase;
 
 import org.firstinspires.ftc.teamcode.resources.subsystems.drive.Drivetrain;
+import org.firstinspires.ftc.teamcode.resources.util.FilterStickInput;
 
 import java.util.function.DoubleSupplier;
 
 public class DriveField extends CommandBase {
     private Drivetrain drivetrain;
+    private FilterStickInput fsi;
     private DoubleSupplier forward;
     private DoubleSupplier strafe;
     private DoubleSupplier turn;
@@ -19,8 +21,9 @@ public class DriveField extends CommandBase {
      * @param strafeSupplier The 'strafe' parameter from the drive() function
      * @param turnSupplier The 'turn' parameter from the drive() function
      */
-    public DriveField(Drivetrain subsystem, DoubleSupplier forwardSupplier, DoubleSupplier strafeSupplier, DoubleSupplier turnSupplier) {
+    public DriveField(Drivetrain subsystem, FilterStickInput util, DoubleSupplier forwardSupplier, DoubleSupplier strafeSupplier, DoubleSupplier turnSupplier) {
         drivetrain = subsystem;
+        fsi = util;
         forward = forwardSupplier;
         strafe = strafeSupplier;
         turn = turnSupplier;
@@ -29,6 +32,6 @@ public class DriveField extends CommandBase {
 
     @Override
     public void execute() {
-        drivetrain.driveField(forward.getAsDouble(), strafe.getAsDouble(), turn.getAsDouble());
+        drivetrain.driveField(fsi.filterStickInput(forward.getAsDouble()), fsi.filterStickInput(strafe.getAsDouble()), fsi.filterStickInput(turn.getAsDouble()));
     }
 }
