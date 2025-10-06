@@ -49,7 +49,7 @@ public class Drivetrain extends SubsystemBase {
      */
     public void drive(double forward, double strafe, double turn) {
         /* mecanum math variables */
-        double[] drivePowers = { //a few magic numbers here refer to the comments (sorry!)
+        double[] drivePowers = { //a few magic numbers here refer to the comments
                 forward + strafe + turn, //leftFront
                 forward - strafe + turn, //leftRear
                 forward - strafe - turn, //rightFront

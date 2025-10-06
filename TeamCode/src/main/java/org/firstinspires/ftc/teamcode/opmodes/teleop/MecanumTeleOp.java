@@ -1,14 +1,17 @@
 package org.firstinspires.ftc.teamcode.opmodes.teleop;
 
 import com.seattlesolvers.solverslib.command.CommandOpMode;
+import com.seattlesolvers.solverslib.command.SequentialCommandGroup;
 import com.seattlesolvers.solverslib.gamepad.GamepadEx;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
+import org.firstinspires.ftc.teamcode.resources.commands.drive.DriveField;
+import org.firstinspires.ftc.teamcode.resources.commands.drive.InitDrive;
 import org.firstinspires.ftc.teamcode.resources.commands.drive.SetGlobalPowers;
 import org.firstinspires.ftc.teamcode.resources.subsystems.drive.Drivetrain;
 import org.firstinspires.ftc.teamcode.resources.util.FilterStickInput;
 
-@TeleOp(group = "TeleOp", name = "MecanumTOp")
+@TeleOp(group = "TeleOp", name = "CompTeleOp")
 public class MecanumTeleOp extends CommandOpMode {
     /* hardware+utilities */
     private Drivetrain drivetrain;
@@ -17,6 +20,7 @@ public class MecanumTeleOp extends CommandOpMode {
     private GamepadEx toolOp;
     /* drive commands (prolly not needed but you never know) */
     private SetGlobalPowers setGlobalPowers;
+    private InitDrive initDrive;
 
     @Override
     public void initialize() {
@@ -26,9 +30,10 @@ public class MecanumTeleOp extends CommandOpMode {
         driverOp = new GamepadEx(gamepad1);
         toolOp = new GamepadEx(gamepad2);
         /* drive */
-        drivetrain.init(hardwareMap);
-        drivetrain.driveField(fsi.filterStickInput(driverOp.getLeftX()), fsi.filterStickInput(driverOp.getLeftY()), fsi.filterStickInput(driverOp.getRightY()));
-        //NOTE: not 100% bout this ^
+        schedule(new SequentialCommandGroup(
+                new InitDrive(hardwareMap, drivetrain),
+                new DriveField(drivetrain, driverOp.getLeftX(), driverOp.getLeftY(), driverOp.getRightX())
+        ));
         /* INSERT HEADER HERE */
         /* NOTE: in the future once the bot is actually built this area would use GamepadEx buttons/triggers attached to instant co*/
     }

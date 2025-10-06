@@ -1,28 +1,27 @@
 package org.firstinspires.ftc.teamcode.resources.commands.drive;
 
+import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.seattlesolvers.solverslib.command.CommandBase;
 
 import org.firstinspires.ftc.teamcode.resources.subsystems.drive.Drivetrain;
+public class InitDrive extends CommandBase {
+    private Drivetrain drive;
+    private HardwareMap hardware;
 
-public class SetGlobalPowers extends CommandBase {
-    private Drivetrain drivetrain;
-    private double power;
-
-    /** Parameters for the command. (updated 9/12/25)
-     *
+    /**
+     * @param hMap
      * @param subsystem The subsystem used by the command (drivetrain, intake, outtake, etc.)
-     * @param motorPower The 'power' parameter from the setGlobalPowers() function
-     *
      */
-    public SetGlobalPowers(Drivetrain subsystem, double motorPower) {
-        drivetrain = subsystem;
-        power = motorPower;
+    public InitDrive(HardwareMap hMap, Drivetrain subsystem) {
+        this.drive = subsystem;
+        this.hardware = hMap;
         addRequirements(subsystem);
     }
 
+
     @Override
     public void execute() {
-        drivetrain.setGlobalPowers(power);
+        drive.init(hardware);
     }
 
     @Override
