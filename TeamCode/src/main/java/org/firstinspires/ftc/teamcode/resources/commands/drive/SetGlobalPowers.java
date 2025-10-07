@@ -8,10 +8,10 @@ public class SetGlobalPowers extends CommandBase {
     private Drivetrain drivetrain;
     private double power;
 
-    /** Parameters for the command. (updated 9/12/25)
+    /** Parameters for the function setting a single power setting for all drive motors at once (updated 10/6/25)
      *
      * @param subsystem The subsystem used by the command (drivetrain, intake, outtake, etc.)
-     * @param motorPower The 'power' parameter from the setGlobalPowers() function
+     * @param motorPower The power you want to set the motors to (goes from -1 -> 1 in a percentage-to-decimal format)
      *
      */
     public SetGlobalPowers(Drivetrain subsystem, double motorPower) {

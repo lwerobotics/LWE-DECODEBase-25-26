@@ -7,12 +7,13 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.IMU;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
-
-/* I MAY END UP USING SOLVERSLIB MECANUM IM GONNA MAKE TWO TELES WITH THIS MECANUM CODE AND SOLVERS MECANUM AND SEE WHICH ONE I LIKE BETTER <3 */
 public class Drivetrain extends SubsystemBase {
     private DcMotor rightFront, leftFront, rightRear, leftRear;
     private IMU imu;
 
+    /**
+     * @param hMap The hardware map used to register hardware into the robot (like motors, servos , actuators, etc.)
+     */
     public void init(HardwareMap hMap) {
         /* motor mapping */
         rightFront = hMap.get(DcMotor.class, "rightFront");
@@ -24,7 +25,7 @@ public class Drivetrain extends SubsystemBase {
         leftRear.setDirection(DcMotor.Direction.REVERSE);
         rightFront.setDirection(DcMotor.Direction.FORWARD);
         rightRear.setDirection(DcMotor.Direction.FORWARD);
-        /* motor run modes */
+        /* motor run-modes */
         leftFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         leftRear.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         rightFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -71,17 +72,15 @@ public class Drivetrain extends SubsystemBase {
     }
 
     /** Parameters for the power of each drive motor (updated 9/13/25)
-     *
      * @param forward The forward power of the given drive motor (backwards if negative)
      * @param strafe The strafe power of the given drive motor (left <-> right)
      * @param turn The rotation power of the given drive motor (in radians [probably lol])
-     *
      */
     public void driveField(double forward, double strafe, double turn) {
         /* field centric math variables */
         double theta = Math.atan2(forward, strafe); //rotation
         double r = Math.hypot(strafe, forward); //distance
-        /* polar to cartesian conversion (i think idk lemme look it up before finalizing this header) */
+        /* polar to cartesian coordinates conversion */
         theta = AngleUnit.normalizeRadians(theta - imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS));
         double newForward = r * Math.sin(theta);
         double newStrafe = r * Math.cos(theta);
@@ -90,9 +89,7 @@ public class Drivetrain extends SubsystemBase {
     }
 
     /** Parameter for setting the power of all drive motors at once
-     *
      * @param power The desired motor power level for all drive motors (can be used for a primitive brake)
-     *
      */
     public void setGlobalPowers(double power) {
         leftFront.setPower(power);
