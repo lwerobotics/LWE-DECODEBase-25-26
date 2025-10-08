@@ -15,12 +15,11 @@ import org.firstinspires.ftc.teamcode.resources.util.FilterStickInput;
 public class MecanumTeleOp extends CommandOpMode {
     /* hardware+utilities */
     private Drivetrain drivetrain;
-    private FilterStickInput fsi; //NOTE: probably would be good to first test without the filter to see if it is even needed
+    private FilterStickInput fsi;
     private GamepadEx driverOp;
     private GamepadEx toolOp;
-    /* drive commands (prolly not needed but you never know) */
+    /* drive commands*/
     private SetGlobalPowers setGlobalPowers;
-    private InitDrive initDrive;
 
     @Override
     public void initialize() {
@@ -32,7 +31,7 @@ public class MecanumTeleOp extends CommandOpMode {
         /* drive */
         schedule(new SequentialCommandGroup(
                 new InitDrive(hardwareMap, drivetrain),
-                new DriveField(drivetrain, driverOp.getLeftX(), driverOp.getLeftY(), driverOp.getRightX())
+                new DriveField(drivetrain, fsi.filterStickInput(driverOp.getLeftX()), fsi.filterStickInput(driverOp.getLeftY()), fsi.filterStickInput(driverOp.getRightX()))
         ));
         /* INSERT HEADER HERE */
         /* NOTE: in the future once the bot is actually built this area would use GamepadEx buttons/triggers attached to instant co*/

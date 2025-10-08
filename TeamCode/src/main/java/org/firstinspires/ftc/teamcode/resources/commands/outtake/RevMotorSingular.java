@@ -7,23 +7,28 @@ import com.seattlesolvers.solverslib.hardware.motors.MotorEx;
 import org.firstinspires.ftc.teamcode.resources.subsystems.outtake.Flywheels;
 
 public class RevMotorSingular extends CommandBase {
-    private final Flywheels outtake;
-    private HardwareMap hardware;
-    private MotorEx motorSingular;
+    private final HardwareMap hardware;
+    private Flywheels outtake;
+    private MotorEx targetMotor;
     private double targetPower;
-    private String targetName;
-    public RevMotorSingular(Flywheels outtake, MotorEx targetMotor, HardwareMap hMap, double power, double power2, String name) {
-        this.outtake = outtake;
-        this.motorSingular = targetMotor;
+    private String motorName;
+    public RevMotorSingular(HardwareMap hMap, Flywheels subsystem, MotorEx motor, double power, String name) {
         this.hardware = hMap;
+        this.outtake = subsystem;
+        this.targetMotor = motor;
         this.targetPower = power;
-        this.targetName = name;
-        addRequirements(outtake); //mere precaution
+        this.motorName = name;
+        addRequirements(subsystem);
     }
 
     @Override
     public void execute() {
-        outtake.init(hardware, targetName);
-        outtake.revMotorSingular(motorSingular, targetPower);
+        outtake.init(hardware, motorName);
+        outtake.revMotorSingular(targetMotor, targetPower);
+    }
+
+    @Override
+    public boolean isFinished() { //ask vin about this lowk
+        return true;
     }
 }
