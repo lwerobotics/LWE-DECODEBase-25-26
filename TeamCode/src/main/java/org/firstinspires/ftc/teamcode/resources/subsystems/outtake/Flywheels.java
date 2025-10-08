@@ -8,15 +8,19 @@ import com.seattlesolvers.solverslib.hardware.motors.MotorEx;
 public class Flywheels extends SubsystemBase {
     private MotorEx wheelMotor;
 
-    /** Parameters for the initialization function of the given flywheel motor (updated 10/7/25)
+    /**
+     * Parameters for the initialization function of the given flywheel motor (updated 10/7/25)
+     *
      * @param hMap The hardware map used to register hardware to the robot (like motors, servos , actuators, etc.)
      * @param name The string name for the given motor ('flywheelL', 'flywheelR', etc.)
+     * @return
      */
-    public void init(HardwareMap hMap, String name) {
+    public MotorEx init(HardwareMap hMap, String name) {
         /* motor mapping */
         wheelMotor = new MotorEx(hMap, name);
         /* motor run-mode */
         wheelMotor.setRunMode(Motor.RunMode.RawPower);
+        return wheelMotor;
     }
 
     /** Parameters for the function that actually revs up one of the two flywheels (you define which one and it will be in a parallel command group) [updated 10/7/25]

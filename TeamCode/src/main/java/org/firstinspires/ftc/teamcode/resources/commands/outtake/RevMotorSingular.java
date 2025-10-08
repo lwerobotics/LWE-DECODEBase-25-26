@@ -1,34 +1,34 @@
 package org.firstinspires.ftc.teamcode.resources.commands.outtake;
 
 import com.qualcomm.robotcore.hardware.HardwareMap;
-import com.seattlesolvers.solverslib.command.CommandBase;
+import com.seattlesolvers.solverslib.command.InstantCommand;
 import com.seattlesolvers.solverslib.hardware.motors.MotorEx;
 
 import org.firstinspires.ftc.teamcode.resources.subsystems.outtake.Flywheels;
 
-public class RevMotorSingular extends CommandBase {
+public class RevMotorSingular extends InstantCommand {
     private final HardwareMap hardware;
     private Flywheels outtake;
     private MotorEx targetMotor;
-    private double targetPower;
     private String motorName;
-    public RevMotorSingular(HardwareMap hMap, Flywheels subsystem, MotorEx motor, double power, String name) {
+    private double targetPower;
+    private boolean functionState;
+    public RevMotorSingular(HardwareMap hMap, Flywheels subsystem, double power, String name, boolean state) {
         this.hardware = hMap;
         this.outtake = subsystem;
-        this.targetMotor = motor;
         this.targetPower = power;
         this.motorName = name;
+        this.targetMotor = outtake.init(hardware, motorName);
+        this.functionState = state;
         addRequirements(subsystem);
     }
 
     @Override
     public void execute() {
-        outtake.init(hardware, motorName);
-        outtake.revMotorSingular(targetMotor, targetPower);
-    }
-
-    @Override
-    public boolean isFinished() { //ask vin about this lowk
-        return true;
+       if (functionState == true) {
+           outtake.revMotorSingular(targetMotor, targetPower);
+       } else {
+           outtake.revMotorSingular(targetMotor, 0.0);
+       }
     }
 }
