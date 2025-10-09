@@ -7,7 +7,6 @@ import com.seattlesolvers.solverslib.command.ParallelCommandGroup;
 import com.seattlesolvers.solverslib.command.SequentialCommandGroup;
 import com.seattlesolvers.solverslib.gamepad.GamepadEx;
 import com.seattlesolvers.solverslib.gamepad.GamepadKeys;
-import com.seattlesolvers.solverslib.hardware.motors.MotorEx;
 
 import org.firstinspires.ftc.teamcode.resources.commands.drive.DriveField;
 import org.firstinspires.ftc.teamcode.resources.commands.drive.InitDrive;
@@ -17,8 +16,8 @@ import org.firstinspires.ftc.teamcode.resources.subsystems.outtake.Flywheels;
 import org.firstinspires.ftc.teamcode.resources.util.FilterStickInput;
 import org.firstinspires.ftc.teamcode.resources.util.IncrementPower;
 
-@TeleOp(group = "TestOps", name = "TestTeleOp")
-public class TestOp extends CommandOpMode {
+@TeleOp(group = "Test OpModes", name = "DebugTeleOp")
+public class DebugOp extends CommandOpMode {
     /* subsystems */
     private Drivetrain drivetrain;
     private Flywheels outtake;
@@ -48,7 +47,7 @@ public class TestOp extends CommandOpMode {
         ));
         /* power incrementer (G2) */
         toolOp.getGamepadButton(GamepadKeys.Button.DPAD_UP)
-                .whileHeld(new InstantCommand(()
+                .whenActive(new InstantCommand(()
                         -> ip.incrementPower(power, false)
                 ));
 
@@ -59,7 +58,7 @@ public class TestOp extends CommandOpMode {
         /* flywheel op (G2) */
         toolOp.getGamepadButton(GamepadKeys.Button.Y)
                 .whenActive(new ParallelCommandGroup(
-                        new RevMotorSingular(hardwareMap, outtake, power, "flywheelL", true),
+                        new RevMotorSingular(hardwareMap, outtake, power * -1, "flywheelL", true),
                         new RevMotorSingular(hardwareMap, outtake, power, "flywheelR", true)
                 ));
     }

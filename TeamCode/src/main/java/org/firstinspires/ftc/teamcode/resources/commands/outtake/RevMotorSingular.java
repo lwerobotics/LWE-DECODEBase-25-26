@@ -13,6 +13,14 @@ public class RevMotorSingular extends InstantCommand {
     private String motorName;
     private double targetPower;
     private boolean functionState;
+
+    /** Parameters for the constructor of this command (constructor parameters dictate what variables are exposed to the op-mode) [updated 10/8/25]
+     * @param hMap
+     * @param subsystem
+     * @param power
+     * @param name
+     * @param state
+     */
     public RevMotorSingular(HardwareMap hMap, Flywheels subsystem, double power, String name, boolean state) {
         this.hardware = hMap;
         this.outtake = subsystem;
