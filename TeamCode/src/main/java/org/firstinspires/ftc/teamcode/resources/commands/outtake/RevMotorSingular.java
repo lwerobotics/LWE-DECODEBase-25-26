@@ -19,20 +19,19 @@ public class RevMotorSingular extends InstantCommand {
      * @param subsystem
      * @param power
      * @param name
-     * @param state
      */
-    public RevMotorSingular(HardwareMap hMap, Flywheels subsystem, double power, String name, boolean state) {
+    public RevMotorSingular(HardwareMap hMap, Flywheels subsystem, double power, String name) {
         this.hardware = hMap;
         this.outtake = subsystem;
         this.targetPower = power;
         this.motorName = name;
         this.targetMotor = outtake.init(hardware, motorName);
-        this.functionState = state;
         addRequirements(subsystem);
     }
 
     @Override
     public void execute() {
+        functionState = !functionState;
        if (functionState == true) {
            outtake.revMotorSingular(targetMotor, targetPower);
        } else {

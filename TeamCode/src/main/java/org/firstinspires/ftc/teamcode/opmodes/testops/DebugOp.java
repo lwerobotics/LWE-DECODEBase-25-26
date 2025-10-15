@@ -12,6 +12,7 @@ import org.firstinspires.ftc.teamcode.resources.commands.drive.DriveField;
 import org.firstinspires.ftc.teamcode.resources.commands.drive.InitDrive;
 import org.firstinspires.ftc.teamcode.resources.commands.outtake.RevMotorSingular;
 import org.firstinspires.ftc.teamcode.resources.subsystems.drive.Drivetrain;
+import org.firstinspires.ftc.teamcode.resources.subsystems.intake.Collection;
 import org.firstinspires.ftc.teamcode.resources.subsystems.outtake.Flywheels;
 import org.firstinspires.ftc.teamcode.resources.util.FilterStickInput;
 import org.firstinspires.ftc.teamcode.resources.util.IncrementPower;
@@ -21,12 +22,13 @@ public class DebugOp extends CommandOpMode {
     /* subsystems */
     private Drivetrain drivetrain;
     private Flywheels outtake;
-    /* utilities */
-    private FilterStickInput fsi;
-    private IncrementPower ip; //sorry for the horrendous variable name it just looks better than 'iPower' okay :(
+    private Collection intake;
     /* hardware */
     private GamepadEx driverOp;
     private GamepadEx toolOp;
+    /* utilities */
+    private FilterStickInput fsi;
+    private IncrementPower ip; //sorry for the horrendous variable name it just looks better than 'iPower' okay :(
     /* primitives */
     private double power;
 
@@ -56,10 +58,6 @@ public class DebugOp extends CommandOpMode {
                         -> ip.incrementPower(power, true)
                 ));
         /* flywheel op (G2) */
-        toolOp.getGamepadButton(GamepadKeys.Button.Y)
-                .whenActive(new ParallelCommandGroup(
-                        new RevMotorSingular(hardwareMap, outtake, power * -1, "flywheelL", true),
-                        new RevMotorSingular(hardwareMap, outtake, power, "flywheelR", true)
-                ));
+        toolOp.getGamepadButton(GamepadKeys.Button.Y).whenActive(new ParallelCommandGroup(new RevMotorSingular(hardwareMap, outtake, power * -1, "flywheelL"), new RevMotorSingular(hardwareMap, outtake, power, "flywheelR")));
     }
 }

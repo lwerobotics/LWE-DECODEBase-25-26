@@ -24,6 +24,6 @@ public class IntakeArtifact extends InstantCommand {
 
     @Override
     public void initialize() {
-
+        
     }
 }

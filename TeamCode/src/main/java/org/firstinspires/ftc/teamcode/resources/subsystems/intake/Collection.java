@@ -26,6 +26,6 @@ public class Collection extends SubsystemBase {
      * @param collectionMotor The given motor that controls the intake system
      */
     public void intake(MotorEx collectionMotor) {
-        collectionMotor.set(1.0); //test this out to see
+        collectionMotor.set(0.5); //test this out as time goes on to make sure its at the right decimal
     }
 }

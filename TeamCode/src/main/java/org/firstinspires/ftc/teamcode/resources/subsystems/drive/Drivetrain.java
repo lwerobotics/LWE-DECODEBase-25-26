@@ -11,7 +11,7 @@ public class Drivetrain extends SubsystemBase {
     private DcMotor rightFront, leftFront, rightRear, leftRear;
     private IMU imu;
 
-    /**
+    /** Parameters for the initialization function for all hardware necessary for the drivetrain to function (updated 10/10/25)
      * @param hMap The hardware map used to register hardware into the robot (like motors, servos , actuators, etc.)
      */
     public void init(HardwareMap hMap) {
@@ -41,12 +41,10 @@ public class Drivetrain extends SubsystemBase {
         imu.initialize(new IMU.Parameters(cHubOrientation));
     }
 
-    /** Parameters for the power of each drive motor. (updated 9/13/25)
-     *
-     * @param forward The forward power of the given drive motor (backwards if negative)
+    /** Parameters for the power of each drive motor. (updated 10/10/25)
+     * @param forward The forward power of the given drive motor (+# = ^, -# = ⌄)
      * @param strafe The strafe power of the given drive motor (left <-> right)
-     * @param turn The rotation power of the given drive motor (in radians [probably lol])
-     *
+     * @param turn The rotation power of the given drive motor (in radians)
      */
     public void drive(double forward, double strafe, double turn) {
         /* mecanum math variables */

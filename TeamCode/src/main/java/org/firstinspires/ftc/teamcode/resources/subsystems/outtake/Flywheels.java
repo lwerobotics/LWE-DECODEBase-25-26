@@ -8,8 +8,7 @@ import com.seattlesolvers.solverslib.hardware.motors.MotorEx;
 public class Flywheels extends SubsystemBase {
     private MotorEx wheelMotor;
 
-    /**
-     * Parameters for the initialization function of the given flywheel motor (updated 10/8/25)
+    /** Parameters for the initialization function of the given flywheel motor (updated 10/8/25)
      * @param hMap The hardware map used to register hardware to the robot (like motors, servos , actuators, etc.)
      * @param name The string name for the given motor ('flywheelL', 'flywheelR', etc.)
      * @return Returns the initialized motor from the function
