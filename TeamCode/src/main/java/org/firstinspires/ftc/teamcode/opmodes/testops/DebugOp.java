@@ -60,8 +60,10 @@ public class DebugOp extends CommandOpMode {
         /* flywheel op (G2) */
         toolOp.getGamepadButton(GamepadKeys.Button.Y)
                 .whenActive(new ParallelCommandGroup(
-                        new RevMotorSingular(hardwareMap, outtake, power * -1, "flywheelL"),
-                        new RevMotorSingular(hardwareMap, outtake, power, "flywheelR")
+                        new RevMotorSingular(outtake, outtake.leftFlywheel, power * -1),
+                        new RevMotorSingular(outtake, outtake.rightFlywheel, power)
                 ));
+        /* intake op (G2) */
+        //continue from here, just commit the registration fix
     }
 }

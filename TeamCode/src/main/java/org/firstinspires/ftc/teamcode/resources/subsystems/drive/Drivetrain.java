@@ -86,8 +86,8 @@ public class Drivetrain extends SubsystemBase {
         this.drive(newForward, newStrafe, turn);
     }
 
-    /** Parameter for setting the power of all drive motors at once
-     * @param power The desired motor power level for all drive motors (can be used for a primitive brake)
+    /** Parameter for setting the power of all drive motors at once (updated 10/16/25)
+     * @param power The motor power desired to be given to all motors (can be used for a primitive brake)
      */
     public void setGlobalPowers(double power) {
         leftFront.setPower(power);

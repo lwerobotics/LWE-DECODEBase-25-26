@@ -12,16 +12,14 @@ public class RevMotorSingular extends InstantCommand {
     private double targetPower;
     private boolean functionState = false;
 
-    /** Parameters for the constructor of this command (constructor parameters dictate what variables are exposed to the op-mode) [updated 10/15/25]
-     * @param hMap The hardware map used to register hardware into the robot (like motors, servos , actuators, etc.)
+    /** Parameters for the constructor of this command (constructor parameters dictate what variables are exposed to the op-mode) [updated 10/16/25]
      * @param subsystem The subsystem used by the command (drivetrain, intake, outtake, etc.)
      * @param power The decimal power given to the motor (-# = reverse, +# = forward; range = [-1, 1])
-     * @param name The name given to the motor when it is registered into the hardware map (and thus the robot)
      */
-    public RevMotorSingular(HardwareMap hMap, Flywheels subsystem, double power, String name) {
+    public RevMotorSingular(Flywheels subsystem, MotorEx motor, double power) {
         this.outtake = subsystem;
+        this.targetMotor = motor;
         this.targetPower = power;
-        this.targetMotor = outtake.init(hMap, name);
         addRequirements(subsystem);
     }
 

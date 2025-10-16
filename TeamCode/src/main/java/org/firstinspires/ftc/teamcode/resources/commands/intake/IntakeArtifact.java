@@ -10,14 +10,12 @@ public class IntakeArtifact extends InstantCommand {
     private HardwareMap hardware;
     private Collection collection;
     private MotorEx targetMotor;
-    private String motorName;
     private boolean functionState = false;
 
-    public IntakeArtifact(HardwareMap hMap, Collection subsystem, String name) {
+    public IntakeArtifact(HardwareMap hMap, Collection subsystem) {
         this.hardware = hMap;
         this.collection = subsystem;
-        this.motorName = name;
-        this.targetMotor = collection.init(hMap, name);
+        this.targetMotor = collection.init(hMap);
         addRequirements(subsystem);
     }
 
