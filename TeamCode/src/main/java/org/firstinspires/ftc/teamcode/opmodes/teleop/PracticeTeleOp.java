@@ -43,5 +43,8 @@ public class PracticeTeleOp extends CommandOpMode {
                 new InitDrive(hardwareMap, drivetrain),
                 new DriveField(drivetrain, fsi.filterStickInput(driverOp.getLeftX()), fsi.filterStickInput(driverOp.getLeftY()), fsi.filterStickInput(driverOp.getRightX()))
         ));
+        /* intake op (G2) */
+        /* outtake op (G2) */
+
     }
 }

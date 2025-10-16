@@ -1,12 +1,11 @@
 package org.firstinspires.ftc.teamcode.resources.commands.outtake;
 
-import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.seattlesolvers.solverslib.command.InstantCommand;
 import com.seattlesolvers.solverslib.hardware.motors.MotorEx;
 
 import org.firstinspires.ftc.teamcode.resources.subsystems.outtake.Flywheels;
 
-public class RevMotorSingular extends InstantCommand {
+public class OuttakeArtifact extends InstantCommand {
     private Flywheels outtake;
     private MotorEx targetMotor;
     private double targetPower;
@@ -16,7 +15,7 @@ public class RevMotorSingular extends InstantCommand {
      * @param subsystem The subsystem used by the command (drivetrain, intake, outtake, etc.)
      * @param power The decimal power given to the motor (-# = reverse, +# = forward; range = [-1, 1])
      */
-    public RevMotorSingular(Flywheels subsystem, MotorEx motor, double power) {
+    public OuttakeArtifact(Flywheels subsystem, MotorEx motor, double power) {
         this.outtake = subsystem;
         this.targetMotor = motor;
         this.targetPower = power;

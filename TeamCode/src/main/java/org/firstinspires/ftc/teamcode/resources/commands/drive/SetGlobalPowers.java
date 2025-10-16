@@ -1,10 +1,10 @@
 package org.firstinspires.ftc.teamcode.resources.commands.drive;
 
-import com.seattlesolvers.solverslib.command.CommandBase;
+import com.seattlesolvers.solverslib.command.InstantCommand;
 
 import org.firstinspires.ftc.teamcode.resources.subsystems.drive.Drivetrain;
 
-public class SetGlobalPowers extends CommandBase {
+public class SetGlobalPowers extends InstantCommand {
     private Drivetrain drivetrain;
     private double power;
 
@@ -23,10 +23,5 @@ public class SetGlobalPowers extends CommandBase {
     @Override
     public void execute() {
         drivetrain.setGlobalPowers(power);
-    }
-
-    @Override
-    public boolean isFinished() {
-        return true;
     }
 }

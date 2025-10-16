@@ -10,7 +10,11 @@ import com.seattlesolvers.solverslib.gamepad.GamepadKeys;
 
 import org.firstinspires.ftc.teamcode.resources.commands.drive.DriveField;
 import org.firstinspires.ftc.teamcode.resources.commands.drive.InitDrive;
-import org.firstinspires.ftc.teamcode.resources.commands.outtake.RevMotorSingular;
+import org.firstinspires.ftc.teamcode.resources.commands.drive.SetGlobalPowers;
+import org.firstinspires.ftc.teamcode.resources.commands.intake.InitIntake;
+import org.firstinspires.ftc.teamcode.resources.commands.intake.IntakeArtifact;
+import org.firstinspires.ftc.teamcode.resources.commands.outtake.InitOuttake;
+import org.firstinspires.ftc.teamcode.resources.commands.outtake.OuttakeArtifact;
 import org.firstinspires.ftc.teamcode.resources.subsystems.drive.Drivetrain;
 import org.firstinspires.ftc.teamcode.resources.subsystems.intake.Collection;
 import org.firstinspires.ftc.teamcode.resources.subsystems.outtake.Flywheels;
@@ -34,19 +38,32 @@ public class DebugOp extends CommandOpMode {
 
     @Override
     public void initialize() {
-        /* init */
+        /* subsystems */
         drivetrain = new Drivetrain();
+        intake = new Collection();
         outtake = new Flywheels();
+        /* utilities */
         fsi = new FilterStickInput();
         ip = new IncrementPower();
+        /* gamepads */
         driverOp = new GamepadEx(gamepad1);
         toolOp = new GamepadEx(gamepad2);
+        /* primitives */
         power = 0.0;
+
         /* drive (G1) */
         schedule(new SequentialCommandGroup(
                 new InitDrive(hardwareMap, drivetrain),
+                new InitIntake(hardwareMap, intake),
+                new InitOuttake(hardwareMap, outtake),
                 new DriveField(drivetrain, fsi.filterStickInput(driverOp.getLeftX()), fsi.filterStickInput(driverOp.getLeftY()), fsi.filterStickInput(driverOp.getRightX()))
         ));
+        /* brake button (G1) */
+        driverOp.getGamepadButton(GamepadKeys.Button.X)
+                .whenActive(
+                        new SetGlobalPowers(drivetrain, 0.0)
+                );
+
         /* power incrementer (G2) */
         toolOp.getGamepadButton(GamepadKeys.Button.DPAD_UP)
                 .whenActive(new InstantCommand(()
@@ -57,13 +74,17 @@ public class DebugOp extends CommandOpMode {
                 .whenActive(new InstantCommand(()
                         -> ip.incrementPower(power, true)
                 ));
-        /* flywheel op (G2) */
+
+        /* intake op (G2) */
+        toolOp.getGamepadButton(GamepadKeys.Button.A)
+                .whenActive(
+                        new IntakeArtifact(intake, intake.collectionMotor)
+                );
+        /* outtake op (G2) */
         toolOp.getGamepadButton(GamepadKeys.Button.Y)
                 .whenActive(new ParallelCommandGroup(
-                        new RevMotorSingular(outtake, outtake.leftFlywheel, power * -1),
-                        new RevMotorSingular(outtake, outtake.rightFlywheel, power)
+                        new OuttakeArtifact(outtake, outtake.leftFlywheel, power * -1),
+                        new OuttakeArtifact(outtake, outtake.rightFlywheel, power)
                 ));
-        /* intake op (G2) */
-        //continue from here, just commit the registration fix
     }
 }
