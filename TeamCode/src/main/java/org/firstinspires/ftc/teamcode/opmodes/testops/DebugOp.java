@@ -58,6 +58,10 @@ public class DebugOp extends CommandOpMode {
                         -> ip.incrementPower(power, true)
                 ));
         /* flywheel op (G2) */
-        toolOp.getGamepadButton(GamepadKeys.Button.Y).whenActive(new ParallelCommandGroup(new RevMotorSingular(hardwareMap, outtake, power * -1, "flywheelL"), new RevMotorSingular(hardwareMap, outtake, power, "flywheelR")));
+        toolOp.getGamepadButton(GamepadKeys.Button.Y)
+                .whenActive(new ParallelCommandGroup(
+                        new RevMotorSingular(hardwareMap, outtake, power * -1, "flywheelL"),
+                        new RevMotorSingular(hardwareMap, outtake, power, "flywheelR")
+                ));
     }
 }

@@ -23,9 +23,10 @@ public class Collection extends SubsystemBase {
     }
 
     /** Parameters for the function that actually revs up one of the two flywheels (you define which one and it will be in a parallel command group) [updated 10/8/25]
-     * @param collectionMotor The given motor that controls the intake system
+     * @param targetMotor The given motor that controls the intake system
      */
-    public void intake(MotorEx collectionMotor) {
-        collectionMotor.set(0.5); //test this out as time goes on to make sure its at the right decimal
+    public void intake(MotorEx targetMotor, double power) {
+        this.collectionMotor = targetMotor;
+        collectionMotor.set(power);
     }
 }

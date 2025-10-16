@@ -21,9 +21,9 @@ public class Flywheels extends SubsystemBase {
         return wheelMotor;
     }
 
-    /** Parameters for the function that actually revs up one of the two flywheels (you define which one and it will be in a parallel command group) [updated 10/7/25]
-     * @param targetMotor The given motor that is being reved up
-     * @param power The speed to which the motor is reved to (based on percentage-to-decimal from -1 to 1)
+    /** Parameters for the function that actually revs up one of the two flywheels (you define which one and it will be in a parallel command group) [updated 10/15/25]
+     * @param targetMotor The given motor that is being given power
+     * @param power The decimal power given to the motor (-# = reverse, +# = forward; range = [-1, 1])
      */
     public void revMotorSingular(MotorEx targetMotor, double power) {
         this.wheelMotor = targetMotor;

@@ -7,35 +7,31 @@ import com.seattlesolvers.solverslib.hardware.motors.MotorEx;
 import org.firstinspires.ftc.teamcode.resources.subsystems.outtake.Flywheels;
 
 public class RevMotorSingular extends InstantCommand {
-    private final HardwareMap hardware;
     private Flywheels outtake;
     private MotorEx targetMotor;
-    private String motorName;
     private double targetPower;
-    private boolean functionState;
+    private boolean functionState = false;
 
-    /** Parameters for the constructor of this command (constructor parameters dictate what variables are exposed to the op-mode) [updated 10/8/25]
-     * @param hMap
-     * @param subsystem
-     * @param power
-     * @param name
+    /** Parameters for the constructor of this command (constructor parameters dictate what variables are exposed to the op-mode) [updated 10/15/25]
+     * @param hMap The hardware map used to register hardware into the robot (like motors, servos , actuators, etc.)
+     * @param subsystem The subsystem used by the command (drivetrain, intake, outtake, etc.)
+     * @param power The decimal power given to the motor (-# = reverse, +# = forward; range = [-1, 1])
+     * @param name The name given to the motor when it is registered into the hardware map (and thus the robot)
      */
     public RevMotorSingular(HardwareMap hMap, Flywheels subsystem, double power, String name) {
-        this.hardware = hMap;
         this.outtake = subsystem;
         this.targetPower = power;
-        this.motorName = name;
-        this.targetMotor = outtake.init(hardware, motorName);
+        this.targetMotor = outtake.init(hMap, name);
         addRequirements(subsystem);
     }
 
     @Override
-    public void execute() {
+    public void execute() { //aight should be good; sound logic to me
         functionState = !functionState;
-       if (functionState == true) {
-           outtake.revMotorSingular(targetMotor, targetPower);
-       } else {
-           outtake.revMotorSingular(targetMotor, 0.0);
-       }
+        if (functionState) {
+            outtake.revMotorSingular(targetMotor, targetPower);
+        } else {
+            outtake.revMotorSingular(targetMotor, 0.0);
+        }
     }
 }

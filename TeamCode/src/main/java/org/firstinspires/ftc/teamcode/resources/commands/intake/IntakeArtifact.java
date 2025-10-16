@@ -4,26 +4,30 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.seattlesolvers.solverslib.command.InstantCommand;
 import com.seattlesolvers.solverslib.hardware.motors.MotorEx;
 
-import org.firstinspires.ftc.teamcode.resources.subsystems.outtake.Flywheels;
+import org.firstinspires.ftc.teamcode.resources.subsystems.intake.Collection;
 
 public class IntakeArtifact extends InstantCommand {
     private HardwareMap hardware;
-    private Flywheels intake;
+    private Collection collection;
     private MotorEx targetMotor;
     private String motorName;
-    private double targetPower;
+    private boolean functionState = false;
 
-    public IntakeArtifact(HardwareMap hMap, Flywheels subsystem, String name, double power) {
+    public IntakeArtifact(HardwareMap hMap, Collection subsystem, String name) {
         this.hardware = hMap;
-        this.intake = subsystem;
+        this.collection = subsystem;
         this.motorName = name;
-        this.targetPower = power;
-        this.targetMotor = intake.init(hMap, name);
+        this.targetMotor = collection.init(hMap, name);
         addRequirements(subsystem);
     }
 
     @Override
-    public void initialize() {
-        
+    public void execute() {
+        functionState = !functionState;
+        if (functionState) {
+            collection.intake(targetMotor, 0.65); //test ts number
+        } else {
+            collection.intake(targetMotor, 0.0);
+        }
     }
 }

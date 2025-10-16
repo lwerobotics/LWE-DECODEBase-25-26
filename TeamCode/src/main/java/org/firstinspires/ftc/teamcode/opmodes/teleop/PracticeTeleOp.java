@@ -22,6 +22,13 @@ public class PracticeTeleOp extends CommandOpMode {
     /* primitives */
     private double power;
 
+    /* NOTICE:
+     *  THIS OPMODE SHALL BE USED BY THE PROGRAMMING TEAM TO MESS AROUND WITH SO THAT WE CAN USE THIS DURING PRACTICE
+     *  BETWEEN COMPS AND THEN ONCE WE HAVE GOOD CODE PUSH THIS TO THE COMPETITION TELEOP (DENOTED IN THE ANNOTATION
+     *  ABOVE THE CLASS) SO THAT WE DONT RUN INTO ANY SHENANIGANS DURING COMP (HAPPENED A BIT LAST YEAR WAS LOWK QUITE
+     *  BUNS)
+     */
+
     @Override
     public void initialize() {
         /* init */
@@ -36,12 +43,5 @@ public class PracticeTeleOp extends CommandOpMode {
                 new InitDrive(hardwareMap, drivetrain),
                 new DriveField(drivetrain, fsi.filterStickInput(driverOp.getLeftX()), fsi.filterStickInput(driverOp.getLeftY()), fsi.filterStickInput(driverOp.getRightX()))
         ));
-
-        /* NOTICE:
-        *  THIS OPMODE SHALL BE USED BY THE PROGRAMMING TEAM TO MESS AROUND WITH SO THAT WE CAN USE THIS DURING PRACTICE
-        *  BETWEEN COMPS AND THEN ONCE WE HAVE GOOD CODE PUSH THIS TO THE COMPETITION TELEOP (DENOTED IN THE ANNOTATION
-        *  ABOVE THE CLASS) SO THAT WE DONT RUN INTO ANY SHENANIGANS DURING COMP (HAPPENED A BIT LAST YEAR WAS LOWK QUITE
-        *  BUNS)
-        */
     }
 }
