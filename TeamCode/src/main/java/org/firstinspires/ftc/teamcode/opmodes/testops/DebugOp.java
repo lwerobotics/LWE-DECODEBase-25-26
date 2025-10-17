@@ -4,7 +4,9 @@ import com.seattlesolvers.solverslib.command.CommandOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.seattlesolvers.solverslib.command.InstantCommand;
 import com.seattlesolvers.solverslib.command.ParallelCommandGroup;
+import com.seattlesolvers.solverslib.command.PerpetualCommand;
 import com.seattlesolvers.solverslib.command.SequentialCommandGroup;
+import com.seattlesolvers.solverslib.command.UninterruptibleCommand;
 import com.seattlesolvers.solverslib.gamepad.GamepadEx;
 import com.seattlesolvers.solverslib.gamepad.GamepadKeys;
 
@@ -56,7 +58,7 @@ public class DebugOp extends CommandOpMode {
                 new InitDrive(hardwareMap, drivetrain),
                 new InitIntake(hardwareMap, intake),
                 new InitOuttake(hardwareMap, outtake),
-                new DriveField(drivetrain, fsi.filterStickInput(driverOp.getLeftX()), fsi.filterStickInput(driverOp.getLeftY()), fsi.filterStickInput(driverOp.getRightX()))
+                new UninterruptibleCommand(new DriveField(drivetrain, fsi.filterStickInput(driverOp.getLeftX()), fsi.filterStickInput(driverOp.getLeftY()), fsi.filterStickInput(driverOp.getRightX())))
         ));
         /* brake button (G1) */
         driverOp.getGamepadButton(GamepadKeys.Button.X)
@@ -82,9 +84,12 @@ public class DebugOp extends CommandOpMode {
                 );
         /* outtake op (G2) */
         toolOp.getGamepadButton(GamepadKeys.Button.Y)
-                .whenActive(new ParallelCommandGroup(
+                .whenPressed(new ParallelCommandGroup(
                         new OuttakeArtifact(outtake, outtake.leftFlywheel, power * -1),
                         new OuttakeArtifact(outtake, outtake.rightFlywheel, power)
+                )).whenReleased(new ParallelCommandGroup(
+                        new OuttakeArtifact(outtake, outtake.leftFlywheel, 0.0),
+                        new OuttakeArtifact(outtake, outtake.rightFlywheel, 0.0)
                 ));
     }
 }

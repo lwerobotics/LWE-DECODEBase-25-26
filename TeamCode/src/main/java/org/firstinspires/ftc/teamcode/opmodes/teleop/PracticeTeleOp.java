@@ -2,17 +2,22 @@ package org.firstinspires.ftc.teamcode.opmodes.teleop;
 
 import com.seattlesolvers.solverslib.command.CommandOpMode;
 import com.seattlesolvers.solverslib.command.SequentialCommandGroup;
+import com.seattlesolvers.solverslib.command.UninterruptibleCommand;
 import com.seattlesolvers.solverslib.gamepad.GamepadEx;
 
 import org.firstinspires.ftc.teamcode.resources.commands.drive.DriveField;
 import org.firstinspires.ftc.teamcode.resources.commands.drive.InitDrive;
+import org.firstinspires.ftc.teamcode.resources.commands.intake.InitIntake;
+import org.firstinspires.ftc.teamcode.resources.commands.outtake.InitOuttake;
 import org.firstinspires.ftc.teamcode.resources.subsystems.drive.Drivetrain;
+import org.firstinspires.ftc.teamcode.resources.subsystems.intake.Collection;
 import org.firstinspires.ftc.teamcode.resources.subsystems.outtake.Flywheels;
 import org.firstinspires.ftc.teamcode.resources.util.FilterStickInput;
 
 public class PracticeTeleOp extends CommandOpMode {
     /* subsystems */
     private Drivetrain drivetrain;
+    private Collection intake;
     private Flywheels outtake;
     /* utilities */
     private FilterStickInput fsi;
@@ -40,8 +45,10 @@ public class PracticeTeleOp extends CommandOpMode {
         power = 0.0;
         /* drive (G1) */
         schedule(new SequentialCommandGroup(
+                new InitIntake(hardwareMap, intake),
+                new InitOuttake(hardwareMap, outtake),
                 new InitDrive(hardwareMap, drivetrain),
-                new DriveField(drivetrain, fsi.filterStickInput(driverOp.getLeftX()), fsi.filterStickInput(driverOp.getLeftY()), fsi.filterStickInput(driverOp.getRightX()))
+                new UninterruptibleCommand(new DriveField(drivetrain, fsi.filterStickInput(driverOp.getLeftX()), fsi.filterStickInput(driverOp.getLeftY()), fsi.filterStickInput(driverOp.getRightX())))
         ));
         /* intake op (G2) */
         /* outtake op (G2) */
