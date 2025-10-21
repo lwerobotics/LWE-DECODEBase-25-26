@@ -12,6 +12,7 @@ import org.firstinspires.ftc.teamcode.resources.commands.initializers.InitDrive;
 import org.firstinspires.ftc.teamcode.resources.commands.initializers.InitIntake;
 import org.firstinspires.ftc.teamcode.resources.commands.initializers.InitOuttake;
 import org.firstinspires.ftc.teamcode.resources.subsystems.drive.Drivetrain;
+import org.firstinspires.ftc.teamcode.resources.subsystems.gate.Gate;
 import org.firstinspires.ftc.teamcode.resources.subsystems.intake.Intake;
 import org.firstinspires.ftc.teamcode.resources.subsystems.outtake.Outtake;
 import org.firstinspires.ftc.teamcode.resources.util.FilterStickInput;
@@ -40,15 +41,16 @@ public class PracticeTeleOp extends CommandOpMode {
     public void initialize() {
         /* init */
         drivetrain = new Drivetrain();
+        intake = new Intake();
         outtake = new Outtake();
-        fsi = new FilterStickInput();
         driverOp = new GamepadEx(gamepad1);
         toolOp = new GamepadEx(gamepad2);
+        fsi = new FilterStickInput();
         power = 0.0;
         /* drive (G1) */
         schedule(new SequentialCommandGroup(
                 new InitIntake(hardwareMap, intake),
-                new InitOuttake(hardwareMap, outtake),
+                new InitOuttake(hardwareMap, outtake), //fix later
                 new InitDrive(hardwareMap, drivetrain),
                 new UninterruptibleCommand(new DriveField(drivetrain, fsi.filterStickInput(driverOp.getLeftX()), fsi.filterStickInput(driverOp.getLeftY()), fsi.filterStickInput(driverOp.getRightX())))
         ));

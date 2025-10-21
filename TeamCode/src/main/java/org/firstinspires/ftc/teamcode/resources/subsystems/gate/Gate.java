@@ -15,10 +15,10 @@ public class Gate extends SubsystemBase {
     }
 
     public void block() {
-        //gng learn how to code servos
+        gateServo.set(0.0);
     }
 
     public void allow() {
-
+        gateServo.set(1.0);
     }
 }

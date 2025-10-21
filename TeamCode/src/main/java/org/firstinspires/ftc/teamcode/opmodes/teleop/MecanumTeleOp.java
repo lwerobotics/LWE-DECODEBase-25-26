@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.resources.commands.drive.DriveField;
 import org.firstinspires.ftc.teamcode.resources.commands.initializers.InitDrive;
-import org.firstinspires.ftc.teamcode.resources.commands.drive.SetGlobalPowers;
+import org.firstinspires.ftc.teamcode.resources.commands.drive.SetGlobalDrivePowers;
 import org.firstinspires.ftc.teamcode.resources.subsystems.drive.Drivetrain;
 import org.firstinspires.ftc.teamcode.resources.util.FilterStickInput;
 
@@ -19,7 +19,7 @@ public class MecanumTeleOp extends CommandOpMode {
     private GamepadEx driverOp;
     private GamepadEx toolOp;
     /* drive commands*/
-    private SetGlobalPowers setGlobalPowers;
+    private SetGlobalDrivePowers setGlobalDrivePowers;
 
     @Override
     public void initialize() {

@@ -4,7 +4,7 @@ import com.seattlesolvers.solverslib.command.InstantCommand;
 
 import org.firstinspires.ftc.teamcode.resources.subsystems.drive.Drivetrain;
 
-public class SetGlobalPowers extends InstantCommand {
+public class SetGlobalDrivePowers extends InstantCommand {
     private Drivetrain drivetrain;
     private double power;
 
@@ -14,7 +14,7 @@ public class SetGlobalPowers extends InstantCommand {
      * @param motorPower The power you want to set the motors to (goes from -1 -> 1 in a percentage-to-decimal format)
      *
      */
-    public SetGlobalPowers(Drivetrain subsystem, double motorPower) {
+    public SetGlobalDrivePowers(Drivetrain subsystem, double motorPower) {
         drivetrain = subsystem;
         power = motorPower;
         addRequirements(subsystem);
