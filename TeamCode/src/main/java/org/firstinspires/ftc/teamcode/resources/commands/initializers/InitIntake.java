@@ -1,15 +1,15 @@
-package org.firstinspires.ftc.teamcode.resources.commands.intake;
+package org.firstinspires.ftc.teamcode.resources.commands.initializers;
 
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.seattlesolvers.solverslib.command.CommandBase;
 
-import org.firstinspires.ftc.teamcode.resources.subsystems.intake.Collection;
+import org.firstinspires.ftc.teamcode.resources.subsystems.intake.Intake;
 
 public class InitIntake extends CommandBase {
-    private Collection intake;
+    private Intake intake;
     private HardwareMap hardware;
 
-    public InitIntake(HardwareMap hMap, Collection subsystem) {
+    public InitIntake(HardwareMap hMap, Intake subsystem) {
         this.hardware = hMap;
         this.intake = subsystem;
         addRequirements(subsystem);
@@ -17,7 +17,7 @@ public class InitIntake extends CommandBase {
 
     @Override
     public void execute() {
-        intake.init(hardware);
+        intake.initMotor(hardware);
     }
 
     @Override

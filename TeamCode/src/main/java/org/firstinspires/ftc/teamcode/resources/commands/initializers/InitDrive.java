@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.resources.commands.drive;
+package org.firstinspires.ftc.teamcode.resources.commands.initializers;
 
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.seattlesolvers.solverslib.command.CommandBase;
@@ -20,7 +20,7 @@ public class InitDrive extends CommandBase {
 
     @Override
     public void execute() {
-        drive.init(hardware);
+        drive.initDrivetrain(hardware);
     }
 
     @Override
