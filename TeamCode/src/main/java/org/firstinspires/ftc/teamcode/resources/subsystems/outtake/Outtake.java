@@ -7,6 +7,7 @@ import com.seattlesolvers.solverslib.hardware.motors.MotorEx;
 
 public class Outtake extends SubsystemBase {
     public MotorEx leftFlywheel, rightFlywheel;
+
     /** Parameters for the initialization function of the given flywheel motor (updated 10/16/25)
      * @param hMap The hardware map used to register hardware to the robot (like motors, servos , actuators, etc.)
      * @return Returns the initialized motor from the function
@@ -20,7 +21,7 @@ public class Outtake extends SubsystemBase {
         rightFlywheel.setRunMode(Motor.RunMode.RawPower);
     }
 
-    public void on(double power) { //test ts numbers
+    public void on(double power) {
         leftFlywheel.set(power);
         rightFlywheel.set(power);
     }

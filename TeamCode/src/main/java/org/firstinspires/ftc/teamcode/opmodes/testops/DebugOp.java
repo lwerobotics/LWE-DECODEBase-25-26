@@ -13,6 +13,7 @@ import org.firstinspires.ftc.teamcode.resources.commands.initializers.InitDrive;
 import org.firstinspires.ftc.teamcode.resources.commands.initializers.InitIntake;
 import org.firstinspires.ftc.teamcode.resources.commands.initializers.InitOuttake;
 import org.firstinspires.ftc.teamcode.resources.subsystems.drive.Drivetrain;
+import org.firstinspires.ftc.teamcode.resources.subsystems.gate.Gate;
 import org.firstinspires.ftc.teamcode.resources.subsystems.intake.Intake;
 import org.firstinspires.ftc.teamcode.resources.subsystems.outtake.Outtake;
 import org.firstinspires.ftc.teamcode.resources.util.FilterStickInput;
@@ -25,6 +26,7 @@ public class DebugOp extends CommandOpMode {
     private Drivetrain drivetrain;
     private Outtake outtake;
     private Intake intake;
+    private Gate gate;
     /* hardware */
     private GamepadEx driverOp;
     private GamepadEx toolOp;
@@ -40,6 +42,7 @@ public class DebugOp extends CommandOpMode {
         drivetrain = new Drivetrain();
         intake = new Intake();
         outtake = new Outtake();
+        gate = new Gate();
         /* utilities */
         fsi = new FilterStickInput();
         ip = new IncrementPower();
@@ -53,7 +56,7 @@ public class DebugOp extends CommandOpMode {
         schedule(new SequentialCommandGroup(
                 new InitDrive(hardwareMap, drivetrain),
                 new InitIntake(hardwareMap, intake),
-                new InitOuttake(hardwareMap, outtake),
+                new InitOuttake(hardwareMap, outtake, gate),
                 new UninterruptibleCommand(
                         new DriveField(
                                 drivetrain,
@@ -89,6 +92,12 @@ public class DebugOp extends CommandOpMode {
                 .toggleWhenPressed(new InstantCommand(()
                         -> outtake.on(power)), new InstantCommand(()
                         -> outtake.off())
+                );
+        /* gate op (G2) */
+        toolOp.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER)
+                .toggleWhenPressed(new InstantCommand(()
+                        -> gate.allow()), new InstantCommand(()
+                        -> gate.block())
                 );
     }
 }

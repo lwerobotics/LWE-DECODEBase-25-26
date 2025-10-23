@@ -22,6 +22,7 @@ public class PracticeTeleOp extends CommandOpMode {
     private Drivetrain drivetrain;
     private Intake intake;
     private Outtake outtake;
+    private Gate gate;
     /* utilities */
     private FilterStickInput fsi;
     /* hardware */
@@ -39,18 +40,22 @@ public class PracticeTeleOp extends CommandOpMode {
 
     @Override
     public void initialize() {
-        /* init */
+        /* subsystems */
         drivetrain = new Drivetrain();
         intake = new Intake();
         outtake = new Outtake();
+        gate = new Gate();
+        /* utilities */
+        fsi = new FilterStickInput();
+        /* gamepads */
         driverOp = new GamepadEx(gamepad1);
         toolOp = new GamepadEx(gamepad2);
-        fsi = new FilterStickInput();
+        /* primitives */
         power = 0.0;
         /* drive (G1) */
         schedule(new SequentialCommandGroup(
                 new InitIntake(hardwareMap, intake),
-                new InitOuttake(hardwareMap, outtake), //fix later
+                new InitOuttake(hardwareMap, outtake, gate), //fix later
                 new InitDrive(hardwareMap, drivetrain),
                 new UninterruptibleCommand(new DriveField(drivetrain, fsi.filterStickInput(driverOp.getLeftX()), fsi.filterStickInput(driverOp.getLeftY()), fsi.filterStickInput(driverOp.getRightX())))
         ));
