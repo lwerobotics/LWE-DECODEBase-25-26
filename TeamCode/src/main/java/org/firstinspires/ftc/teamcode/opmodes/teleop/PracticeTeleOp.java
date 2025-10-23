@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.opmodes.teleop;
 
 import com.seattlesolvers.solverslib.command.CommandOpMode;
 import com.seattlesolvers.solverslib.command.InstantCommand;
+import com.seattlesolvers.solverslib.command.ParallelCommandGroup;
 import com.seattlesolvers.solverslib.command.SequentialCommandGroup;
 import com.seattlesolvers.solverslib.command.UninterruptibleCommand;
 import com.seattlesolvers.solverslib.gamepad.GamepadEx;
@@ -16,6 +17,8 @@ import org.firstinspires.ftc.teamcode.resources.subsystems.gate.Gate;
 import org.firstinspires.ftc.teamcode.resources.subsystems.intake.Intake;
 import org.firstinspires.ftc.teamcode.resources.subsystems.outtake.Outtake;
 import org.firstinspires.ftc.teamcode.resources.util.FilterStickInput;
+
+import kotlin.time.Instant;
 
 public class PracticeTeleOp extends CommandOpMode {
     /* subsystems */
@@ -53,9 +56,9 @@ public class PracticeTeleOp extends CommandOpMode {
         /* primitives */
         power = 0.0;
         /* drive (G1) */
-        schedule(new SequentialCommandGroup(
+        schedule(new ParallelCommandGroup(
                 new InitIntake(hardwareMap, intake),
-                new InitOuttake(hardwareMap, outtake, gate), //fix later
+                new InitOuttake(hardwareMap, outtake, gate),
                 new InitDrive(hardwareMap, drivetrain),
                 new UninterruptibleCommand(new DriveField(drivetrain, fsi.filterStickInput(driverOp.getLeftX()), fsi.filterStickInput(driverOp.getLeftY()), fsi.filterStickInput(driverOp.getRightX())))
         ));
@@ -71,5 +74,10 @@ public class PracticeTeleOp extends CommandOpMode {
                         -> outtake.on(0.67)), new InstantCommand(()
                         -> outtake.off())
                 );
+        /* gate op (G2) */
+        toolOp.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER).toggleWhenPressed(new InstantCommand(()
+                -> gate.allow()), new InstantCommand(()
+                -> gate.block())
+        );
     }
 }

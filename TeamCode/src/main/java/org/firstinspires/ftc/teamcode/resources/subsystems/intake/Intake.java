@@ -18,6 +18,8 @@ public class Intake extends SubsystemBase {
         collectionMotor = new MotorEx(hMap, "collectionMotor");
         /* motor run-mode */
         collectionMotor.setRunMode(Motor.RunMode.RawPower);
+        /* motor behavior */
+        collectionMotor.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
     }
 
     /* The reasoning for the minimal functions here is because most of the function of the system can be done via the opmode. */
@@ -32,5 +34,3 @@ public class Intake extends SubsystemBase {
         collectionMotor.stopMotor();
     }
 }
-
-

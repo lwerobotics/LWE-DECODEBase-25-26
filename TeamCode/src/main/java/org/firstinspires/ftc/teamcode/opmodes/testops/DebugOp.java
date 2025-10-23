@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.opmodes.testops;
 import com.seattlesolvers.solverslib.command.CommandOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.seattlesolvers.solverslib.command.InstantCommand;
+import com.seattlesolvers.solverslib.command.ParallelCommandGroup;
 import com.seattlesolvers.solverslib.command.SequentialCommandGroup;
 import com.seattlesolvers.solverslib.command.UninterruptibleCommand;
 import com.seattlesolvers.solverslib.gamepad.GamepadEx;
@@ -53,15 +54,15 @@ public class DebugOp extends CommandOpMode {
         power = 0.0;
 
         /* drive (G1) */
-        schedule(new SequentialCommandGroup(
+        schedule(new ParallelCommandGroup(
                 new InitDrive(hardwareMap, drivetrain),
                 new InitIntake(hardwareMap, intake),
                 new InitOuttake(hardwareMap, outtake, gate),
                 new UninterruptibleCommand(
-                        new DriveField(
+                        new DriveField( //i honestly dont know why i have to multiply the params by something to get the param names in android studio dont ask
                                 drivetrain,
-                                fsi.filterStickInput(driverOp.getLeftX()),
-                                fsi.filterStickInput(driverOp.getLeftY()),
+                                fsi.filterStickInput(driverOp.getLeftX() ) * 1,
+                                fsi.filterStickInput(driverOp.getLeftY()) * 1,
                                 fsi.filterStickInput(driverOp.getRightX()) * GamepadConstants.TURN_SENSITIVITY.getEnumValue()))
         ));
         /* brake button (G1) */

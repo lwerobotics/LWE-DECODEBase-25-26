@@ -19,6 +19,9 @@ public class Outtake extends SubsystemBase {
         /* motor run-modes */
         leftFlywheel.setRunMode(Motor.RunMode.RawPower);
         rightFlywheel.setRunMode(Motor.RunMode.RawPower);
+        /* motor behaviors */
+        leftFlywheel.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
+        rightFlywheel.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
     }
 
     public void on(double power) {
