@@ -16,6 +16,7 @@ import org.firstinspires.ftc.teamcode.resources.subsystems.drive.Drivetrain;
 import org.firstinspires.ftc.teamcode.resources.subsystems.gate.Gate;
 import org.firstinspires.ftc.teamcode.resources.subsystems.intake.Intake;
 import org.firstinspires.ftc.teamcode.resources.subsystems.outtake.Outtake;
+import org.firstinspires.ftc.teamcode.resources.util.enums.GamepadConstants;
 import org.firstinspires.ftc.teamcode.resources.util.functions.FilterStickInput;
 
 @TeleOp(group = "Test OpModes", name = "Practice/Test TeleOp")
@@ -57,10 +58,15 @@ public class PracticeTeleOp extends CommandOpMode {
 
         /* drive (G1) */
         schedule(new ParallelCommandGroup(
+                new InitDrive(hardwareMap, drivetrain),
                 new InitIntake(hardwareMap, intake),
                 new InitOuttake(hardwareMap, outtake, gate),
-                new InitDrive(hardwareMap, drivetrain),
-                new UninterruptibleCommand(new DriveField(drivetrain, fsi.filterStickInput(driverOp.getLeftX()), fsi.filterStickInput(driverOp.getLeftY()), fsi.filterStickInput(driverOp.getRightX())))
+                new UninterruptibleCommand(
+                        new DriveField( //i honestly dont know why i have to multiply the params by something to get the param names in android studio dont ask
+                                drivetrain,
+                                fsi.filterStickInput(driverOp.getLeftX() ) * 1,
+                                fsi.filterStickInput(driverOp.getLeftY()) * 1,
+                                fsi.filterStickInput(driverOp.getRightX()) * GamepadConstants.TURN_SENSITIVITY.getEnumValue()))
         ));
         /* brake button (G1) */
         driverOp.getGamepadButton(GamepadKeys.Button.X)

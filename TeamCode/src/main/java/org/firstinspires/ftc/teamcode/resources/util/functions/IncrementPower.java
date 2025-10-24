@@ -19,12 +19,12 @@ public class IncrementPower {
         if (power >= 0.0 && power <= 1.0) {
             power = power + 0.25;
             if (negCheck) {power = power - 0.5;} //ex. 0.5 -> 0.75 -> 0.25 (target: 0.25) [this is so scuffed holy moly]
-            telemetry.addData("Current global non-drive motor power:", (power*100)+"%");
+            telemetry.addData("Current global non-drive motor power: ", (power*100)+"%");
             telemetry.update();
         } else if (targetPower == 1.0) { //this is to stop any power from going above 1 (1 -> 100% motor power)
             power = targetPower + 0.0;
             if (negCheck) {power = power - 0.25;}
-            telemetry.addData("Current global non-drive motor power:", (power*100)+"%");
+            telemetry.addData("Current global non-drive motor power: ", (power*100)+"%");
             telemetry.update();
         }
     }

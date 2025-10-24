@@ -77,12 +77,12 @@ public class DebugOp extends CommandOpMode {
         /* power incrementer (G2) */
         toolOp.getGamepadButton(GamepadKeys.Button.DPAD_UP)
                 .whenActive(new InstantCommand(()
-                        -> ip.incrementPower(this.power, false, telemetry) //test this
+                        -> ip.incrementPower(power, false, telemetry) //test this
                 ));
 
         toolOp.getGamepadButton(GamepadKeys.Button.DPAD_DOWN)
                 .whenActive(new InstantCommand(()
-                        -> ip.incrementPower(this.power, true, telemetry)
+                        -> ip.incrementPower(power, true, telemetry)
                 ));
 
         /* intake op (G2) */
