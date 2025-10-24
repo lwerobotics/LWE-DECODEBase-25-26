@@ -4,7 +4,6 @@ import com.seattlesolvers.solverslib.command.CommandOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.seattlesolvers.solverslib.command.InstantCommand;
 import com.seattlesolvers.solverslib.command.ParallelCommandGroup;
-import com.seattlesolvers.solverslib.command.SequentialCommandGroup;
 import com.seattlesolvers.solverslib.command.UninterruptibleCommand;
 import com.seattlesolvers.solverslib.gamepad.GamepadEx;
 import com.seattlesolvers.solverslib.gamepad.GamepadKeys;
@@ -17,9 +16,9 @@ import org.firstinspires.ftc.teamcode.resources.subsystems.drive.Drivetrain;
 import org.firstinspires.ftc.teamcode.resources.subsystems.gate.Gate;
 import org.firstinspires.ftc.teamcode.resources.subsystems.intake.Intake;
 import org.firstinspires.ftc.teamcode.resources.subsystems.outtake.Outtake;
-import org.firstinspires.ftc.teamcode.resources.util.FilterStickInput;
-import org.firstinspires.ftc.teamcode.resources.util.GamepadConstants;
-import org.firstinspires.ftc.teamcode.resources.util.IncrementPower;
+import org.firstinspires.ftc.teamcode.resources.util.functions.FilterStickInput;
+import org.firstinspires.ftc.teamcode.resources.util.enums.GamepadConstants;
+import org.firstinspires.ftc.teamcode.resources.util.functions.IncrementPower;
 
 @TeleOp(group = "Test OpModes", name = "DebugTeleOp")
 public class DebugOp extends CommandOpMode {
@@ -36,6 +35,10 @@ public class DebugOp extends CommandOpMode {
     private IncrementPower ip; //sorry for the horrendous variable name it just looks better than 'iPower' okay :(
     /* primitives */
     private double power;
+
+    /** NOTE: (updated 10/23/25)
+     * Although the function says "initialize()", it does not exactly operate like an initializer in the sense that it initializes things to be used later, rather it is a general initialzer of the opmode as a whole (as seen below, sorry if thats too obvious lol)
+     */
 
     @Override
     public void initialize() {
@@ -74,12 +77,12 @@ public class DebugOp extends CommandOpMode {
         /* power incrementer (G2) */
         toolOp.getGamepadButton(GamepadKeys.Button.DPAD_UP)
                 .whenActive(new InstantCommand(()
-                        -> ip.incrementPower(power, false)
+                        -> ip.incrementPower(this.power, false, telemetry) //test this
                 ));
 
         toolOp.getGamepadButton(GamepadKeys.Button.DPAD_DOWN)
                 .whenActive(new InstantCommand(()
-                        -> ip.incrementPower(power, true)
+                        -> ip.incrementPower(this.power, true, telemetry)
                 ));
 
         /* intake op (G2) */

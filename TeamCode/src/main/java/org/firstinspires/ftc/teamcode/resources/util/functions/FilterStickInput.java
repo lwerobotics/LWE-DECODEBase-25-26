@@ -1,4 +1,6 @@
-package org.firstinspires.ftc.teamcode.resources.util;
+package org.firstinspires.ftc.teamcode.resources.util.functions;
+
+import org.firstinspires.ftc.teamcode.resources.util.enums.GamepadConstants;
 
 public class FilterStickInput {
     public double filterStickInput(double input) {
