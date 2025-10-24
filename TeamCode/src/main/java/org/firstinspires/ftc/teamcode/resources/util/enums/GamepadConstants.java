@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.resources.util;
+package org.firstinspires.ftc.teamcode.resources.util.enums;
 
 public enum GamepadConstants {
     STICK_DEADZONE(0.05),

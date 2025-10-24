@@ -9,10 +9,10 @@ import org.firstinspires.ftc.teamcode.resources.commands.drive.DriveField;
 import org.firstinspires.ftc.teamcode.resources.commands.initializers.InitDrive;
 import org.firstinspires.ftc.teamcode.resources.commands.drive.SetGlobalDrivePowers;
 import org.firstinspires.ftc.teamcode.resources.subsystems.drive.Drivetrain;
-import org.firstinspires.ftc.teamcode.resources.util.FilterStickInput;
+import org.firstinspires.ftc.teamcode.resources.util.functions.FilterStickInput;
 
-@TeleOp(group = "TeleOp OpModes", name = "Competition TeleOp")
-public class MecanumTeleOp extends CommandOpMode {
+@TeleOp(group = "TeleOp", name = "CompOp")
+public class CompetitionTeleOp extends CommandOpMode {
     /* hardware+utilities */
     private Drivetrain drivetrain;
     private FilterStickInput fsi;

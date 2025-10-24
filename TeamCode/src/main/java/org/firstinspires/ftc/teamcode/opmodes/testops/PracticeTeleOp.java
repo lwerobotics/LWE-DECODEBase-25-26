@@ -1,9 +1,9 @@
-package org.firstinspires.ftc.teamcode.opmodes.teleop;
+package org.firstinspires.ftc.teamcode.opmodes.testops;
 
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.seattlesolvers.solverslib.command.CommandOpMode;
 import com.seattlesolvers.solverslib.command.InstantCommand;
 import com.seattlesolvers.solverslib.command.ParallelCommandGroup;
-import com.seattlesolvers.solverslib.command.SequentialCommandGroup;
 import com.seattlesolvers.solverslib.command.UninterruptibleCommand;
 import com.seattlesolvers.solverslib.gamepad.GamepadEx;
 import com.seattlesolvers.solverslib.gamepad.GamepadKeys;
@@ -16,10 +16,9 @@ import org.firstinspires.ftc.teamcode.resources.subsystems.drive.Drivetrain;
 import org.firstinspires.ftc.teamcode.resources.subsystems.gate.Gate;
 import org.firstinspires.ftc.teamcode.resources.subsystems.intake.Intake;
 import org.firstinspires.ftc.teamcode.resources.subsystems.outtake.Outtake;
-import org.firstinspires.ftc.teamcode.resources.util.FilterStickInput;
+import org.firstinspires.ftc.teamcode.resources.util.functions.FilterStickInput;
 
-import kotlin.time.Instant;
-
+@TeleOp(group = "Test OpModes", name = "Practice/Test TeleOp")
 public class PracticeTeleOp extends CommandOpMode {
     /* subsystems */
     private Drivetrain drivetrain;
@@ -34,7 +33,7 @@ public class PracticeTeleOp extends CommandOpMode {
     /* primitives */
     private double power;
 
-    /* NOTICE:
+    /** NOTICE:
      *  THIS OPMODE SHALL BE USED BY THE PROGRAMMING TEAM TO MESS AROUND WITH SO THAT WE CAN USE THIS DURING PRACTICE
      *  BETWEEN COMPS AND THEN ONCE WE HAVE GOOD CODE PUSH THIS TO THE COMPETITION TELEOP (DENOTED IN THE ANNOTATION
      *  ABOVE THE CLASS) SO THAT WE DONT RUN INTO ANY SHENANIGANS DURING COMP (HAPPENED A BIT LAST YEAR WAS LOWK QUITE
@@ -55,6 +54,7 @@ public class PracticeTeleOp extends CommandOpMode {
         toolOp = new GamepadEx(gamepad2);
         /* primitives */
         power = 0.0;
+
         /* drive (G1) */
         schedule(new ParallelCommandGroup(
                 new InitIntake(hardwareMap, intake),
@@ -62,6 +62,12 @@ public class PracticeTeleOp extends CommandOpMode {
                 new InitDrive(hardwareMap, drivetrain),
                 new UninterruptibleCommand(new DriveField(drivetrain, fsi.filterStickInput(driverOp.getLeftX()), fsi.filterStickInput(driverOp.getLeftY()), fsi.filterStickInput(driverOp.getRightX())))
         ));
+        /* brake button (G1) */
+        driverOp.getGamepadButton(GamepadKeys.Button.X)
+                .whenActive(new InstantCommand(()
+                        -> drivetrain.setGlobalPowers(0.0))
+                );
+
         /* intake op (G2) */
         toolOp.getGamepadButton(GamepadKeys.Button.A)
                 .toggleWhenPressed(new InstantCommand(() //use debugOp to pop in proper number

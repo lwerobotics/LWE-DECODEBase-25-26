@@ -25,7 +25,7 @@ public class Outtake extends SubsystemBase {
     }
 
     public void on(double power) {
-        leftFlywheel.set(power);
+        leftFlywheel.set(power * -1);
         rightFlywheel.set(power);
     }
 
