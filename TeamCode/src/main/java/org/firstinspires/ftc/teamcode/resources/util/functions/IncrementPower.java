@@ -1,7 +1,5 @@
 package org.firstinspires.ftc.teamcode.resources.util.functions;
 
-import org.firstinspires.ftc.robotcore.external.Telemetry;
-
 public class IncrementPower {
     private double power;
     private boolean negCheck;

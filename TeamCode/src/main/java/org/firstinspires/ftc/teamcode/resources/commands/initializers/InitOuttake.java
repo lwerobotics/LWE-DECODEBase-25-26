@@ -3,8 +3,8 @@ package org.firstinspires.ftc.teamcode.resources.commands.initializers;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.seattlesolvers.solverslib.command.CommandBase;
 
-import org.firstinspires.ftc.teamcode.resources.subsystems.gate.Gate;
-import org.firstinspires.ftc.teamcode.resources.subsystems.outtake.Outtake;
+import org.firstinspires.ftc.teamcode.resources.hardware.Gate;
+import org.firstinspires.ftc.teamcode.resources.hardware.Outtake;
 
 public class InitOuttake extends CommandBase {
     private Outtake outtake;

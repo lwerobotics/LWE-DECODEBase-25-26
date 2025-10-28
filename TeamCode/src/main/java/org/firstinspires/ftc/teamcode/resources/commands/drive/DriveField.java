@@ -2,7 +2,7 @@ package org.firstinspires.ftc.teamcode.resources.commands.drive;
 
 import com.seattlesolvers.solverslib.command.CommandBase;
 
-import org.firstinspires.ftc.teamcode.resources.subsystems.drive.Drivetrain;
+import org.firstinspires.ftc.teamcode.resources.hardware.Drivetrain;
 
 public class DriveField extends CommandBase {
     private Drivetrain drive;

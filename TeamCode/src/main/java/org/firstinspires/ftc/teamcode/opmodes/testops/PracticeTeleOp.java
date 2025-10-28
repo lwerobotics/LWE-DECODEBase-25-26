@@ -12,10 +12,10 @@ import org.firstinspires.ftc.teamcode.resources.commands.drive.DriveField;
 import org.firstinspires.ftc.teamcode.resources.commands.initializers.InitDrive;
 import org.firstinspires.ftc.teamcode.resources.commands.initializers.InitIntake;
 import org.firstinspires.ftc.teamcode.resources.commands.initializers.InitOuttake;
-import org.firstinspires.ftc.teamcode.resources.subsystems.drive.Drivetrain;
-import org.firstinspires.ftc.teamcode.resources.subsystems.gate.Gate;
-import org.firstinspires.ftc.teamcode.resources.subsystems.intake.Intake;
-import org.firstinspires.ftc.teamcode.resources.subsystems.outtake.Outtake;
+import org.firstinspires.ftc.teamcode.resources.hardware.Drivetrain;
+import org.firstinspires.ftc.teamcode.resources.hardware.Gate;
+import org.firstinspires.ftc.teamcode.resources.hardware.Intake;
+import org.firstinspires.ftc.teamcode.resources.hardware.Outtake;
 import org.firstinspires.ftc.teamcode.resources.util.enums.GamepadConstants;
 import org.firstinspires.ftc.teamcode.resources.util.functions.FilterStickInput;
 

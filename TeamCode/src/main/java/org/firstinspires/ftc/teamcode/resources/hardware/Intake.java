@@ -1,4 +1,6 @@
-package org.firstinspires.ftc.teamcode.resources.subsystems.intake;
+package org.firstinspires.ftc.teamcode.resources.hardware;
+
+import androidx.annotation.NonNull;
 
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.seattlesolvers.solverslib.command.SubsystemBase;
@@ -13,7 +15,7 @@ public class Intake extends SubsystemBase {
      * @param hMap The hardware map used to register hardware to the robot (like motors, servos , actuators, etc.)
      * @return Returns the initialized motor from the functions
      */
-    public void initMotor(HardwareMap hMap) {
+    public void initMotor(@NonNull HardwareMap hMap) {
         /* motor mapping */
         collectionMotor = new MotorEx(hMap, "collectionMotor");
         /* motor run-mode */

@@ -1,4 +1,6 @@
-package org.firstinspires.ftc.teamcode.resources.subsystems.outtake;
+package org.firstinspires.ftc.teamcode.resources.hardware;
+
+import androidx.annotation.NonNull;
 
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.seattlesolvers.solverslib.command.SubsystemBase;
@@ -12,7 +14,7 @@ public class Outtake extends SubsystemBase {
      * @param hMap The hardware map used to register hardware to the robot (like motors, servos , actuators, etc.)
      * @return Returns the initialized motor from the function
      */
-    public void initOuttake(HardwareMap hMap) {
+    public void initOuttake(@NonNull HardwareMap hMap) {
         /* motor mapping */
         leftFlywheel = new MotorEx(hMap, "leftFlywheel");
         rightFlywheel = new MotorEx(hMap, "rightFlywheel");

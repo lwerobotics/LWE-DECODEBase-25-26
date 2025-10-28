@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.opmodes.testops;
 
 import com.bylazar.telemetry.PanelsTelemetry;
+import com.bylazar.telemetry.TelemetryManager;
 import com.seattlesolvers.solverslib.command.CommandOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.seattlesolvers.solverslib.command.InstantCommand;
@@ -13,10 +14,11 @@ import org.firstinspires.ftc.teamcode.resources.commands.drive.DriveField;
 import org.firstinspires.ftc.teamcode.resources.commands.initializers.InitDrive;
 import org.firstinspires.ftc.teamcode.resources.commands.initializers.InitIntake;
 import org.firstinspires.ftc.teamcode.resources.commands.initializers.InitOuttake;
-import org.firstinspires.ftc.teamcode.resources.subsystems.drive.Drivetrain;
-import org.firstinspires.ftc.teamcode.resources.subsystems.gate.Gate;
-import org.firstinspires.ftc.teamcode.resources.subsystems.intake.Intake;
-import org.firstinspires.ftc.teamcode.resources.subsystems.outtake.Outtake;
+import org.firstinspires.ftc.teamcode.resources.commands.utility.KillRobot;
+import org.firstinspires.ftc.teamcode.resources.hardware.Drivetrain;
+import org.firstinspires.ftc.teamcode.resources.hardware.Gate;
+import org.firstinspires.ftc.teamcode.resources.hardware.Intake;
+import org.firstinspires.ftc.teamcode.resources.hardware.Outtake;
 import org.firstinspires.ftc.teamcode.resources.util.functions.FilterStickInput;
 import org.firstinspires.ftc.teamcode.resources.util.enums.GamepadConstants;
 import org.firstinspires.ftc.teamcode.resources.util.functions.IncrementPower;
@@ -38,7 +40,7 @@ public class DebugOp extends CommandOpMode {
     private TelemetryTest ttest;
     /* miscellaneous */
     private double power;
-    private PanelsTelemetry pTelemetry;
+    private TelemetryManager panelsTelemetry;
 
     /** NOTE: (updated 10/23/25)
      * Although the function says "initialize()", it does not exactly operate like an initializer in the sense that it initializes things to be used later,
@@ -61,6 +63,7 @@ public class DebugOp extends CommandOpMode {
         toolOp = new GamepadEx(gamepad2);
         /* miscellaneous */
         power = 0.0;
+        panelsTelemetry = PanelsTelemetry.INSTANCE.getTelemetry();
 
 
         /* --GAMEPAD 1-- */
@@ -85,6 +88,12 @@ public class DebugOp extends CommandOpMode {
                         -> drivetrain.setGlobalPowers(0.0))
                 );
 
+        /* kill switch G1 */
+        driverOp.getGamepadButton(GamepadKeys.Button.BACK)
+                .whenPressed(new KillRobot(
+                        drivetrain, intake, outtake, gate
+                ));
+
 
         /* --GAMEPAD 2-- */
 
@@ -103,7 +112,7 @@ public class DebugOp extends CommandOpMode {
         /* telemetry test */
         toolOp.getGamepadButton(GamepadKeys.Button.X)
                 .whenPressed(new InstantCommand(() //please ask baron or someone on this; it feels wrong man (10/27/25)
-                        -> ttest.telemetryTest(pTelemetry, telemetry))
+                        -> ttest.telemetryTest(panelsTelemetry, telemetry))
                 );
 
         /* intake op */
@@ -125,6 +134,10 @@ public class DebugOp extends CommandOpMode {
                         -> gate.block())
                 );
 
-        /* */
+        /* kill switch G2 */
+        toolOp.getGamepadButton(GamepadKeys.Button.BACK)
+                .whenPressed(new KillRobot(
+                        drivetrain, intake, outtake, gate
+                ));
     }
 }

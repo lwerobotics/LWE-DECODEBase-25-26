@@ -1,4 +1,6 @@
-package org.firstinspires.ftc.teamcode.resources.subsystems.drive;
+package org.firstinspires.ftc.teamcode.resources.hardware;
+
+import androidx.annotation.NonNull;
 
 import com.seattlesolvers.solverslib.command.SubsystemBase;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
@@ -14,7 +16,7 @@ public class Drivetrain extends SubsystemBase {
     /** Parameters for the initialization function for all hardware necessary for the drivetrain to function (updated 10/10/25)
      * @param hMap The hardware map used to register hardware into the robot (like motors, servos , actuators, etc.)
      */
-    public void initDrivetrain(HardwareMap hMap) {
+    public void initDrivetrain(@NonNull HardwareMap hMap) {
         /* motor mapping */
         rightFront = hMap.get(DcMotor.class, "rightFront");
         leftFront = hMap.get(DcMotor.class, "leftFront");

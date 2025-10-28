@@ -3,7 +3,7 @@ package org.firstinspires.ftc.teamcode.resources.commands.initializers;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.seattlesolvers.solverslib.command.CommandBase;
 
-import org.firstinspires.ftc.teamcode.resources.subsystems.intake.Intake;
+import org.firstinspires.ftc.teamcode.resources.hardware.Intake;
 
 public class InitIntake extends CommandBase {
     private Intake intake;

@@ -2,7 +2,7 @@ package org.firstinspires.ftc.teamcode.resources.commands.drive;
 
 import com.seattlesolvers.solverslib.command.InstantCommand;
 
-import org.firstinspires.ftc.teamcode.resources.subsystems.drive.Drivetrain;
+import org.firstinspires.ftc.teamcode.resources.hardware.Drivetrain;
 
 public class SetGlobalDrivePowers extends InstantCommand {
     private Drivetrain drivetrain;

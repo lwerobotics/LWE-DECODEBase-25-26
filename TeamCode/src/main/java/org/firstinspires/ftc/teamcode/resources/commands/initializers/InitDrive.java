@@ -3,7 +3,7 @@ package org.firstinspires.ftc.teamcode.resources.commands.initializers;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.seattlesolvers.solverslib.command.CommandBase;
 
-import org.firstinspires.ftc.teamcode.resources.subsystems.drive.Drivetrain;
+import org.firstinspires.ftc.teamcode.resources.hardware.Drivetrain;
 public class InitDrive extends CommandBase {
     private Drivetrain drive;
     private HardwareMap hardware;
