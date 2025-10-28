@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.opmodes.testops;
 
+import com.bylazar.telemetry.PanelsTelemetry;
 import com.seattlesolvers.solverslib.command.CommandOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.seattlesolvers.solverslib.command.InstantCommand;
@@ -19,6 +20,7 @@ import org.firstinspires.ftc.teamcode.resources.subsystems.outtake.Outtake;
 import org.firstinspires.ftc.teamcode.resources.util.functions.FilterStickInput;
 import org.firstinspires.ftc.teamcode.resources.util.enums.GamepadConstants;
 import org.firstinspires.ftc.teamcode.resources.util.functions.IncrementPower;
+import org.firstinspires.ftc.teamcode.resources.util.functions.TelemetryTest;
 
 @TeleOp(group = "Test OpModes", name = "DebugTeleOp")
 public class DebugOp extends CommandOpMode {
@@ -32,12 +34,15 @@ public class DebugOp extends CommandOpMode {
     private GamepadEx toolOp;
     /* utilities */
     private FilterStickInput fsi;
-    private IncrementPower ip; //sorry for the horrendous variable name it just looks better than 'iPower' okay :(
-    /* primitives */
+    private IncrementPower ip;
+    private TelemetryTest ttest;
+    /* miscellaneous */
     private double power;
+    private PanelsTelemetry pTelemetry;
 
     /** NOTE: (updated 10/23/25)
-     * Although the function says "initialize()", it does not exactly operate like an initializer in the sense that it initializes things to be used later, rather it is a general initialzer of the opmode as a whole (as seen below, sorry if thats too obvious lol)
+     * Although the function says "initialize()", it does not exactly operate like an initializer in the sense that it initializes things to be used later,
+     * rather it is a general initialzer of the opmode as a whole (as seen below, sorry if thats too obvious lol)
      */
 
     @Override
@@ -50,13 +55,18 @@ public class DebugOp extends CommandOpMode {
         /* utilities */
         fsi = new FilterStickInput();
         ip = new IncrementPower();
+        ttest = new TelemetryTest();
         /* gamepads */
         driverOp = new GamepadEx(gamepad1);
         toolOp = new GamepadEx(gamepad2);
-        /* primitives */
+        /* miscellaneous */
         power = 0.0;
 
-        /* drive (G1) */
+
+        /* --GAMEPAD 1-- */
+
+
+        /* drive */
         schedule(new ParallelCommandGroup(
                 new InitDrive(hardwareMap, drivetrain),
                 new InitIntake(hardwareMap, intake),
@@ -68,40 +78,53 @@ public class DebugOp extends CommandOpMode {
                                 fsi.filterStickInput(driverOp.getLeftY()) * 1,
                                 fsi.filterStickInput(driverOp.getRightX()) * GamepadConstants.TURN_SENSITIVITY.getEnumValue()))
         ));
-        /* brake button (G1) */
+
+        /* brake button */
         driverOp.getGamepadButton(GamepadKeys.Button.X)
                 .whenActive(new InstantCommand(()
                         -> drivetrain.setGlobalPowers(0.0))
                 );
 
-        /* power incrementer (G2) */
+
+        /* --GAMEPAD 2-- */
+
+
+        /* power incrementer */
         toolOp.getGamepadButton(GamepadKeys.Button.DPAD_UP)
-                .whenActive(new InstantCommand(()
-                        -> ip.incrementPower(power, false, telemetry) //test this
+                .whenPressed(new InstantCommand(()
+                        -> ip.incrementPower(power, false) //test this
                 ));
 
         toolOp.getGamepadButton(GamepadKeys.Button.DPAD_DOWN)
-                .whenActive(new InstantCommand(()
-                        -> ip.incrementPower(power, true, telemetry)
+                .whenPressed(new InstantCommand(()
+                        -> ip.incrementPower(power, true)
                 ));
 
-        /* intake op (G2) */
+        /* telemetry test */
+        toolOp.getGamepadButton(GamepadKeys.Button.X)
+                .whenPressed(new InstantCommand(() //please ask baron or someone on this; it feels wrong man (10/27/25)
+                        -> ttest.telemetryTest(pTelemetry, telemetry))
+                );
+
+        /* intake op */
         toolOp.getGamepadButton(GamepadKeys.Button.A)
                 .toggleWhenPressed(new InstantCommand(()
                         -> intake.in(power)), new InstantCommand(()
                         -> intake.stop())
                 );
-        /* outtake op (G2) */
+        /* outtake op */
         toolOp.getGamepadButton(GamepadKeys.Button.Y)
                 .toggleWhenPressed(new InstantCommand(()
                         -> outtake.on(power)), new InstantCommand(()
                         -> outtake.off())
                 );
-        /* gate op (G2) */
+        /* gate op */
         toolOp.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER)
                 .toggleWhenPressed(new InstantCommand(()
                         -> gate.allow()), new InstantCommand(()
                         -> gate.block())
                 );
+
+        /* */
     }
 }
