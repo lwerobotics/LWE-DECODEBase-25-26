@@ -38,13 +38,13 @@ public class DebugOp extends CommandOpMode {
     private FilterStickInput fsi;
     private IncrementPower ip;
     private TelemetryTest ttest;
-    /* miscellaneous */
+    /*   */
     private double power;
     private TelemetryManager panelsTelemetry;
 
     /** NOTE: (updated 10/23/25)
      * Although the function says "initialize()", it does not exactly operate like an initializer in the sense that it initializes things to be used later,
-     * rather it is a general initialzer of the opmode as a whole (as seen below, sorry if thats too obvious lol)
+     * rather it is a general initializer of the opmode as a whole (as seen below, sorry if thats too obvious lol)
      */
 
     @Override
@@ -71,9 +71,9 @@ public class DebugOp extends CommandOpMode {
 
         /* drive */
         schedule(new ParallelCommandGroup(
-                new InitDrive(hardwareMap, drivetrain),
-                new InitIntake(hardwareMap, intake),
-                new InitOuttake(hardwareMap, outtake, gate),
+                new InitDrive(panelsTelemetry, telemetry, hardwareMap, drivetrain),
+                new InitIntake(panelsTelemetry, telemetry, hardwareMap, intake),
+                new InitOuttake(panelsTelemetry, telemetry, hardwareMap, outtake, gate),
                 new UninterruptibleCommand(
                         new DriveField( //i honestly dont know why i have to multiply the params by something to get the param names in android studio dont ask
                                 drivetrain,
@@ -111,7 +111,7 @@ public class DebugOp extends CommandOpMode {
 
         /* telemetry test */
         toolOp.getGamepadButton(GamepadKeys.Button.X)
-                .whenPressed(new InstantCommand(() //please ask baron or someone on this; it feels wrong man (10/27/25)
+                .whenPressed(new InstantCommand(() 
                         -> ttest.telemetryTest(panelsTelemetry, telemetry))
                 );
 

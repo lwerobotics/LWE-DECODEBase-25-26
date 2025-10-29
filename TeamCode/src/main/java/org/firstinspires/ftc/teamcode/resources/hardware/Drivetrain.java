@@ -2,21 +2,27 @@ package org.firstinspires.ftc.teamcode.resources.hardware;
 
 import androidx.annotation.NonNull;
 
+import com.bylazar.telemetry.TelemetryManager;
 import com.seattlesolvers.solverslib.command.SubsystemBase;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.IMU;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.teamcode.resources.util.enums.TelemetryStates;
+
 public class Drivetrain extends SubsystemBase {
     private DcMotor rightFront, leftFront, rightRear, leftRear;
     private IMU imu;
 
     /** Parameters for the initialization function for all hardware necessary for the drivetrain to function (updated 10/10/25)
      * @param hMap The hardware map used to register hardware into the robot (like motors, servos , actuators, etc.)
+     * @param panels The telemetry that sends to Panels
+     * @param ftc The telemetry that sends to the Driver Hub
      */
-    public void initDrivetrain(@NonNull HardwareMap hMap) {
+    public void initDrivetrain(@NonNull HardwareMap hMap, @NonNull TelemetryManager panels, @NonNull Telemetry ftc) {
         /* motor mapping */
         rightFront = hMap.get(DcMotor.class, "rightFront");
         leftFront = hMap.get(DcMotor.class, "leftFront");
@@ -38,7 +44,6 @@ public class Drivetrain extends SubsystemBase {
         rightFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         rightRear.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-
         /* imu mapping+config */
         imu = hMap.get(IMU.class, "imu");
 
@@ -47,6 +52,22 @@ public class Drivetrain extends SubsystemBase {
                 RevHubOrientationOnRobot.UsbFacingDirection.UP
         );
         imu.initialize(new IMU.Parameters(cHubOrientation));
+
+        /* telemetry */
+        panels.addData("Right front motor: ", TelemetryStates.INITIALIZED.toString());
+        panels.addData("Right rear motor: ", TelemetryStates.INITIALIZED.toString());
+        panels.addData("Left front motor: ", TelemetryStates.INITIALIZED.toString());
+        panels.addData("Left rear motor: ", TelemetryStates.INITIALIZED.toString());
+        panels.addData("Imu: ", TelemetryStates.INITIALIZED.toString());
+
+        ftc.addData("Right front motor: ", TelemetryStates.INITIALIZED);
+        ftc.addData("Right rear motor: ", TelemetryStates.INITIALIZED);
+        ftc.addData("Left front motor: ", TelemetryStates.INITIALIZED);
+        ftc.addData("Left rear motor: ", TelemetryStates.INITIALIZED);
+        ftc.addData("Imu: ", TelemetryStates.INITIALIZED);
+
+        panels.update();
+        ftc.update();
     }
 
     /** Parameters for the power of each drive motor. (updated 10/10/25)

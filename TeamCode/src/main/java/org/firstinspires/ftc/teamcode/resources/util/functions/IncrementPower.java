@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.resources.util.functions;
 
+import androidx.annotation.NonNull;
+
 import com.bylazar.telemetry.TelemetryManager;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
@@ -9,10 +11,12 @@ public class IncrementPower {
     private boolean negCheck;
 
     /** Parameters for the incrementing of motor power in 25% increments for debug purposes (updated 10/23/25)
+     * @param panels The telemetry that sends to Panels
+     * @param ftc The telemetry that sends to the Driver Hub
      * @param targetPower The power value for the given motor(s) to be incremented
      * @param negativeCheck A boolean used to check whether to add or subtract 25% of power
      */
-    public void incrementPower(TelemetryManager panels, Telemetry ftc, double targetPower, boolean negativeCheck) {
+    public void incrementPower(@NonNull TelemetryManager panels, @NonNull Telemetry ftc, double targetPower, boolean negativeCheck) {
         this.power = targetPower;
         this.negCheck = negativeCheck;
 

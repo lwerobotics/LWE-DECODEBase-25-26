@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.opmodes.testops;
 
+import com.bylazar.telemetry.PanelsTelemetry;
+import com.bylazar.telemetry.TelemetryManager;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.seattlesolvers.solverslib.command.CommandOpMode;
 import com.seattlesolvers.solverslib.command.InstantCommand;
@@ -12,12 +14,15 @@ import org.firstinspires.ftc.teamcode.resources.commands.drive.DriveField;
 import org.firstinspires.ftc.teamcode.resources.commands.initializers.InitDrive;
 import org.firstinspires.ftc.teamcode.resources.commands.initializers.InitIntake;
 import org.firstinspires.ftc.teamcode.resources.commands.initializers.InitOuttake;
+import org.firstinspires.ftc.teamcode.resources.commands.utility.KillRobot;
 import org.firstinspires.ftc.teamcode.resources.hardware.Drivetrain;
 import org.firstinspires.ftc.teamcode.resources.hardware.Gate;
 import org.firstinspires.ftc.teamcode.resources.hardware.Intake;
 import org.firstinspires.ftc.teamcode.resources.hardware.Outtake;
 import org.firstinspires.ftc.teamcode.resources.util.enums.GamepadConstants;
 import org.firstinspires.ftc.teamcode.resources.util.functions.FilterStickInput;
+import org.firstinspires.ftc.teamcode.resources.util.functions.IncrementPower;
+import org.firstinspires.ftc.teamcode.resources.util.functions.TelemetryTest;
 
 @TeleOp(group = "Test OpModes", name = "Practice/Test TeleOp")
 public class PracticeTeleOp extends CommandOpMode {
@@ -31,8 +36,9 @@ public class PracticeTeleOp extends CommandOpMode {
     /* hardware */
     private GamepadEx driverOp;
     private GamepadEx toolOp;
-    /* primitives */
+    /* miscellaneous */
     private double power;
+    private TelemetryManager panelsTelemetry;
 
     /** NOTICE:
      *  THIS OPMODE SHALL BE USED BY THE PROGRAMMING TEAM TO MESS AROUND WITH SO THAT WE CAN USE THIS DURING PRACTICE
@@ -53,43 +59,64 @@ public class PracticeTeleOp extends CommandOpMode {
         /* gamepads */
         driverOp = new GamepadEx(gamepad1);
         toolOp = new GamepadEx(gamepad2);
-        /* primitives */
+        /* miscellaneous */
         power = 0.0;
+        panelsTelemetry = PanelsTelemetry.INSTANCE.getTelemetry();
 
-        /* drive (G1) */
+
+        /* --GAMEPAD 1-- */
+
+
+        /* drive */
         schedule(new ParallelCommandGroup(
-                new InitDrive(hardwareMap, drivetrain),
-                new InitIntake(hardwareMap, intake),
-                new InitOuttake(hardwareMap, outtake, gate),
+                new InitDrive(panelsTelemetry, telemetry, hardwareMap, drivetrain),
+                new InitIntake(panelsTelemetry, telemetry, hardwareMap, intake),
+                new InitOuttake(panelsTelemetry, telemetry, hardwareMap, outtake, gate),
                 new UninterruptibleCommand(
                         new DriveField( //i honestly dont know why i have to multiply the params by something to get the param names in android studio dont ask
                                 drivetrain,
-                                fsi.filterStickInput(driverOp.getLeftX() ) * 1,
+                                fsi.filterStickInput(driverOp.getLeftX()) * 1,
                                 fsi.filterStickInput(driverOp.getLeftY()) * 1,
                                 fsi.filterStickInput(driverOp.getRightX()) * GamepadConstants.TURN_SENSITIVITY.getEnumValue()))
         ));
-        /* brake button (G1) */
+        /* brake button */
         driverOp.getGamepadButton(GamepadKeys.Button.X)
                 .whenActive(new InstantCommand(()
                         -> drivetrain.setGlobalPowers(0.0))
                 );
+        /* kill switch G1 */
+        driverOp.getGamepadButton(GamepadKeys.Button.BACK)
+                .whenPressed(new KillRobot(
+                        drivetrain, intake, outtake, gate
+                ));
 
-        /* intake op (G2) */
+
+        /* --GAMEPAD 2-- */
+
+
+        /* intake op */
         toolOp.getGamepadButton(GamepadKeys.Button.A)
-                .toggleWhenPressed(new InstantCommand(() //use debugOp to pop in proper number
-                        -> intake.in(0.5)), new InstantCommand(()
+                .toggleWhenPressed(new InstantCommand(()
+                        -> intake.in(power)), new InstantCommand(()
                         -> intake.stop())
                 );
-        /* outtake op (G2) */
+        /* outtake op */
         toolOp.getGamepadButton(GamepadKeys.Button.Y)
-                .toggleWhenPressed(new InstantCommand(() //use debugOp to pop in proper number
-                        -> outtake.on(0.67)), new InstantCommand(()
+                .toggleWhenPressed(new InstantCommand(()
+                        -> outtake.on(power)), new InstantCommand(()
                         -> outtake.off())
                 );
-        /* gate op (G2) */
-        toolOp.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER).toggleWhenPressed(new InstantCommand(()
-                -> gate.allow()), new InstantCommand(()
-                -> gate.block())
-        );
+        /* gate op */
+        toolOp.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER)
+                .toggleWhenPressed(new InstantCommand(()
+                        -> gate.allow()), new InstantCommand(()
+                        -> gate.block())
+                );
+
+        /* kill switch G2 */
+        toolOp.getGamepadButton(GamepadKeys.Button.BACK)
+                .whenPressed(new KillRobot(
+                        drivetrain, intake, outtake, gate
+                ));
     }
 }
