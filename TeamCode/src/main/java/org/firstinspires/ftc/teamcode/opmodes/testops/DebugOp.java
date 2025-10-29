@@ -77,7 +77,7 @@ public class DebugOp extends CommandOpMode {
                 new UninterruptibleCommand(
                         new DriveField( //i honestly dont know why i have to multiply the params by something to get the param names in android studio dont ask
                                 drivetrain,
-                                fsi.filterStickInput(driverOp.getLeftX() ) * 1,
+                                fsi.filterStickInput(driverOp.getLeftX()) * 1,
                                 fsi.filterStickInput(driverOp.getLeftY()) * 1,
                                 fsi.filterStickInput(driverOp.getRightX()) * GamepadConstants.TURN_SENSITIVITY.getEnumValue()))
         ));
@@ -101,12 +101,12 @@ public class DebugOp extends CommandOpMode {
         /* power incrementer */
         toolOp.getGamepadButton(GamepadKeys.Button.DPAD_UP)
                 .whenPressed(new InstantCommand(()
-                        -> ip.incrementPower(power, false) //test this
+                        -> ip.incrementPower(panelsTelemetry, telemetry, power, false) //test this
                 ));
 
         toolOp.getGamepadButton(GamepadKeys.Button.DPAD_DOWN)
                 .whenPressed(new InstantCommand(()
-                        -> ip.incrementPower(power, true)
+                        -> ip.incrementPower(panelsTelemetry, telemetry, power, true)
                 ));
 
         /* telemetry test */
