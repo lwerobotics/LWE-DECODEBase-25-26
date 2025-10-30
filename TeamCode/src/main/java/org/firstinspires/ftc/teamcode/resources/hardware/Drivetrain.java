@@ -11,7 +11,7 @@ import com.qualcomm.robotcore.hardware.IMU;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
-import org.firstinspires.ftc.teamcode.resources.util.enums.TelemetryStates;
+import org.firstinspires.ftc.teamcode.resources.util.enums.HardwareStates;
 
 public class Drivetrain extends SubsystemBase {
     private DcMotor rightFront, leftFront, rightRear, leftRear;
@@ -54,17 +54,17 @@ public class Drivetrain extends SubsystemBase {
         imu.initialize(new IMU.Parameters(cHubOrientation));
 
         /* telemetry */
-        panels.addData("Right front motor: ", TelemetryStates.INITIALIZED.toString());
-        panels.addData("Right rear motor: ", TelemetryStates.INITIALIZED.toString());
-        panels.addData("Left front motor: ", TelemetryStates.INITIALIZED.toString());
-        panels.addData("Left rear motor: ", TelemetryStates.INITIALIZED.toString());
-        panels.addData("Imu: ", TelemetryStates.INITIALIZED.toString());
+        panels.addData("Right front motor: ", HardwareStates.INITIALIZED.toString());
+        panels.addData("Right rear motor: ", HardwareStates.INITIALIZED.toString());
+        panels.addData("Left front motor: ", HardwareStates.INITIALIZED.toString());
+        panels.addData("Left rear motor: ", HardwareStates.INITIALIZED.toString());
+        panels.addData("Imu: ", HardwareStates.INITIALIZED.toString());
 
-        ftc.addData("Right front motor: ", TelemetryStates.INITIALIZED);
-        ftc.addData("Right rear motor: ", TelemetryStates.INITIALIZED);
-        ftc.addData("Left front motor: ", TelemetryStates.INITIALIZED);
-        ftc.addData("Left rear motor: ", TelemetryStates.INITIALIZED);
-        ftc.addData("Imu: ", TelemetryStates.INITIALIZED);
+        ftc.addData("Right front motor: ", HardwareStates.INITIALIZED);
+        ftc.addData("Right rear motor: ", HardwareStates.INITIALIZED);
+        ftc.addData("Left front motor: ", HardwareStates.INITIALIZED);
+        ftc.addData("Left rear motor: ", HardwareStates.INITIALIZED);
+        ftc.addData("Imu: ", HardwareStates.INITIALIZED);
 
         panels.update();
         ftc.update();

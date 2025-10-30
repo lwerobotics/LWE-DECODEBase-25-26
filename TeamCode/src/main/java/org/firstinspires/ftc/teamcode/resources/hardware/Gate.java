@@ -9,7 +9,7 @@ import com.seattlesolvers.solverslib.hardware.servos.ServoEx;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
-import org.firstinspires.ftc.teamcode.resources.util.enums.TelemetryStates;
+import org.firstinspires.ftc.teamcode.resources.util.enums.HardwareStates;
 
 public class Gate extends SubsystemBase {
     private ServoEx gateServo;
@@ -18,8 +18,8 @@ public class Gate extends SubsystemBase {
         /* servo mapping+range config */
         gateServo = new ServoEx(hMap, "gateServo", 90.0, AngleUnit.RADIANS); //lowk ask vin or baron about this just to be safe
         /* telemetry */
-        panels.addData("Servo: ", TelemetryStates.INITIALIZED.toString());
-        ftc.addData("Servo: ", TelemetryStates.INITIALIZED);
+        panels.addData("Servo: ", HardwareStates.INITIALIZED.toString());
+        ftc.addData("Servo: ", HardwareStates.INITIALIZED);
 
         panels.update();
         ftc.update();

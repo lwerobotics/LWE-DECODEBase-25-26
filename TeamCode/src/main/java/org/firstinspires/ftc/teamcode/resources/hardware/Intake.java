@@ -9,7 +9,7 @@ import com.seattlesolvers.solverslib.hardware.motors.Motor;
 import com.seattlesolvers.solverslib.hardware.motors.MotorEx;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.teamcode.resources.util.enums.TelemetryStates;
+import org.firstinspires.ftc.teamcode.resources.util.enums.HardwareStates;
 
 public class Intake extends SubsystemBase {
     private MotorEx collectionMotor;
@@ -27,8 +27,8 @@ public class Intake extends SubsystemBase {
         /* motor behavior */
         collectionMotor.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
         /* telemetry */
-        panels.addData("Intake motor: ", TelemetryStates.INITIALIZED.toString());
-        ftc.addData("Intake motor: ", TelemetryStates.INITIALIZED);
+        panels.addData("Intake motor: ", HardwareStates.INITIALIZED.toString());
+        ftc.addData("Intake motor: ", HardwareStates.INITIALIZED);
         panels.update();
         ftc.update();
     }

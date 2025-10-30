@@ -9,7 +9,7 @@ import com.seattlesolvers.solverslib.hardware.motors.Motor;
 import com.seattlesolvers.solverslib.hardware.motors.MotorEx;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.teamcode.resources.util.enums.TelemetryStates;
+import org.firstinspires.ftc.teamcode.resources.util.enums.HardwareStates;
 
 public class Outtake extends SubsystemBase {
     private MotorEx leftFlywheel, rightFlywheel;
@@ -29,10 +29,10 @@ public class Outtake extends SubsystemBase {
         leftFlywheel.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
         rightFlywheel.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
         /* telemetry */
-        panels.addData("Left flywheel: ", TelemetryStates.INITIALIZED.toString());
-        panels.addData("Right flywheel: ", TelemetryStates.INITIALIZED.toString());
-        ftc.addData("Left flywheel: ", TelemetryStates.INITIALIZED);
-        ftc.addData("Right flywheel: ", TelemetryStates.INITIALIZED);
+        panels.addData("Left flywheel: ", HardwareStates.INITIALIZED.toString());
+        panels.addData("Right flywheel: ", HardwareStates.INITIALIZED.toString());
+        ftc.addData("Left flywheel: ", HardwareStates.INITIALIZED);
+        ftc.addData("Right flywheel: ", HardwareStates.INITIALIZED);
 
         panels.update();
         ftc.update();

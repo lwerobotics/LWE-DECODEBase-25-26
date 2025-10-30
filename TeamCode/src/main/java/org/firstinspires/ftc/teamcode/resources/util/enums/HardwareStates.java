@@ -1,6 +1,6 @@
 package org.firstinspires.ftc.teamcode.resources.util.enums;
 
-public enum TelemetryStates {
+public enum HardwareStates {
     INITIALIZED,
     CONNECTED,
     DISCONNECTED,

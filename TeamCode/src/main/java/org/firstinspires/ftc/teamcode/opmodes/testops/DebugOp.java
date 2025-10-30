@@ -130,11 +130,15 @@ public class DebugOp extends CommandOpMode {
                         -> outtake.on(power)), new InstantCommand(()
                         -> outtake.off())
                 );
-        /* gate op */
+        /* gate+holder op */
+
+        //toolOp.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER).toggleWhenPressed(new InstantCommand(()-> gate.allow()), new InstantCommand(()-> gate.block()));
+        // keep this commented out until servo is ON THE BOT ^
+
+        //keep this here though for v1.0b
         toolOp.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER)
-                .toggleWhenPressed(new InstantCommand(()
-                        -> gate.allow()), new InstantCommand(()
-                        -> gate.block())
+                .whileHeld(new InstantCommand(()
+                        -> holder.powerMotor(power))
                 );
 
         /* kill switch G2 */

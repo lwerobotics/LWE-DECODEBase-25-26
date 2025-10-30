@@ -5,7 +5,7 @@ import androidx.annotation.NonNull;
 import com.bylazar.telemetry.TelemetryManager;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.teamcode.resources.util.enums.TelemetryStates;
+import org.firstinspires.ftc.teamcode.resources.util.enums.HardwareStates;
 
 public class TelemetryTest {
 
@@ -14,8 +14,8 @@ public class TelemetryTest {
      * @param ftc The telemetry that sends to the Driver Hub
      */
     public void telemetryTest(@NonNull TelemetryManager panels, @NonNull Telemetry ftc) { //@NonNull here is used as a precaution
-        panels.addData("Telemetry Test (Panels): ", TelemetryStates.SUCCESS.toString()); //tests to see if telemetry works on panels and DHub together
-        ftc.addData("Telemetry Test (FTC): ", TelemetryStates.SUCCESS);
+        panels.addData("Telemetry Test (Panels): ", HardwareStates.SUCCESS.toString()); //tests to see if telemetry works on panels and DHub together
+        ftc.addData("Telemetry Test (FTC): ", HardwareStates.SUCCESS);
         panels.update();
         ftc.update();
     }
