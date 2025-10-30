@@ -8,11 +8,13 @@ import com.seattlesolvers.solverslib.command.CommandBase;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.resources.hardware.Gate;
+import org.firstinspires.ftc.teamcode.resources.hardware.Holder;
 import org.firstinspires.ftc.teamcode.resources.hardware.Outtake;
 
 public class InitOuttake extends CommandBase {
     private Outtake outtake;
     private Gate gate;
+    private Holder holder;
     private HardwareMap hardware;
     private TelemetryManager pTele;
     private Telemetry fTele;
@@ -21,19 +23,21 @@ public class InitOuttake extends CommandBase {
      * @param hMap The hardware map used to register hardware to the robot (like motors, servos , actuators, etc.)
      * @param subsystem The subsystem used by the command (drivetrain, intake, outtake, etc.)
      */
-    public InitOuttake(@NonNull TelemetryManager panels, @NonNull Telemetry ftc, @NonNull HardwareMap hMap, Outtake subsystem, Gate subsystem2) {
+    public InitOuttake(@NonNull TelemetryManager panels, @NonNull Telemetry ftc, @NonNull HardwareMap hMap, Outtake subsystem, Gate subsystem2, Holder subsystem3) {
         this.hardware = hMap;
         this.pTele = panels;
         this.fTele = ftc;
         this.outtake = subsystem;
         this.gate = subsystem2;
-        addRequirements(subsystem);
+        this.holder = subsystem3;
+        addRequirements(subsystem, subsystem2, subsystem3);
     }
 
     @Override
     public void execute() {
         outtake.initOuttake(pTele, fTele, hardware);
         gate.initGate(pTele, fTele, hardware);
+        holder.initHolder(pTele, fTele, hardware);
     }
 
     @Override

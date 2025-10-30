@@ -12,7 +12,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.resources.util.enums.TelemetryStates;
 
 public class Gate extends SubsystemBase {
-    public ServoEx gateServo;
+    private ServoEx gateServo;
 
     public void initGate(@NonNull TelemetryManager panels, @NonNull Telemetry ftc, @NonNull HardwareMap hMap) {
         /* servo mapping+range config */

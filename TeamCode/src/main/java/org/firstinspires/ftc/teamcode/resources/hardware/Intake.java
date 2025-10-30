@@ -12,7 +12,7 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.resources.util.enums.TelemetryStates;
 
 public class Intake extends SubsystemBase {
-    public MotorEx collectionMotor;
+    private MotorEx collectionMotor;
 
     /**
      * Parameters for the initialization function of the collection motor (updated 10/16/25)

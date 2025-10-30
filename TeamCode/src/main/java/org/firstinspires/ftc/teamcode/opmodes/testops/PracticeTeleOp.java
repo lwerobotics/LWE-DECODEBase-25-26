@@ -17,6 +17,7 @@ import org.firstinspires.ftc.teamcode.resources.commands.initializers.InitOuttak
 import org.firstinspires.ftc.teamcode.resources.commands.utility.KillRobot;
 import org.firstinspires.ftc.teamcode.resources.hardware.Drivetrain;
 import org.firstinspires.ftc.teamcode.resources.hardware.Gate;
+import org.firstinspires.ftc.teamcode.resources.hardware.Holder;
 import org.firstinspires.ftc.teamcode.resources.hardware.Intake;
 import org.firstinspires.ftc.teamcode.resources.hardware.Outtake;
 import org.firstinspires.ftc.teamcode.resources.util.enums.GamepadConstants;
@@ -24,13 +25,14 @@ import org.firstinspires.ftc.teamcode.resources.util.functions.FilterStickInput;
 import org.firstinspires.ftc.teamcode.resources.util.functions.IncrementPower;
 import org.firstinspires.ftc.teamcode.resources.util.functions.TelemetryTest;
 
-@TeleOp(group = "Test OpModes", name = "Practice/Test TeleOp")
+@TeleOp(name = "Practice TeleOp")
 public class PracticeTeleOp extends CommandOpMode {
     /* subsystems */
     private Drivetrain drivetrain;
     private Intake intake;
     private Outtake outtake;
     private Gate gate;
+    private Holder holder;
     /* utilities */
     private FilterStickInput fsi;
     /* hardware */
@@ -54,6 +56,7 @@ public class PracticeTeleOp extends CommandOpMode {
         intake = new Intake();
         outtake = new Outtake();
         gate = new Gate();
+        holder = new Holder();
         /* utilities */
         fsi = new FilterStickInput();
         /* gamepads */
@@ -71,7 +74,7 @@ public class PracticeTeleOp extends CommandOpMode {
         schedule(new ParallelCommandGroup(
                 new InitDrive(panelsTelemetry, telemetry, hardwareMap, drivetrain),
                 new InitIntake(panelsTelemetry, telemetry, hardwareMap, intake),
-                new InitOuttake(panelsTelemetry, telemetry, hardwareMap, outtake, gate),
+                new InitOuttake(panelsTelemetry, telemetry, hardwareMap, outtake, gate, holder),
                 new UninterruptibleCommand(
                         new DriveField( //i honestly dont know why i have to multiply the params by something to get the param names in android studio dont ask
                                 drivetrain,

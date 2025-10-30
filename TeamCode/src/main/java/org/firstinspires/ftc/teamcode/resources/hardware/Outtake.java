@@ -12,7 +12,7 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.resources.util.enums.TelemetryStates;
 
 public class Outtake extends SubsystemBase {
-    public MotorEx leftFlywheel, rightFlywheel;
+    private MotorEx leftFlywheel, rightFlywheel;
 
     /** Parameters for the initialization function of the given flywheel motor (updated 10/16/25)
      * @param hMap The hardware map used to register hardware to the robot (like motors, servos , actuators, etc.)
@@ -38,7 +38,7 @@ public class Outtake extends SubsystemBase {
         ftc.update();
     }
 
-    public void on(double power) {
+    public void on(double power) { //test this and edit as need be
         leftFlywheel.set(power * -1);
         rightFlywheel.set(power);
     }

@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.opmodes.teleop;
 
+import com.bylazar.telemetry.PanelsTelemetry;
+import com.bylazar.telemetry.TelemetryManager;
 import com.seattlesolvers.solverslib.command.CommandOpMode;
 import com.seattlesolvers.solverslib.command.SequentialCommandGroup;
 import com.seattlesolvers.solverslib.gamepad.GamepadEx;
@@ -11,15 +13,15 @@ import org.firstinspires.ftc.teamcode.resources.commands.drive.SetGlobalDrivePow
 import org.firstinspires.ftc.teamcode.resources.hardware.Drivetrain;
 import org.firstinspires.ftc.teamcode.resources.util.functions.FilterStickInput;
 
-@TeleOp(group = "TeleOp", name = "CompOp")
-public class CompetitionTeleOp extends CommandOpMode {
+@TeleOp(name = "CompOp")
+public class CompetitionTeleOp extends CommandOpMode { //lock in bro
     /* hardware+utilities */
     private Drivetrain drivetrain;
     private FilterStickInput fsi;
     private GamepadEx driverOp;
     private GamepadEx toolOp;
-    /* drive commands*/
-    private SetGlobalDrivePowers setGlobalDrivePowers;
+    /* miscellaneous */
+    private TelemetryManager panelsTelemetry;
 
     @Override
     public void initialize() {
@@ -28,12 +30,14 @@ public class CompetitionTeleOp extends CommandOpMode {
         fsi = new FilterStickInput();
         driverOp = new GamepadEx(gamepad1);
         toolOp = new GamepadEx(gamepad2);
+        panelsTelemetry = PanelsTelemetry.INSTANCE.getTelemetry();
         /* drive */
         schedule(new SequentialCommandGroup(
-                new InitDrive(hardwareMap, drivetrain),
+                new InitDrive(panelsTelemetry, telemetry, hardwareMap, drivetrain),
                 new DriveField(drivetrain, fsi.filterStickInput(driverOp.getLeftX()), fsi.filterStickInput(driverOp.getLeftY()), fsi.filterStickInput(driverOp.getRightX()))
         ));
         /* INSERT HEADER HERE */
         /* NOTE: in the future once the bot is actually built this area would use GamepadEx buttons/triggers attached to instant co*/
+        /* 10/29 NOTE: just copy from practice opmode once it actually works */
     }
 }
