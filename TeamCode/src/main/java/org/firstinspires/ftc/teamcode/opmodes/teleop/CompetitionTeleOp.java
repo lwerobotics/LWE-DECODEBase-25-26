@@ -13,7 +13,7 @@ import org.firstinspires.ftc.teamcode.resources.commands.drive.SetGlobalDrivePow
 import org.firstinspires.ftc.teamcode.resources.hardware.Drivetrain;
 import org.firstinspires.ftc.teamcode.resources.util.functions.FilterStickInput;
 
-@TeleOp(name = "CompOp")
+@TeleOp(name = "DONT TOUCH (v1.0b)")
 public class CompetitionTeleOp extends CommandOpMode { //lock in bro
     /* hardware+utilities */
     private Drivetrain drivetrain;

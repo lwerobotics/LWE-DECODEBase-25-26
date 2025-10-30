@@ -107,17 +107,16 @@ public class PracticeTeleOp extends CommandOpMode {
                         -> outtake.on(power)), new InstantCommand(()
                         -> outtake.off())
                 );
-        /* gate+holder op */
-
-        //toolOp.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER).toggleWhenPressed(new InstantCommand(()-> gate.allow()), new InstantCommand(()-> gate.block()));
-        // keep this commented out until servo is ON THE BOT ^
-
-        //keep this here though for v1.0b
+        /* gate op */
         toolOp.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER)
+                .toggleWhenPressed(new InstantCommand(()
+                        -> gate.allow()), new InstantCommand(()
+                        -> gate.block()));
+        /* holder op */
+        toolOp.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER)
                 .whileHeld(new InstantCommand(()
                         -> holder.powerMotor(power))
                 );
-
         /* kill switch G2 */
         toolOp.getGamepadButton(GamepadKeys.Button.BACK)
                 .whenPressed(new KillRobot(
