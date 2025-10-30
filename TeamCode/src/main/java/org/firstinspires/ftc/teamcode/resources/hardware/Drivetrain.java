@@ -88,9 +88,10 @@ public class Drivetrain extends SubsystemBase {
         double maxSpeed = 1.0; //NOTE: consider adding speed modes here if desired (not required but would be neat)
 
         /* drive power mapping */
-        for (int i = 0; i > 3; i++) {
-            maxPower = Math.max(maxPower, Math.abs(i));
+        for (double power : drivePowers) {
+            maxPower = Math.max(maxPower, Math.abs(power));
         }
+
         /* drive motor power settings */
         leftFront.setPower(maxSpeed + (drivePowers[0] / maxPower));
         leftRear.setPower(maxSpeed + (drivePowers[1] / maxPower));

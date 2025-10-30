@@ -13,7 +13,7 @@ import org.firstinspires.ftc.teamcode.resources.util.enums.HardwareStates;
 
 public class Holder extends SubsystemBase {
     public MotorEx holderMotor;
-    private HardwareStates motorState = HardwareStates.NULL;
+    //private HardwareStates motorState = HardwareStates.NULL;
     public void initHolder(@NonNull TelemetryManager panels, @NonNull Telemetry ftc, @NonNull HardwareMap hMap) {
         /* motor mapping+configuration */
         holderMotor = new MotorEx(hMap, "holderMotor");
@@ -27,7 +27,7 @@ public class Holder extends SubsystemBase {
         panels.update();
         ftc.update();
 
-        motorState = HardwareStates.OFF;
+        //motorState = HardwareStates.OFF;
     }
 
     public void powerMotor(double power) {

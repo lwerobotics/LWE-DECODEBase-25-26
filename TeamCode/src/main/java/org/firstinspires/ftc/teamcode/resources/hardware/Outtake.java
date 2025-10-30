@@ -16,7 +16,6 @@ public class Outtake extends SubsystemBase {
 
     /** Parameters for the initialization function of the given flywheel motor (updated 10/16/25)
      * @param hMap The hardware map used to register hardware to the robot (like motors, servos , actuators, etc.)
-     * @return Returns the initialized motor from the function
      */
     public void initOuttake(@NonNull TelemetryManager panels, @NonNull Telemetry ftc, @NonNull HardwareMap hMap) {
         /* motor mapping */

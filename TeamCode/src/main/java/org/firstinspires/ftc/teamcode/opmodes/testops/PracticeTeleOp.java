@@ -22,10 +22,8 @@ import org.firstinspires.ftc.teamcode.resources.hardware.Intake;
 import org.firstinspires.ftc.teamcode.resources.hardware.Outtake;
 import org.firstinspires.ftc.teamcode.resources.util.enums.GamepadConstants;
 import org.firstinspires.ftc.teamcode.resources.util.functions.FilterStickInput;
-import org.firstinspires.ftc.teamcode.resources.util.functions.IncrementPower;
-import org.firstinspires.ftc.teamcode.resources.util.functions.TelemetryTest;
 
-@TeleOp(name = "Practice TeleOp")
+@TeleOp(name = "PracticeOp")
 public class PracticeTeleOp extends CommandOpMode {
     /* subsystems */
     private Drivetrain drivetrain;
@@ -109,11 +107,15 @@ public class PracticeTeleOp extends CommandOpMode {
                         -> outtake.on(power)), new InstantCommand(()
                         -> outtake.off())
                 );
-        /* gate op */
+        /* gate+holder op */
+
+        //toolOp.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER).toggleWhenPressed(new InstantCommand(()-> gate.allow()), new InstantCommand(()-> gate.block()));
+        // keep this commented out until servo is ON THE BOT ^
+
+        //keep this here though for v1.0b
         toolOp.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER)
-                .toggleWhenPressed(new InstantCommand(()
-                        -> gate.allow()), new InstantCommand(()
-                        -> gate.block())
+                .whileHeld(new InstantCommand(()
+                        -> holder.powerMotor(power))
                 );
 
         /* kill switch G2 */

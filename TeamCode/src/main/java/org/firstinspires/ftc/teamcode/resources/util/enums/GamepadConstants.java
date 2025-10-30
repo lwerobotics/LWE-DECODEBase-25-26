@@ -6,7 +6,7 @@ public enum GamepadConstants {
     TURN_SENSITIVITY(0.8);
     private final double value;
 
-    private GamepadConstants(double value) {
+    GamepadConstants(double value) {
         this.value = value;
     }
 

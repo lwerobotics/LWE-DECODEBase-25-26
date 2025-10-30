@@ -17,7 +17,6 @@ public class Intake extends SubsystemBase {
     /**
      * Parameters for the initialization function of the collection motor (updated 10/16/25)
      * @param hMap The hardware map used to register hardware to the robot (like motors, servos , actuators, etc.)
-     * @return Returns the initialized motor from the functions
      */
     public void initMotor(@NonNull TelemetryManager panels, @NonNull Telemetry ftc, @NonNull HardwareMap hMap) {
         /* motor mapping */
