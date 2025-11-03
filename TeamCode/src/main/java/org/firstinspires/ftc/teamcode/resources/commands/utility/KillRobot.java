@@ -8,10 +8,10 @@ import org.firstinspires.ftc.teamcode.resources.hardware.Intake;
 import org.firstinspires.ftc.teamcode.resources.hardware.Outtake;
 
 public class KillRobot extends InstantCommand {
-    private Drivetrain drive;
-    private Intake intake;
-    private Outtake outtake;
-    private Gate gate;
+    private final Drivetrain drive;
+    private final Intake intake;
+    private final Outtake outtake;
+    private final Gate gate;
 
     public KillRobot(Drivetrain drivetrain, Intake intake, Outtake outtake, Gate gate) {
         this.drive = drivetrain;

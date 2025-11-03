@@ -33,12 +33,16 @@ public class PracticeTeleOp extends CommandOpMode {
     private Gate gate;
     private Holder holder;
     /* utilities */
+    /** @noinspection FieldCanBeLocal*/
     private FilterStickInput fsi;
     /* hardware */
+    /** @noinspection FieldCanBeLocal*/
     private GamepadEx driverOp;
+    /** @noinspection FieldCanBeLocal*/
     private GamepadEx toolOp;
     /* miscellaneous */
     private double power;
+    /** @noinspection FieldCanBeLocal*/
     private TelemetryManager panelsTelemetry;
 
     /** NOTICE:

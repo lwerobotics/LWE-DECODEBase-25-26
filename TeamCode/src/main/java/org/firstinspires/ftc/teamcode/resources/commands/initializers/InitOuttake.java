@@ -12,12 +12,12 @@ import org.firstinspires.ftc.teamcode.resources.hardware.Holder;
 import org.firstinspires.ftc.teamcode.resources.hardware.Outtake;
 
 public class InitOuttake extends CommandBase {
-    private Outtake outtake;
-    private Gate gate;
-    private Holder holder;
-    private HardwareMap hardware;
-    private TelemetryManager pTele;
-    private Telemetry fTele;
+    private final Outtake outtake;
+    private final Gate gate;
+    private final Holder holder;
+    private final HardwareMap hardware;
+    private final TelemetryManager pTele;
+    private final Telemetry fTele;
 
     /** Parameters for the initialization function of the drivetrain (updated 10/16/25)
      * @param hMap The hardware map used to register hardware to the robot (like motors, servos , actuators, etc.)
@@ -34,7 +34,7 @@ public class InitOuttake extends CommandBase {
     }
 
     @Override
-    public void execute() {
+    public void initialize() {
         outtake.initOuttake(pTele, fTele, hardware);
         gate.initGate(pTele, fTele, hardware);
         holder.initHolder(pTele, fTele, hardware);

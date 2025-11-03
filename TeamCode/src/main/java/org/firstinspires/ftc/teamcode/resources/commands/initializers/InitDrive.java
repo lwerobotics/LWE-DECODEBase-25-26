@@ -9,10 +9,10 @@ import com.seattlesolvers.solverslib.command.CommandBase;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.resources.hardware.Drivetrain;
 public class InitDrive extends CommandBase {
-    private Drivetrain drive;
-    private HardwareMap hardware;
-    private TelemetryManager pTele;
-    private Telemetry fTele;
+    private final Drivetrain drive;
+    private final HardwareMap hardware;
+    private final TelemetryManager pTele;
+    private final Telemetry fTele;
 
     /** Parameters for the initialization function of the drivetrain (updated 10/16/25)
      * @param hMap The hardware map used to register hardware to the robot (like motors, servos , actuators, etc.)
@@ -27,7 +27,7 @@ public class InitDrive extends CommandBase {
     }
 
     @Override
-    public void execute() {
+    public void initialize() {
         drive.initDrivetrain(hardware, pTele, fTele);
     }
 

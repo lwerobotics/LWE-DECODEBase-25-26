@@ -10,10 +10,10 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.resources.hardware.Intake;
 
 public class InitIntake extends CommandBase {
-    private Intake intake;
-    private HardwareMap hardware;
-    private TelemetryManager pTele;
-    private Telemetry fTele;
+    private final Intake intake;
+    private final HardwareMap hardware;
+    private final TelemetryManager pTele;
+    private final Telemetry fTele;
 
     public InitIntake(@NonNull TelemetryManager panels, @NonNull Telemetry ftc, @NonNull HardwareMap hMap, Intake subsystem) {
         this.hardware = hMap;
@@ -24,7 +24,7 @@ public class InitIntake extends CommandBase {
     }
 
     @Override
-    public void execute() {
+    public void initialize() {
         intake.initMotor(pTele, fTele, hardware);
     }
 
