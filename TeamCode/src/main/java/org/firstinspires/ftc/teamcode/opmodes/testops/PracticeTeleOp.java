@@ -4,6 +4,7 @@ import com.bylazar.telemetry.PanelsTelemetry;
 import com.bylazar.telemetry.TelemetryManager;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.seattlesolvers.solverslib.command.CommandOpMode;
+import com.seattlesolvers.solverslib.command.CommandScheduler;
 import com.seattlesolvers.solverslib.command.InstantCommand;
 import com.seattlesolvers.solverslib.command.ParallelCommandGroup;
 import com.seattlesolvers.solverslib.command.UninterruptibleCommand;
@@ -122,5 +123,6 @@ public class PracticeTeleOp extends CommandOpMode {
                 .whenPressed(new KillRobot(
                         drivetrain, intake, outtake, gate
                 ));
+        CommandScheduler.getInstance().run();
     }
 }

@@ -4,6 +4,7 @@ import com.bylazar.telemetry.PanelsTelemetry;
 import com.bylazar.telemetry.TelemetryManager;
 import com.seattlesolvers.solverslib.command.CommandOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.seattlesolvers.solverslib.command.CommandScheduler;
 import com.seattlesolvers.solverslib.command.InstantCommand;
 import com.seattlesolvers.solverslib.command.ParallelCommandGroup;
 import com.seattlesolvers.solverslib.command.UninterruptibleCommand;
@@ -34,9 +35,12 @@ public class DebugOp extends CommandOpMode {
     private Gate gate;
     private Holder holder;
     /* hardware */
+    /** @noinspection FieldCanBeLocal*/
     private GamepadEx driverOp;
+    /** @noinspection FieldCanBeLocal*/
     private GamepadEx toolOp;
     /* utilities */
+    /** @noinspection FieldCanBeLocal*/
     private FilterStickInput fsi;
     private IncrementPower ip;
     private TelemetryTest ttest;
@@ -46,7 +50,7 @@ public class DebugOp extends CommandOpMode {
 
     /** NOTE: (updated 10/23/25)
      * Although the function says "initialize()", it does not exactly operate like an initializer in the sense that it initializes things to be used later,
-     * rather it is a general initializer of the opmode as a whole (as seen below, sorry if thats too obvious lol)
+     * rather it is a general initializer of the opmode as a whole (as seen below, sorry if thats too obvious)
      */
 
     @Override
@@ -68,11 +72,8 @@ public class DebugOp extends CommandOpMode {
         power = 0.0;
         panelsTelemetry = PanelsTelemetry.INSTANCE.getTelemetry();
 
-
-        /* --GAMEPAD 1-- */
-
-
         /* drive */
+        register(drivetrain, intake, outtake, gate, holder);
         schedule(new ParallelCommandGroup(
                 new InitDrive(panelsTelemetry, telemetry, hardwareMap, drivetrain),
                 new InitIntake(panelsTelemetry, telemetry, hardwareMap, intake),
@@ -84,6 +85,10 @@ public class DebugOp extends CommandOpMode {
                                 fsi.filterStickInput(driverOp.getLeftY()) * 1,
                                 fsi.filterStickInput(driverOp.getRightX()) * GamepadConstants.TURN_SENSITIVITY.getEnumValue()))
         ));
+
+
+        /* --GAMEPAD 1-- */
+
 
         /* brake button */
         driverOp.getGamepadButton(GamepadKeys.Button.X)
@@ -114,7 +119,7 @@ public class DebugOp extends CommandOpMode {
 
         /* telemetry test */
         toolOp.getGamepadButton(GamepadKeys.Button.X)
-                .whenPressed(new InstantCommand(() 
+                .whenPressed(new InstantCommand(()
                         -> ttest.telemetryTest(panelsTelemetry, telemetry))
                 );
         /* intake op */
@@ -144,5 +149,10 @@ public class DebugOp extends CommandOpMode {
                 .whenPressed(new KillRobot(
                         drivetrain, intake, outtake, gate
                 ));
+    }
+
+    @Override
+    public void run() {
+        CommandScheduler.getInstance().run();
     }
 }

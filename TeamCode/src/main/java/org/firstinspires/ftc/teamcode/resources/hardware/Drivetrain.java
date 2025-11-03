@@ -47,9 +47,9 @@ public class Drivetrain extends SubsystemBase {
         /* imu mapping+config */
         imu = hMap.get(IMU.class, "imu");
 
-        RevHubOrientationOnRobot cHubOrientation = new RevHubOrientationOnRobot( //CHANGE THESE VALUES ONCE BOT IS BUILT
-                RevHubOrientationOnRobot.LogoFacingDirection.UP,
-                RevHubOrientationOnRobot.UsbFacingDirection.UP
+        RevHubOrientationOnRobot cHubOrientation = new RevHubOrientationOnRobot( //changed for v1.0b3
+                RevHubOrientationOnRobot.LogoFacingDirection.LEFT,
+                RevHubOrientationOnRobot.UsbFacingDirection.DOWN
         );
         imu.initialize(new IMU.Parameters(cHubOrientation));
 
@@ -105,13 +105,13 @@ public class Drivetrain extends SubsystemBase {
      * @param turn The rotation power of the given drive motor (in radians [probably lol])
      */
     public void driveField(double forward, double strafe, double turn) {
-        /* field centric math variables */
+        /* drive data to polar coordinate values */
         double theta = Math.atan2(forward, strafe); //rotation
         double r = Math.hypot(strafe, forward); //distance
         /* polar to cartesian coordinates conversion */
-        theta = AngleUnit.normalizeRadians(theta - imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS));
-        double newForward = r * Math.sin(theta);
-        double newStrafe = r * Math.cos(theta);
+        theta = AngleUnit.normalizeRadians(theta - imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS)); //makes the initial rotation more accurate
+        double newForward = r * Math.sin(theta); //equivalent to the y coordinate
+        double newStrafe = r * Math.cos(theta); //equivalent to the x coordinate
 
         this.drive(newForward, newStrafe, turn);
     }

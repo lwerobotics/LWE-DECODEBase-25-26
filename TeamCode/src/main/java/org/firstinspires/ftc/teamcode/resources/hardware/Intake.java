@@ -37,6 +37,7 @@ public class Intake extends SubsystemBase {
        collectionMotor.set(power);
     }
 
+    /** @noinspection unused*/
     public void out(double power) {
         collectionMotor.set(power);
     }

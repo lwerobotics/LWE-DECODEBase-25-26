@@ -9,7 +9,6 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.resources.commands.drive.DriveField;
 import org.firstinspires.ftc.teamcode.resources.commands.initializers.InitDrive;
-import org.firstinspires.ftc.teamcode.resources.commands.drive.SetGlobalDrivePowers;
 import org.firstinspires.ftc.teamcode.resources.hardware.Drivetrain;
 import org.firstinspires.ftc.teamcode.resources.util.functions.FilterStickInput;
 
