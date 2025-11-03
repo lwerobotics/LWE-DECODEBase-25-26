@@ -123,6 +123,8 @@ public class PracticeTeleOp extends CommandOpMode {
                 .whenPressed(new KillRobot(
                         drivetrain, intake, outtake, gate
                 ));
+
+
         CommandScheduler.getInstance().run();
     }
 }

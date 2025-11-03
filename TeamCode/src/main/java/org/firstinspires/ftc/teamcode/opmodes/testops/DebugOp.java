@@ -149,10 +149,7 @@ public class DebugOp extends CommandOpMode {
                 .whenPressed(new KillRobot(
                         drivetrain, intake, outtake, gate
                 ));
-    }
 
-    @Override
-    public void run() {
         CommandScheduler.getInstance().run();
     }
 }
