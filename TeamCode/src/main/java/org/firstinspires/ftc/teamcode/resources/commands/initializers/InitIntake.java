@@ -27,9 +27,4 @@ public class InitIntake extends CommandBase {
     public void initialize() {
         intake.initMotor(pTele, fTele, hardware);
     }
-
-    @Override
-    public boolean isFinished() {
-        return true;
-    }
 }

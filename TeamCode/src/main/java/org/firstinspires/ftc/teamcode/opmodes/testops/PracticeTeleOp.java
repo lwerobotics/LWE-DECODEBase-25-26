@@ -34,6 +34,9 @@ public class PracticeTeleOp extends CommandOpMode {
     private Holder holder;
     /* utilities */
     /** @noinspection FieldCanBeLocal*/
+    /* these no-inspections here are meant to suppress warnings about how these field variables can be local,
+     * although they CAN be, it isn't going to break anything if they arent and are initialized at the start
+     * of the opmode. */
     private FilterStickInput fsi;
     /* hardware */
     /** @noinspection FieldCanBeLocal*/

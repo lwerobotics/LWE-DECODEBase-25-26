@@ -39,9 +39,4 @@ public class InitOuttake extends CommandBase {
         gate.initGate(pTele, fTele, hardware);
         holder.initHolder(pTele, fTele, hardware);
     }
-
-    @Override
-    public boolean isFinished() {
-        return true;
-    }
 }
