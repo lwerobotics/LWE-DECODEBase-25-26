@@ -44,7 +44,6 @@ public class PracticeTeleOp extends CommandOpMode {
     /** @noinspection FieldCanBeLocal*/
     private GamepadEx toolOp;
     /* miscellaneous */
-    private double power;
     /** @noinspection FieldCanBeLocal*/
     private TelemetryManager panelsTelemetry;
 
@@ -69,7 +68,6 @@ public class PracticeTeleOp extends CommandOpMode {
         driverOp = new GamepadEx(gamepad1);
         toolOp = new GamepadEx(gamepad2);
         /* miscellaneous */
-        power = 0.0;
         panelsTelemetry = PanelsTelemetry.INSTANCE.getTelemetry();
 
 
@@ -106,13 +104,13 @@ public class PracticeTeleOp extends CommandOpMode {
         /* intake op */
         toolOp.getGamepadButton(GamepadKeys.Button.A)
                 .toggleWhenPressed(new InstantCommand(()
-                        -> intake.in(power)), new InstantCommand(()
+                        -> intake.in(1.0)), new InstantCommand(()
                         -> intake.stop())
                 );
         /* outtake op */
         toolOp.getGamepadButton(GamepadKeys.Button.Y)
                 .toggleWhenPressed(new InstantCommand(()
-                        -> outtake.on(power)), new InstantCommand(()
+                        -> outtake.on(0.67)), new InstantCommand(()
                         -> outtake.off())
                 );
         /* gate op */
@@ -123,14 +121,13 @@ public class PracticeTeleOp extends CommandOpMode {
         /* holder op */
         toolOp.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER)
                 .whileHeld(new InstantCommand(()
-                        -> holder.powerMotor(power))
+                        -> holder.powerMotor(1.0))
                 );
         /* kill switch G2 */
         toolOp.getGamepadButton(GamepadKeys.Button.BACK)
                 .whenPressed(new KillRobot(
                         drivetrain, intake, outtake, gate
                 ));
-
 
         CommandScheduler.getInstance().run();
     }
