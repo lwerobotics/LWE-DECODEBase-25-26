@@ -23,8 +23,6 @@ public class Drivetrain extends SubsystemBase {
      * @param ftc The telemetry that sends to the Driver Hub
      */
     public void initDrivetrain(@NonNull HardwareMap hMap, @NonNull TelemetryManager panels, @NonNull Telemetry ftc) {
-        DcMotor[] driveMotors = new DcMotor[]{leftFront, leftRear, rightFront, rightRear};
-
         /* motor mapping */
         rightFront = hMap.get(DcMotor.class, "rightFront");
         leftFront = hMap.get(DcMotor.class, "leftFront");
@@ -36,11 +34,19 @@ public class Drivetrain extends SubsystemBase {
         rightFront.setDirection(DcMotor.Direction.FORWARD);
         rightRear.setDirection(DcMotor.Direction.FORWARD);
 
-        for (DcMotor motors : driveMotors) {
-            motors.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-            motors.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-            motors.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        }
+        leftFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        leftRear.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        rightFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        rightRear.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
+        leftFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        leftRear.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rightFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rightRear.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        leftFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        leftRear.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        rightFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        rightRear.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         /* imu mapping+config */
         imu = hMap.get(IMU.class, "imu");
