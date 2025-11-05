@@ -4,10 +4,10 @@ import com.bylazar.telemetry.PanelsTelemetry;
 import com.bylazar.telemetry.TelemetryManager;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.seattlesolvers.solverslib.command.CommandOpMode;
-import com.seattlesolvers.solverslib.command.CommandScheduler;
+//import com.seattlesolvers.solverslib.command.CommandScheduler;
 import com.seattlesolvers.solverslib.command.InstantCommand;
-import com.seattlesolvers.solverslib.command.ParallelCommandGroup;
-import com.seattlesolvers.solverslib.command.UninterruptibleCommand;
+import com.seattlesolvers.solverslib.command.SequentialCommandGroup;
+//import com.seattlesolvers.solverslib.command.UninterruptibleCommand;
 import com.seattlesolvers.solverslib.gamepad.GamepadEx;
 import com.seattlesolvers.solverslib.gamepad.GamepadKeys;
 
@@ -21,7 +21,7 @@ import org.firstinspires.ftc.teamcode.resources.hardware.Gate;
 import org.firstinspires.ftc.teamcode.resources.hardware.Holder;
 import org.firstinspires.ftc.teamcode.resources.hardware.Intake;
 import org.firstinspires.ftc.teamcode.resources.hardware.Outtake;
-import org.firstinspires.ftc.teamcode.resources.util.enums.GamepadConstants;
+//import org.firstinspires.ftc.teamcode.resources.util.enums.GamepadConstants;
 import org.firstinspires.ftc.teamcode.resources.util.functions.FilterStickInput;
 
 @TeleOp(name = "PracticeOp")
@@ -75,26 +75,24 @@ public class PracticeTeleOp extends CommandOpMode {
 
 
         /* drive */
-        schedule(new ParallelCommandGroup(
+        schedule(new SequentialCommandGroup(
                 new InitDrive(panelsTelemetry, telemetry, hardwareMap, drivetrain),
                 new InitIntake(panelsTelemetry, telemetry, hardwareMap, intake),
                 new InitOuttake(panelsTelemetry, telemetry, hardwareMap, outtake, gate, holder),
-                new UninterruptibleCommand(
-                        new DriveField( //i honestly dont know why i have to multiply the params by something to get the param names in android studio dont ask
-                                drivetrain,
-                                fsi.filterStickInput(driverOp.getLeftX()) * 1,
-                                fsi.filterStickInput(driverOp.getLeftY()) * 1,
-                                fsi.filterStickInput(driverOp.getRightX()) * GamepadConstants.TURN_SENSITIVITY.getEnumValue()))
+                new DriveField(drivetrain,
+                        fsi.filterStickInput(driverOp.gamepad.left_stick_x) * 1,
+                        fsi.filterStickInput(driverOp.gamepad.left_stick_y) * 1,
+                        fsi.filterStickInput(driverOp.gamepad.right_stick_x) * 1)
         ));
         /* brake button */
         driverOp.getGamepadButton(GamepadKeys.Button.X)
                 .whenActive(new InstantCommand(()
-                        -> drivetrain.setGlobalPowers(0.0))
+                        -> drivetrain.setGlobalPowers(1.0)) //test purposes
                 );
         /* kill switch G1 */
         driverOp.getGamepadButton(GamepadKeys.Button.BACK)
-                .whenPressed(new KillRobot(
-                        drivetrain, intake, outtake, gate
+                .whenActive(new KillRobot(
+                        drivetrain, intake, outtake, gate, telemetry
                 ));
 
 
@@ -103,19 +101,19 @@ public class PracticeTeleOp extends CommandOpMode {
 
         /* intake op */
         toolOp.getGamepadButton(GamepadKeys.Button.A)
-                .toggleWhenPressed(new InstantCommand(()
+                .toggleWhenActive(new InstantCommand(()
                         -> intake.in(1.0)), new InstantCommand(()
                         -> intake.stop())
                 );
         /* outtake op */
         toolOp.getGamepadButton(GamepadKeys.Button.Y)
-                .toggleWhenPressed(new InstantCommand(()
+                .toggleWhenActive(new InstantCommand(()
                         -> outtake.on(0.67)), new InstantCommand(()
                         -> outtake.off())
                 );
         /* gate op */
         toolOp.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER)
-                .toggleWhenPressed(new InstantCommand(()
+                .toggleWhenActive(new InstantCommand(()
                         -> gate.allow()), new InstantCommand(()
                         -> gate.block()));
         /* holder op */
@@ -126,16 +124,15 @@ public class PracticeTeleOp extends CommandOpMode {
         /* kill switch G2 */
         toolOp.getGamepadButton(GamepadKeys.Button.BACK)
                 .whenPressed(new KillRobot(
-                        drivetrain, intake, outtake, gate
+                        drivetrain, intake, outtake, gate, telemetry
                 ));
 
     }
 
-    @Override
-    public void run() {
-        super.run();
-        // haha vin skibidi toilet ohio
-        CommandScheduler.getInstance().run();
-    }
-
+//    @Override
+//    public void run() {
+//        super.run();
+//        // haha vin skibidi toilet ohio
+//        CommandScheduler.getInstance().run();
+//    }
 }

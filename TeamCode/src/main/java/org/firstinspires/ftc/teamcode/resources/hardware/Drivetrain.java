@@ -23,26 +23,24 @@ public class Drivetrain extends SubsystemBase {
      * @param ftc The telemetry that sends to the Driver Hub
      */
     public void initDrivetrain(@NonNull HardwareMap hMap, @NonNull TelemetryManager panels, @NonNull Telemetry ftc) {
+        DcMotor[] driveMotors = new DcMotor[]{leftFront, leftRear, rightFront, rightRear};
+
         /* motor mapping */
         rightFront = hMap.get(DcMotor.class, "rightFront");
         leftFront = hMap.get(DcMotor.class, "leftFront");
         rightRear = hMap.get(DcMotor.class, "rightRear");
         leftRear = hMap.get(DcMotor.class, "leftRear");
-        /* motor directions */
+        /* motor config */
         leftFront.setDirection(DcMotor.Direction.REVERSE);
         leftRear.setDirection(DcMotor.Direction.REVERSE);
         rightFront.setDirection(DcMotor.Direction.FORWARD);
         rightRear.setDirection(DcMotor.Direction.FORWARD);
-        /* motor run-modes */
-        leftFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        leftRear.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        rightFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        rightRear.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        /* motor behaviors */
-        leftFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        leftRear.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        rightFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        rightRear.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
+        for (DcMotor motors : driveMotors) {
+            motors.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+            motors.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            motors.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        }
 
         /* imu mapping+config */
         imu = hMap.get(IMU.class, "imu");
@@ -77,7 +75,7 @@ public class Drivetrain extends SubsystemBase {
      */
     public void drive(double forward, double strafe, double turn) {
         /* mecanum math variables */
-        double[] drivePowers = { //a few magic numbers here refer to the comments
+        double[] drivePowers = {
                 forward + strafe + turn, //leftFront
                 forward - strafe + turn, //leftRear
                 forward - strafe - turn, //rightFront
@@ -93,10 +91,10 @@ public class Drivetrain extends SubsystemBase {
         }
 
         /* drive motor power settings */
-        leftFront.setPower(maxSpeed + (drivePowers[0] / maxPower));
-        leftRear.setPower(maxSpeed + (drivePowers[1] / maxPower));
-        rightFront.setPower(maxSpeed + (drivePowers[2] / maxPower));
-        rightRear.setPower(maxSpeed + (drivePowers[3] / maxPower));
+        leftFront.setPower(maxSpeed * (drivePowers[0] / maxPower));
+        leftRear.setPower(maxSpeed * (drivePowers[1] / maxPower));
+        rightFront.setPower(maxSpeed * (drivePowers[2] / maxPower));
+        rightRear.setPower(maxSpeed * (drivePowers[3] / maxPower));
     }
 
     /** Parameters for the power of each drive motor (updated 9/13/25)

@@ -13,11 +13,13 @@ import org.firstinspires.ftc.teamcode.resources.util.enums.HardwareStates;
 
 public class Gate extends SubsystemBase {
     private ServoEx gateServo;
+    private Telemetry telemetry;
 
     public void initGate(@NonNull TelemetryManager panels, @NonNull Telemetry ftc, @NonNull HardwareMap hMap) {
         /* servo mapping+range config */
         gateServo = new ServoEx(hMap, "gateServo", 90.0, AngleUnit.RADIANS); //lowk ask vin or baron about this just to be safe
         /* telemetry */
+        this.telemetry = ftc;
         panels.addData("Servo: ", HardwareStates.INITIALIZED.toString());
         ftc.addData("Servo: ", HardwareStates.INITIALIZED);
 
@@ -26,10 +28,14 @@ public class Gate extends SubsystemBase {
     }
 
     public void block() {
+        telemetry.addData("Did it run? ", "yur");
+        telemetry.update();
         gateServo.set(0.0);
     }
 
     public void allow() {
+        telemetry.addData("Did it run? ", "yur");
+        telemetry.update();
         gateServo.set(1.0);
     }
 }
