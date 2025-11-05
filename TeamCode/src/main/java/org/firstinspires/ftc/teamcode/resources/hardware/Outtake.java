@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.resources.hardware;
 
+//import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.telemetry;
+
 import androidx.annotation.NonNull;
 
 import com.bylazar.telemetry.TelemetryManager;
@@ -13,6 +15,7 @@ import org.firstinspires.ftc.teamcode.resources.util.enums.HardwareStates;
 
 public class Outtake extends SubsystemBase {
     private MotorEx leftFlywheel, rightFlywheel;
+    private Telemetry telemetry;
 
     /** Parameters for the initialization function of the given flywheel motor (updated 10/16/25)
      * @param hMap The hardware map used to register hardware to the robot (like motors, servos , actuators, etc.)
@@ -28,6 +31,7 @@ public class Outtake extends SubsystemBase {
         leftFlywheel.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
         rightFlywheel.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
         /* telemetry */
+        this.telemetry = ftc;
         panels.addData("Left flywheel: ", HardwareStates.INITIALIZED.toString());
         panels.addData("Right flywheel: ", HardwareStates.INITIALIZED.toString());
         ftc.addData("Left flywheel: ", HardwareStates.INITIALIZED);
@@ -38,11 +42,15 @@ public class Outtake extends SubsystemBase {
     }
 
     public void on(double power) { //test this and edit as need be
+        telemetry.addData("Did it run? ", "yur");
+        telemetry.update();
         leftFlywheel.set(power * -1);
         rightFlywheel.set(power);
     }
 
     public void off() {
+        telemetry.addData("Did it run? ", "yur");
+        telemetry.update();
         leftFlywheel.stopMotor();
         rightFlywheel.stopMotor();
     }

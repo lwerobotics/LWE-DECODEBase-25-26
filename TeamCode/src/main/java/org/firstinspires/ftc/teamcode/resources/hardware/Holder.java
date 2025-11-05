@@ -13,6 +13,7 @@ import org.firstinspires.ftc.teamcode.resources.util.enums.HardwareStates;
 
 public class Holder extends SubsystemBase {
     public MotorEx holderMotor;
+    private Telemetry telemetry;
     //private HardwareStates motorState = HardwareStates.NULL;
     public void initHolder(@NonNull TelemetryManager panels, @NonNull Telemetry ftc, @NonNull HardwareMap hMap) {
         /* motor mapping+configuration */
@@ -20,6 +21,7 @@ public class Holder extends SubsystemBase {
         holderMotor.setRunMode(Motor.RunMode.RawPower);
         holderMotor.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
         /* telemetry+state */
+        this.telemetry = ftc;
         panels.addData("Artifact holder motor: ", HardwareStates.INITIALIZED.toString());
         panels.addData("Artifact holder motor: ", HardwareStates.OFF.toString());
         ftc.addData("Artifact holder motor: ", HardwareStates.INITIALIZED);
@@ -31,6 +33,8 @@ public class Holder extends SubsystemBase {
     }
 
     public void powerMotor(double power) {
+        telemetry.addData("Did it run? ", "yur");
+        telemetry.update();
         holderMotor.set(power);
         //motorState = HardwareStates.ON; commented out it for v1.0b, will be reinstated at a later time (v1.0?)
     }

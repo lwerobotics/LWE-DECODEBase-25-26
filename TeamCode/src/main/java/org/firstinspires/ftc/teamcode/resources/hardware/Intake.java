@@ -13,6 +13,7 @@ import org.firstinspires.ftc.teamcode.resources.util.enums.HardwareStates;
 
 public class Intake extends SubsystemBase {
     private MotorEx collectionMotor;
+    private Telemetry telemetry;
 
     /**
      * Parameters for the initialization function of the collection motor (updated 10/16/25)
@@ -26,6 +27,7 @@ public class Intake extends SubsystemBase {
         /* motor behavior */
         collectionMotor.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
         /* telemetry */
+        this.telemetry = ftc;
         panels.addData("Intake motor: ", HardwareStates.INITIALIZED.toString());
         ftc.addData("Intake motor: ", HardwareStates.INITIALIZED);
         panels.update();
@@ -39,9 +41,13 @@ public class Intake extends SubsystemBase {
 
     /** @noinspection unused*/
     public void out(double power) {
+        telemetry.addData("Did it run? ", "yur");
+        telemetry.update();
         collectionMotor.set(power);
     }
     public void stop() {
+        telemetry.addData("Did it run? ", "yur");
+        telemetry.update();
         collectionMotor.stopMotor();
     }
 }
