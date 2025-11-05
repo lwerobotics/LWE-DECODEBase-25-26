@@ -80,9 +80,9 @@ public class PracticeTeleOp extends CommandOpMode {
                 new InitIntake(panelsTelemetry, telemetry, hardwareMap, intake),
                 new InitOuttake(panelsTelemetry, telemetry, hardwareMap, outtake, gate, holder),
                 new DriveField(drivetrain,
-                        fsi.filterStickInput(driverOp.gamepad.left_stick_x) * 1,
-                        fsi.filterStickInput(driverOp.gamepad.left_stick_y) * 1,
-                        fsi.filterStickInput(driverOp.gamepad.right_stick_x) * 1)
+                        fsi.filterStickInput(driverOp.gamepad.left_stick_x) ,
+                        fsi.filterStickInput(driverOp.gamepad.left_stick_y),
+                        fsi.filterStickInput(driverOp.gamepad.right_stick_x))
         ));
         /* brake button */
         driverOp.getGamepadButton(GamepadKeys.Button.X)

@@ -33,7 +33,7 @@ public class CompetitionTeleOp extends CommandOpMode { //lock in bro
         /* drive */
         schedule(new SequentialCommandGroup(
                 new InitDrive(panelsTelemetry, telemetry, hardwareMap, drivetrain),
-                new DriveField(drivetrain, fsi.filterStickInput(driverOp.getLeftX()), fsi.filterStickInput(driverOp.getLeftY()), fsi.filterStickInput(driverOp.getRightX()))
+                new DriveField(drivetrain, fsi.filterStickInput(driverOp.gamepad.left_stick_x), fsi.filterStickInput(driverOp.gamepad.left_stick_y), fsi.filterStickInput(driverOp.gamepad.right_stick_x))
         ));
         /* INSERT HEADER HERE */
         /* NOTE: in the future once the bot is actually built this area would use GamepadEx buttons/triggers attached to instant co*/

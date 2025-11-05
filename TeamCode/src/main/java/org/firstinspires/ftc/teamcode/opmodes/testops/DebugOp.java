@@ -84,9 +84,9 @@ public class DebugOp extends CommandOpMode {
                 new UninterruptibleCommand(
                         new DriveField( //i honestly dont know why i have to multiply the params by something to get the param names in android studio dont ask
                                 drivetrain,
-                                fsi.filterStickInput(driverOp.getLeftX()) * 1,
-                                fsi.filterStickInput(driverOp.getLeftY()) * 1,
-                                fsi.filterStickInput(driverOp.getRightX()) * GamepadConstants.TURN_SENSITIVITY.getEnumValue()))
+                                fsi.filterStickInput(driverOp.gamepad.left_stick_x) * 1,
+                                fsi.filterStickInput(driverOp.gamepad.left_stick_y) * 1,
+                                fsi.filterStickInput(driverOp.gamepad.right_stick_x) * GamepadConstants.TURN_SENSITIVITY.getEnumValue()))
         ));
 
 

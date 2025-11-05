@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.resources.hardware;
 import androidx.annotation.NonNull;
 
 import com.bylazar.telemetry.TelemetryManager;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.seattlesolvers.solverslib.command.SubsystemBase;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.hardware.HardwareMap;
@@ -29,10 +30,10 @@ public class Drivetrain extends SubsystemBase {
         rightRear = hMap.get(DcMotor.class, "rightRear");
         leftRear = hMap.get(DcMotor.class, "leftRear");
         /* motor config */
-        leftFront.setDirection(DcMotor.Direction.REVERSE);
-        leftRear.setDirection(DcMotor.Direction.REVERSE);
-        rightFront.setDirection(DcMotor.Direction.FORWARD);
-        rightRear.setDirection(DcMotor.Direction.FORWARD);
+        leftFront.setDirection(DcMotor.Direction.FORWARD);
+        leftRear.setDirection(DcMotor.Direction.FORWARD);
+        rightFront.setDirection(DcMotor.Direction.REVERSE);
+        rightRear.setDirection(DcMotor.Direction.REVERSE);
 
         leftFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         leftRear.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
