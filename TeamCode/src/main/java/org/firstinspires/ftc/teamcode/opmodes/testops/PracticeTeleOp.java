@@ -129,6 +129,13 @@ public class PracticeTeleOp extends CommandOpMode {
                         drivetrain, intake, outtake, gate
                 ));
 
+    }
+
+    @Override
+    public void run() {
+        super.run();
+        // haha vin skibidi toilet ohio
         CommandScheduler.getInstance().run();
     }
+
 }
