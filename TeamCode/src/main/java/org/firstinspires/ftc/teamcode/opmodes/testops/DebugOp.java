@@ -102,7 +102,7 @@ public class DebugOp extends CommandOpMode {
         /* kill switch G1 */
         driverOp.getGamepadButton(GamepadKeys.Button.BACK)
                 .whenPressed(new KillRobot(
-                        drivetrain, intake, outtake, gate
+                        drivetrain, intake, outtake, gate, telemetry
                 ));
 
 
@@ -150,7 +150,7 @@ public class DebugOp extends CommandOpMode {
         /* kill switch G2 */
         toolOp.getGamepadButton(GamepadKeys.Button.BACK)
                 .whenPressed(new KillRobot(
-                        drivetrain, intake, outtake, gate
+                        drivetrain, intake, outtake, gate, telemetry
                 ));
 
         CommandScheduler.getInstance().run();
