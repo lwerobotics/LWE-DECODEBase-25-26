@@ -3,16 +3,15 @@ package org.firstinspires.ftc.teamcode.resources.hardware;
 import androidx.annotation.NonNull;
 
 import com.bylazar.telemetry.TelemetryManager;
+import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
-import com.seattlesolvers.solverslib.command.SubsystemBase;
-import com.seattlesolvers.solverslib.hardware.motors.Motor;
-import com.seattlesolvers.solverslib.hardware.motors.MotorEx;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.resources.util.enums.HardwareStates;
 
-public class Intake extends SubsystemBase {
-    private MotorEx collectionMotor;
+public class Intake {
+    private DcMotor collectionMotor;
     private Telemetry telemetry;
 
     /**
@@ -20,12 +19,11 @@ public class Intake extends SubsystemBase {
      * @param hMap The hardware map used to register hardware to the robot (like motors, servos , actuators, etc.)
      */
     public void initMotor(@NonNull TelemetryManager panels, @NonNull Telemetry ftc, @NonNull HardwareMap hMap) {
-        /* motor mapping */
-        collectionMotor = new MotorEx(hMap, "collectionMotor");
-        /* motor run-mode */
-        collectionMotor.setRunMode(Motor.RunMode.RawPower);
-        /* motor behavior */
-        collectionMotor.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
+        collectionMotor = hMap.get(DcMotor.class, "collectionMotor");
+        collectionMotor.setDirection(DcMotorSimple.Direction.FORWARD);
+        collectionMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        collectionMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        collectionMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         /* telemetry */
         this.telemetry = ftc;
         panels.addData("Intake motor: ", HardwareStates.INITIALIZED.toString());
@@ -36,18 +34,15 @@ public class Intake extends SubsystemBase {
 
     /* The reasoning for the minimal functions here is because most of the function of the system can be done via the opmode. */
     public void in(double power) {
-       collectionMotor.set(power);
+        collectionMotor.setPower(power);
     }
 
     /** @noinspection unused*/
     public void out(double power) {
-        telemetry.addData("Did it run? ", "yur");
-        telemetry.update();
-        collectionMotor.set(power);
+        collectionMotor.setPower(-power);
     }
+
     public void stop() {
-        telemetry.addData("Did it run? ", "yur");
-        telemetry.update();
-        collectionMotor.stopMotor();
+        collectionMotor.setPower(0.0);
     }
 }

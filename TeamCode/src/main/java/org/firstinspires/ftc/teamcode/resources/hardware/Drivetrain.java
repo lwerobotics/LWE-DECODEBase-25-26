@@ -3,7 +3,6 @@ package org.firstinspires.ftc.teamcode.resources.hardware;
 import androidx.annotation.NonNull;
 
 import com.bylazar.telemetry.TelemetryManager;
-import com.seattlesolvers.solverslib.command.SubsystemBase;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -13,9 +12,7 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.resources.util.enums.HardwareStates;
 
-import java.util.function.DoubleSupplier;
-
-public class Drivetrain extends SubsystemBase {
+public class Drivetrain{
     private DcMotor rightFront, leftFront, rightRear, leftRear;
     private IMU imu;
 
@@ -25,24 +22,31 @@ public class Drivetrain extends SubsystemBase {
      * @param ftc The telemetry that sends to the Driver Hub
      */
     public void initDrivetrain(@NonNull HardwareMap hMap, @NonNull TelemetryManager panels, @NonNull Telemetry ftc) {
-        DcMotor[] driveMotors = new DcMotor[]{leftFront, leftRear, rightFront, rightRear};
-
         /* motor mapping */
         rightFront = hMap.get(DcMotor.class, "rightFront");
         leftFront = hMap.get(DcMotor.class, "leftFront");
         rightRear = hMap.get(DcMotor.class, "rightRear");
         leftRear = hMap.get(DcMotor.class, "leftRear");
         /* motor config */
-        leftFront.setDirection(DcMotor.Direction.REVERSE);
+        leftFront.setDirection(DcMotor.Direction.FORWARD);
         leftRear.setDirection(DcMotor.Direction.REVERSE);
         rightFront.setDirection(DcMotor.Direction.FORWARD);
-        rightRear.setDirection(DcMotor.Direction.FORWARD);
+        rightRear.setDirection(DcMotor.Direction.REVERSE);
 
-        for (DcMotor motors : driveMotors) {
-            motors.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-            motors.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-            motors.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        }
+        leftFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        leftRear.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        rightFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        rightRear.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
+        leftFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        leftRear.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rightFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rightRear.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        /* after reset THEN... */
+        leftFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        leftRear.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        rightFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        rightRear.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         /* imu mapping+config */
         imu = hMap.get(IMU.class, "imu");

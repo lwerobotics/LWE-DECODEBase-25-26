@@ -1,19 +1,16 @@
 package org.firstinspires.ftc.teamcode.resources.hardware;
 
-//import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.telemetry;
-
 import androidx.annotation.NonNull;
 
 import com.bylazar.telemetry.TelemetryManager;
 import com.qualcomm.robotcore.hardware.HardwareMap;
-import com.seattlesolvers.solverslib.command.SubsystemBase;
 import com.seattlesolvers.solverslib.hardware.motors.Motor;
 import com.seattlesolvers.solverslib.hardware.motors.MotorEx;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.resources.util.enums.HardwareStates;
 
-public class Outtake extends SubsystemBase {
+public class Outtake {
     private MotorEx leftFlywheel, rightFlywheel;
     private Telemetry telemetry;
 
@@ -34,11 +31,11 @@ public class Outtake extends SubsystemBase {
         this.telemetry = ftc;
         panels.addData("Left flywheel: ", HardwareStates.INITIALIZED.toString());
         panels.addData("Right flywheel: ", HardwareStates.INITIALIZED.toString());
-        ftc.addData("Left flywheel: ", HardwareStates.INITIALIZED);
-        ftc.addData("Right flywheel: ", HardwareStates.INITIALIZED);
+        telemetry.addData("Left flywheel: ", HardwareStates.INITIALIZED);
+        telemetry.addData("Right flywheel: ", HardwareStates.INITIALIZED);
 
         panels.update();
-        ftc.update();
+        telemetry.update();
     }
 
     public void on(double power) { //test this and edit as need be
