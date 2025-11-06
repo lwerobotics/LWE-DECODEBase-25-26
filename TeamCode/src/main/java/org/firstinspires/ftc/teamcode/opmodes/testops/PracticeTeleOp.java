@@ -27,6 +27,7 @@ public class PracticeTeleOp extends OpMode {
         drivetrain = new Drivetrain();
         intake = new Intake();
         outtake = new Outtake();
+        possession = new Possession();
 
         driverOp = gamepad1;
         toolOp = gamepad2;
@@ -40,16 +41,37 @@ public class PracticeTeleOp extends OpMode {
 
     @Override
     public void loop() {
-        drivetrain.driveField(driverOp.left_stick_x, driverOp.left_stick_y, driverOp.right_stick_x);
+        /* drive */
+        drivetrain.driveField(-driverOp.left_stick_x, driverOp.left_stick_y, driverOp.right_stick_x); //works?????
 
         /* intake */
         if (toolOp.aWasPressed()) {
             intake.in(1.0);
-        } else if (toolOp.bWasPressed()) {
+            possession.hold();
+        }
+        if (toolOp.bWasPressed()) {
             intake.stop();
+            possession.stop();
         }
 
         /* outtake */
-        //continue tmrw SPEEDRUN GO GO GO
+        if (toolOp.yWasPressed()) {
+            outtake.on(0.80);
+        }
+        if (toolOp.xWasPressed()) {
+            outtake.off();
+        }
+
+        /* possession */
+        if (toolOp.leftBumperWasPressed()) {
+            possession.release();
+        } else if (toolOp.leftBumperWasReleased()) {
+            possession.stop();
+        }
+        if (toolOp.rightBumperWasPressed()) {
+            possession.allow();
+        } else if (toolOp.rightBumperWasReleased()) {
+            possession.stop();
+        }
     }
 }
