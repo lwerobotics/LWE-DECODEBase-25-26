@@ -4,12 +4,14 @@ import androidx.annotation.NonNull;
 
 import com.bylazar.telemetry.TelemetryManager;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.resources.util.enums.HardwareStates;
 
+@SuppressWarnings("ALL")
 public class Possession {
     private DcMotor holderMotor;
     private Servo gateServo;
@@ -19,12 +21,12 @@ public class Possession {
         holderMotor = hMap.get(DcMotor.class, "holderMotor");
         gateServo = hMap.get(Servo.class, "gateServo");
         /* config */
-        holderMotor.setDirection(DcMotor.Direction.FORWARD);
+        holderMotor.setDirection(DcMotor.Direction.REVERSE);
         holderMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         holderMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         holderMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
-        gateServo.scaleRange(0.0, 0.35);
+        gateServo.scaleRange(0.0, 0.5);
 
         ftc.addData("Holder motor: ", HardwareStates.INITIALIZED);
         ftc.addData("Gate servo: ", HardwareStates.INITIALIZED);
@@ -45,11 +47,11 @@ public class Possession {
     }
 
     /* holder methods */
-    public void hold() {
+    public void pull() {
         holderMotor.setPower(0.75);
     }
 
-    public void release() {
+    public void repel() {
         holderMotor.setPower(-0.75);
     }
 

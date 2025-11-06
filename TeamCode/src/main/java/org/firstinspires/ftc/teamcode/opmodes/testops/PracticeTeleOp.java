@@ -19,7 +19,9 @@ public class PracticeTeleOp extends OpMode {
     private Possession possession;
     private Gamepad driverOp;
     private Gamepad toolOp;
+    @SuppressWarnings("FieldCanBeLocal")
     private TelemetryManager panelsTelemetry;
+    private boolean intakeToggle, outtakeToggle, gateToggle, holderToggle = false;
 
     @Override
     public void init() {
@@ -42,35 +44,49 @@ public class PracticeTeleOp extends OpMode {
     @Override
     public void loop() {
         /* drive */
-        drivetrain.driveField(-driverOp.left_stick_x, driverOp.left_stick_y, driverOp.right_stick_x); //works?????
+        drivetrain.driveField(driverOp.left_stick_x, driverOp.left_stick_y, driverOp.right_stick_x); //works?????
 
         /* intake */
         if (toolOp.aWasPressed()) {
-            intake.in(1.0);
-            possession.hold();
-        }
-        if (toolOp.bWasPressed()) {
-            intake.stop();
-            possession.stop();
+            intakeToggle = !intakeToggle;
         }
 
         /* outtake */
         if (toolOp.yWasPressed()) {
-            outtake.on(0.80);
-        }
-        if (toolOp.xWasPressed()) {
-            outtake.off();
+            outtakeToggle = !outtakeToggle;
         }
 
         /* possession */
         if (toolOp.leftBumperWasPressed()) {
-            possession.release();
-        } else if (toolOp.leftBumperWasReleased()) {
-            possession.stop();
+            gateToggle = !gateToggle;
         }
-        if (toolOp.rightBumperWasPressed()) {
+
+        if (toolOp.xWasPressed()) {
+            holderToggle = !holderToggle;
+        }
+
+        /* toggles */
+        if (intakeToggle == true) {
+            intake.in(1.0);
+        } else {
+            intake.stop();
+        }
+
+        if (outtakeToggle == true) {
+            outtake.on(0.75);
+        } else {
+            outtake.off();
+        }
+
+        if (gateToggle == true) {
             possession.allow();
-        } else if (toolOp.rightBumperWasReleased()) {
+        } else {
+            possession.block();
+        }
+
+        if (holderToggle == true) {
+            possession.pull();
+        } else {
             possession.stop();
         }
     }
