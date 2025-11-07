@@ -59,6 +59,7 @@ public class Drivetrain{
                 RevHubOrientationOnRobot.UsbFacingDirection.DOWN
         );
         imu.initialize(new IMU.Parameters(cHubOrientation));
+        imu.resetYaw();
 
         /* telemetry */
         panels.addData("Right front motor: ", HardwareStates.INITIALIZED.toString());
@@ -86,8 +87,8 @@ public class Drivetrain{
         /* mecanum math variables */
         double[] drivePowers = {
                 forward - strafe + turn, //leftFront
-                forward + strafe + turn, //leftRear
-                forward + strafe - turn, //rightFront
+                forward + strafe - turn, //leftRear
+                forward + strafe + turn, //rightFront
                 forward - strafe - turn  //rightRear
         };
 

@@ -74,7 +74,7 @@ public class PracticeTeleOp extends OpMode {
         }
 
         if (outtakeToggle == true) {
-            outtake.on(0.75);
+            outtake.on(0.6);
         } else {
             outtake.off();
         }
