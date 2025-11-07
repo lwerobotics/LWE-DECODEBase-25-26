@@ -4,7 +4,6 @@ import androidx.annotation.NonNull;
 
 import com.bylazar.telemetry.TelemetryManager;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.IMU;
@@ -126,6 +125,7 @@ public class Drivetrain{
     /** Parameter for setting the power of all drive motors at once (updated 10/16/25)
      * @param power The motor power desired to be given to all motors (can be used for a primitive brake)
      */
+    @SuppressWarnings("ALL")
     public void setGlobalPowers(double power) {
         leftFront.setPower(power);
         leftRear.setPower(power);

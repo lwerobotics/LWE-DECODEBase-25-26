@@ -9,6 +9,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.resources.util.enums.HardwareStates;
 
+@SuppressWarnings("FieldCanBeLocal")
 public class Outtake {
     private DcMotor leftFlywheel, rightFlywheel;
     private Telemetry telemetry;

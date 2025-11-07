@@ -10,6 +10,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.resources.util.enums.HardwareStates;
 
+@SuppressWarnings("FieldCanBeLocal")
 public class Intake {
     private DcMotor collectionMotor;
     private Telemetry telemetry;
