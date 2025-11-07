@@ -58,9 +58,9 @@ public class PracticeTeleOp extends OpMode {
         }
 
         /* possession */
-        if (toolOp.leftBumperWasPressed()) {
-            gateToggle = !gateToggle;
-        }
+//        if (toolOp.leftBumperWasPressed()) {
+//            gateToggle = !gateToggle;
+//        }
 
         if (toolOp.xWasPressed()) {
             holderToggle = !holderToggle;
@@ -74,16 +74,16 @@ public class PracticeTeleOp extends OpMode {
         }
 
         if (outtakeToggle == true) {
-            outtake.on(0.7);
+            outtake.on(0.6);
         } else {
             outtake.off();
         }
 
-        if (gateToggle == true) {
-            possession.allow();
-        } else {
-            possession.block();
-        }
+//        if (gateToggle == true) {
+//            possession.allow();
+//        } else {
+//            possession.block();
+//        }
 
         if (holderToggle == true) {
             possession.pull();
