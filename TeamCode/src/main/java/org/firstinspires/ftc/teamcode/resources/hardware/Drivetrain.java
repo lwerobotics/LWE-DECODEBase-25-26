@@ -29,6 +29,8 @@ public class Drivetrain{
         rightRear = hMap.get(DcMotor.class, "rightRear");
         leftRear = hMap.get(DcMotor.class, "leftRear");
         /* motor config */
+        //THIS IS THE ONLY SEGMENT OF CODE IM ALLOWING YOU TO TOUCH YOU GOT IT
+        //WORKING WITHOUT CHANGING THE RAW MATH
         leftFront.setDirection(DcMotor.Direction.REVERSE);
         leftRear.setDirection(DcMotor.Direction.FORWARD);
         rightFront.setDirection(DcMotor.Direction.REVERSE);
@@ -83,10 +85,10 @@ public class Drivetrain{
     public void drive(double forward, double strafe, double turn) {
         /* mecanum math variables */
         double[] drivePowers = {
-                forward - strafe + turn, //leftFront
-                forward + strafe + turn, //leftRear
-                forward + strafe - turn, //rightFront
-                forward - strafe - turn  //rightRear
+                forward + strafe + turn, //leftFront
+                forward - strafe + turn, //leftRear
+                forward - strafe - turn, //rightFront
+                forward + strafe - turn  //rightRear
         };
 
         double maxPower = 1.0;
