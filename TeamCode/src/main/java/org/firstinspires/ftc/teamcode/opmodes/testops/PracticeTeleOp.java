@@ -11,7 +11,9 @@ import org.firstinspires.ftc.teamcode.resources.hardware.Intake;
 import org.firstinspires.ftc.teamcode.resources.hardware.Outtake;
 import org.firstinspires.ftc.teamcode.resources.hardware.Possession;
 
+
 @TeleOp(name = "PracticeOp")
+@SuppressWarnings("FieldCanBeLocal")
 public class PracticeTeleOp extends OpMode {
     private Drivetrain drivetrain;
     private Intake intake;
@@ -19,7 +21,6 @@ public class PracticeTeleOp extends OpMode {
     private Possession possession;
     private Gamepad driverOp;
     private Gamepad toolOp;
-    @SuppressWarnings("FieldCanBeLocal")
     private TelemetryManager panelsTelemetry;
     private boolean intakeToggle, outtakeToggle, gateToggle, holderToggle = false;
 
