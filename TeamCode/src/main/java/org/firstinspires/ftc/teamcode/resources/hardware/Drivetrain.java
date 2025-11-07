@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 
 import com.bylazar.telemetry.TelemetryManager;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.IMU;
@@ -30,10 +31,10 @@ public class Drivetrain{
         /* motor config */
         //THIS IS THE ONLY SEGMENT OF CODE IM ALLOWING YOU TO TOUCH YOU GOT IT
         //WORKING WITHOUT CHANGING THE RAW MATH
-        leftFront.setDirection(DcMotor.Direction.REVERSE);
-        leftRear.setDirection(DcMotor.Direction.FORWARD);
-        rightFront.setDirection(DcMotor.Direction.REVERSE);
-        rightRear.setDirection(DcMotor.Direction.FORWARD);
+        leftFront.setDirection(DcMotor.Direction.FORWARD);
+        leftRear.setDirection(DcMotor.Direction.REVERSE);
+        rightFront.setDirection(DcMotor.Direction.FORWARD);
+        rightRear.setDirection(DcMotor.Direction.REVERSE);
 
         leftFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         leftRear.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -84,10 +85,10 @@ public class Drivetrain{
     public void drive(double forward, double strafe, double turn) {
         /* mecanum math variables */
         double[] drivePowers = {
-                forward + strafe + turn, //leftFront
-                forward - strafe + turn, //leftRear
-                forward - strafe - turn, //rightFront
-                forward + strafe - turn  //rightRear
+                forward - strafe + turn, //leftFront
+                forward + strafe + turn, //leftRear
+                forward + strafe - turn, //rightFront
+                forward - strafe - turn  //rightRear
         };
 
         double maxPower = 1.0;
