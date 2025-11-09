@@ -22,7 +22,7 @@ public class PracticeTeleOp extends OpMode {
     private Gamepad driverOp;
     private Gamepad toolOp;
     private TelemetryManager panelsTelemetry;
-    private boolean intakeToggle, outtakeToggle, gateToggle, holderToggle = false;
+    private boolean intakeToggle, outtakeToggle, gateToggle, holderToggle, isReversed = false;
 
     @Override
     public void init() {
@@ -45,7 +45,7 @@ public class PracticeTeleOp extends OpMode {
     @Override
     public void loop() {
         /* drive */
-        drivetrain.driveField(driverOp.left_stick_x, driverOp.left_stick_y, driverOp.right_stick_x); //works?????
+        drivetrain.drive(driverOp.left_stick_x, driverOp.left_stick_y, driverOp.right_stick_x); //test this wednesday
 
         /* intake */
         if (toolOp.aWasPressed()) {
@@ -66,15 +66,30 @@ public class PracticeTeleOp extends OpMode {
             holderToggle = !holderToggle;
         }
 
+        /* intake+possession reverse */
+        if (toolOp.rightBumperWasPressed()) { //update this soon so it can be held not toggled
+            isReversed = !isReversed;
+
+            telemetry.addData("Reversed is: ", isReversed);
+            panelsTelemetry.addData("Reversed is: ", isReversed);
+            telemetry.update();
+            panelsTelemetry.update();
+        }
+
+
         /* toggles */
         if (intakeToggle == true) {
-            intake.in(1.0);
+            if (isReversed == false) {
+                intake.in(1.0);
+            } else {
+                intake.in(-1.0);
+            }
         } else {
             intake.stop();
         }
 
         if (outtakeToggle == true) {
-            outtake.on(0.6);
+            outtake.on(0.63);
         } else {
             outtake.off();
         }
@@ -86,7 +101,11 @@ public class PracticeTeleOp extends OpMode {
 //        }
 
         if (holderToggle == true) {
-            possession.pull();
+            if (isReversed == false) {
+                possession.pull();
+            } else {
+                possession.repel();
+            }
         } else {
             possession.stop();
         }
