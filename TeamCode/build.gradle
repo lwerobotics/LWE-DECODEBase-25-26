@@ -32,7 +32,7 @@ dependencies {
     implementation project(':FtcRobotController')
     implementation "org.solverslib:core:0.3.3"
     implementation "org.solverslib:pedroPathing:0.3.3"
-    implementation "com.bylazar:fullpanels:1.0.7"
+    implementation "com.bylazar:fullpanels:1.0.9"
 }
 
 repositories {

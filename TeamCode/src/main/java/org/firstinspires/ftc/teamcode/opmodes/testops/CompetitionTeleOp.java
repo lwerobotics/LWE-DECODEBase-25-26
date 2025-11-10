@@ -13,9 +13,9 @@ import org.firstinspires.ftc.teamcode.resources.hardware.Possession;
 import org.firstinspires.ftc.teamcode.resources.util.enums.HardwareStates;
 
 
-@TeleOp(name = "PracticeOp")
+@TeleOp(name = "CompOp (v1.0.0)")
 @SuppressWarnings("FieldCanBeLocal")
-public class PracticeTeleOp extends OpMode {
+public class CompetitionTeleOp extends OpMode {
     private Drivetrain drivetrain;
     private Intake intake;
     private Outtake outtake;
