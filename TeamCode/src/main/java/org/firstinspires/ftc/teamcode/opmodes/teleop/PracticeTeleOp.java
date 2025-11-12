@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.opmodes.testops;
+package org.firstinspires.ftc.teamcode.opmodes.teleop;
 
 import com.bylazar.telemetry.PanelsTelemetry;
 import com.bylazar.telemetry.TelemetryManager;
@@ -13,9 +13,9 @@ import org.firstinspires.ftc.teamcode.resources.hardware.Possession;
 import org.firstinspires.ftc.teamcode.resources.util.enums.HardwareStates;
 
 
-@TeleOp(name = "CompOp (v1.0.0)")
-@SuppressWarnings("FieldCanBeLocal")
-public class CompetitionTeleOp extends OpMode {
+@TeleOp(name = "PracticeOp")
+@SuppressWarnings({"FieldCanBeLocal", "IfStatementWithIdenticalBranches"})
+public class PracticeTeleOp extends OpMode {
     private Drivetrain drivetrain;
     private Intake intake;
     private Outtake outtake;
@@ -59,9 +59,9 @@ public class CompetitionTeleOp extends OpMode {
         }
 
         /* possession */
-//        if (toolOp.leftBumperWasPressed()) {
-//            gateToggle = !gateToggle;
-//        }
+        if (toolOp.leftBumperWasPressed()) {
+            gateToggle = !gateToggle;
+        }
 
         if (toolOp.xWasPressed()) {
             holderToggle = !holderToggle;
@@ -90,47 +90,53 @@ public class CompetitionTeleOp extends OpMode {
 
             telemetry.addData("Intake: ", HardwareStates.ON);
             panelsTelemetry.addData("Intake: ", HardwareStates.ON.toString());
+            telemetry.update();
+            panelsTelemetry.update();
         } else {
             intake.stop();
 
             telemetry.addData("Intake: ", HardwareStates.OFF);
             panelsTelemetry.addData("Intake: ", HardwareStates.OFF.toString());
+            telemetry.update();
+            panelsTelemetry.update();
         }
-        telemetry.update();
-        panelsTelemetry.update();
 
         if (outtakeToggle == true) {
             outtake.on(0.63);
 
             telemetry.addData("Outtake: ", HardwareStates.ON);
             panelsTelemetry.addData("Outtake: ", HardwareStates.ON.toString());
+            telemetry.update();
+            panelsTelemetry.update();
         } else {
             outtake.off();
 
             telemetry.addData("Outtake ", HardwareStates.OFF);
             panelsTelemetry.addData("Outtake: ", HardwareStates.OFF.toString());
+            telemetry.update();
+            panelsTelemetry.update();
         }
-        telemetry.update();
-        panelsTelemetry.update();
 
-//        if (gateToggle == true) {
-//            possession.allow();
-//        } else {
-//            possession.block();
-//        }
+        if (gateToggle == true) {
+            possession.allow();
+        } else {
+            possession.block();
+        }
 
         if (holderToggle == true) {
             possession.pull();
 
             telemetry.addData("Ramp: ", HardwareStates.ON);
             panelsTelemetry.addData("Ramp: ", HardwareStates.ON.toString());
+            telemetry.update();
+            panelsTelemetry.update();
         } else {
             possession.stop();
 
-            telemetry.addData("Ramp: ", HardwareStates.OFF);
-            panelsTelemetry.addData("Ramp: ", HardwareStates.OFF.toString());
+            telemetry.addData("Ramp: ", HardwareStates.ON);
+            panelsTelemetry.addData("Ramp: ", HardwareStates.ON.toString());
+            telemetry.update();
+            panelsTelemetry.update();
         }
-        telemetry.update();
-        panelsTelemetry.update();
     }
 }

@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 
 import com.bylazar.telemetry.TelemetryManager;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
@@ -11,7 +12,7 @@ import org.firstinspires.ftc.teamcode.resources.util.enums.HardwareStates;
 
 @SuppressWarnings("FieldCanBeLocal")
 public class Outtake {
-    private DcMotor leftFlywheel, rightFlywheel;
+    public DcMotorEx leftFlywheel, rightFlywheel;
     private Telemetry telemetry;
 
     /** Parameters for the initialization function of the given flywheel motor (updated 10/16/25)
@@ -19,8 +20,8 @@ public class Outtake {
      */
     public void initOuttake(@NonNull TelemetryManager panels, @NonNull Telemetry ftc, @NonNull HardwareMap hMap) {
         /* motor mapping */
-        leftFlywheel = hMap.get(DcMotor.class, "leftFlywheel");
-        rightFlywheel = hMap.get(DcMotor.class, "rightFlywheel");
+        leftFlywheel = hMap.get(DcMotorEx.class, "leftFlywheel");
+        rightFlywheel = hMap.get(DcMotorEx.class, "rightFlywheel");
 
         leftFlywheel.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         rightFlywheel.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);

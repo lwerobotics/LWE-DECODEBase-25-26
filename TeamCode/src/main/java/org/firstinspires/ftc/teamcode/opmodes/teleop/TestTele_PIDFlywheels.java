@@ -1,5 +1,6 @@
-package org.firstinspires.ftc.teamcode.opmodes.testops;
+package org.firstinspires.ftc.teamcode.opmodes.teleop;
 
+import com.bylazar.configurables.annotations.Configurable;
 import com.bylazar.telemetry.PanelsTelemetry;
 import com.bylazar.telemetry.TelemetryManager;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
@@ -12,10 +13,10 @@ import org.firstinspires.ftc.teamcode.resources.hardware.Outtake;
 import org.firstinspires.ftc.teamcode.resources.hardware.Possession;
 import org.firstinspires.ftc.teamcode.resources.util.enums.HardwareStates;
 
-
-@TeleOp(name = "PracticeOp")
+@Configurable
+@TeleOp(name = "FeatureTest_PIDF")
 @SuppressWarnings("FieldCanBeLocal")
-public class PracticeTeleOp extends OpMode {
+public class TestTele_PIDFlywheels extends OpMode {
     private Drivetrain drivetrain;
     private Intake intake;
     private Outtake outtake;
@@ -24,6 +25,10 @@ public class PracticeTeleOp extends OpMode {
     private Gamepad toolOp;
     private TelemetryManager panelsTelemetry;
     private boolean intakeToggle, outtakeToggle, gateToggle, holderToggle = false;
+    public static double kP = 0.0;
+    public static double kI = 0.0;
+    public static double kD = 0.0;
+
 
     @Override
     public void init() {
@@ -83,6 +88,12 @@ public class PracticeTeleOp extends OpMode {
             panelsTelemetry.update();
         }
 
+        /* getvelocity experiment */
+        if (toolOp.backWasReleased()) { //takes from left flywheel
+            panelsTelemetry.addData("Flywheel velocity: ", outtake.leftFlywheel.getVelocity());
+            telemetry.addData("Flywheel velocity: ", outtake.leftFlywheel.getVelocity());
+        }
+
 
         /* toggles */
         if (intakeToggle == true) {
@@ -131,6 +142,12 @@ public class PracticeTeleOp extends OpMode {
             panelsTelemetry.addData("Ramp: ", HardwareStates.OFF.toString());
         }
         telemetry.update();
+        panelsTelemetry.update();
+
+        /* panels graphing of PID constants */
+        panelsTelemetry.addData("P", kP);
+        panelsTelemetry.addData("I", kI);
+        panelsTelemetry.addData("D", kD);
         panelsTelemetry.update();
     }
 }

@@ -24,8 +24,6 @@ public class Possession {
         holderMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         holderMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
-        gateServo.scaleRange(0.0, 0.5);
-
         ftc.addData("Holder motor: ", HardwareStates.INITIALIZED);
         ftc.addData("Gate servo: ", HardwareStates.INITIALIZED);
         panels.addData("Holder motor: ", HardwareStates.INITIALIZED.toString());
@@ -37,7 +35,7 @@ public class Possession {
 
     /* gate methods */
     public void allow() {
-        gateServo.setPosition(0.5);
+        gateServo.setPosition(1.0);
     }
 
     public void block() {
