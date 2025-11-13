@@ -7,6 +7,8 @@ public enum HardwareStates {
     DISCONNECTED,
     ON,
     OFF,
+    OPEN,
+    CLOSED,
     KILLED,
     SUCCESS,
     FAILURE,

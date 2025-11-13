@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.opmodes.teleop;
 
+import android.graphics.HardwareRenderer;
+
 import com.bylazar.telemetry.PanelsTelemetry;
 import com.bylazar.telemetry.TelemetryManager;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
@@ -59,7 +61,7 @@ public class PracticeTeleOp extends OpMode {
         }
 
         /* possession */
-        if (toolOp.leftBumperWasPressed()) {
+        if (toolOp.rightBumperWasPressed()) {
             gateToggle = !gateToggle;
         }
 
@@ -69,13 +71,15 @@ public class PracticeTeleOp extends OpMode {
 
         /* intake+possession reverse */
         if (toolOp.left_trigger > 0.65) { //this should work please test; probably need to lower the number cus of like sensitivity or wtv
-            intake.in(-1.0);
-            possession.repel();
+            if (outtake.state == HardwareStates.ON && possession.holderState == HardwareStates.ON) {
+                intake.in(-1.0);
+                possession.repel();
 
-            telemetry.addData("Reversed is: ", HardwareStates.ON);
-            panelsTelemetry.addData("Reversed is: ", HardwareStates.ON.toString());
-            telemetry.update();
-            panelsTelemetry.update();
+                telemetry.addData("Reversed is: ", HardwareStates.ON);
+                panelsTelemetry.addData("Reversed is: ", HardwareStates.ON.toString());
+                telemetry.update();
+                panelsTelemetry.update();
+            }
         } else if (toolOp.left_trigger < 0.65) {
             telemetry.addData("Reversed is: ", HardwareStates.OFF);
             panelsTelemetry.addData("Reversed is: ", HardwareStates.OFF.toString());
@@ -83,60 +87,46 @@ public class PracticeTeleOp extends OpMode {
             panelsTelemetry.update();
         }
 
+        /* curious experiment */
+        if (driverOp.backWasReleased()) { //please logcat i need this
+            System.out.println("Left flywheel velocity: "+outtake.leftFlywheel.getVelocity());
+            System.out.println("Right flywheel velocity: "+outtake.rightFlywheel.getVelocity());
+        }
+
 
         /* toggles */
         if (intakeToggle == true) {
             intake.in(1.0);
-
-            telemetry.addData("Intake: ", HardwareStates.ON);
-            panelsTelemetry.addData("Intake: ", HardwareStates.ON.toString());
-            telemetry.update();
-            panelsTelemetry.update();
         } else {
             intake.stop();
-
-            telemetry.addData("Intake: ", HardwareStates.OFF);
-            panelsTelemetry.addData("Intake: ", HardwareStates.OFF.toString());
-            telemetry.update();
-            panelsTelemetry.update();
         }
 
         if (outtakeToggle == true) {
-            outtake.on(0.63);
-
-            telemetry.addData("Outtake: ", HardwareStates.ON);
-            panelsTelemetry.addData("Outtake: ", HardwareStates.ON.toString());
-            telemetry.update();
-            panelsTelemetry.update();
+            outtake.on(0.55);
         } else {
             outtake.off();
-
-            telemetry.addData("Outtake ", HardwareStates.OFF);
-            panelsTelemetry.addData("Outtake: ", HardwareStates.OFF.toString());
-            telemetry.update();
-            panelsTelemetry.update();
         }
 
         if (gateToggle == true) {
             possession.allow();
+
+            panelsTelemetry.addData("Servo: ", HardwareStates.OPEN.toString());
+            telemetry.addData("Servo: ", HardwareStates.OPEN);
+            panelsTelemetry.update();
+            telemetry.update();
         } else {
             possession.block();
+
+            panelsTelemetry.addData("Servo: ", HardwareStates.CLOSED.toString());
+            telemetry.addData("Servo: ", HardwareStates.CLOSED);
+            panelsTelemetry.update();
+            telemetry.update();
         }
 
         if (holderToggle == true) {
             possession.pull();
-
-            telemetry.addData("Ramp: ", HardwareStates.ON);
-            panelsTelemetry.addData("Ramp: ", HardwareStates.ON.toString());
-            telemetry.update();
-            panelsTelemetry.update();
         } else {
             possession.stop();
-
-            telemetry.addData("Ramp: ", HardwareStates.ON);
-            panelsTelemetry.addData("Ramp: ", HardwareStates.ON.toString());
-            telemetry.update();
-            panelsTelemetry.update();
         }
     }
 }

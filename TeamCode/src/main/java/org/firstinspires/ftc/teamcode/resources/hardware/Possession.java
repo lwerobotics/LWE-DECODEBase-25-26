@@ -11,6 +11,8 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.resources.util.enums.HardwareStates;
 
 public class Possession {
+    public HardwareStates servoState = HardwareStates.NULL;
+    public HardwareStates holderState = HardwareStates.NULL;
     private DcMotor holderMotor;
     private Servo gateServo;
 
@@ -23,6 +25,9 @@ public class Possession {
         holderMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         holderMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         holderMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        /* telemetry+state */
+        holderState = HardwareStates.INITIALIZED;
+        servoState = HardwareStates.INITIALIZED;
 
         ftc.addData("Holder motor: ", HardwareStates.INITIALIZED);
         ftc.addData("Gate servo: ", HardwareStates.INITIALIZED);
@@ -35,23 +40,28 @@ public class Possession {
 
     /* gate methods */
     public void allow() {
-        gateServo.setPosition(1.0);
+        gateServo.setPosition(0.9);
+        servoState = HardwareStates.OPEN;
     }
 
     public void block() {
         gateServo.setPosition(0.0);
+        servoState = HardwareStates.CLOSED;
     }
 
     /* holder methods */
     public void pull() {
         holderMotor.setPower(0.75);
+        holderState = HardwareStates.ON;
     }
 
     public void repel() {
         holderMotor.setPower(-0.75);
+        holderState = HardwareStates.ON;
     }
 
     public void stop() {
         holderMotor.setPower(0.0);
+        holderState = HardwareStates.OFF;
     }
 }

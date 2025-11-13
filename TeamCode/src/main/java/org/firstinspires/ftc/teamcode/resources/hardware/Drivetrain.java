@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 
 import com.bylazar.telemetry.TelemetryManager;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.IMU;
@@ -30,10 +31,10 @@ public class Drivetrain{
         /* motor config */
         //THIS IS THE ONLY SEGMENT OF CODE IM ALLOWING YOU TO TOUCH YOU GOT IT
         //WORKING WITHOUT CHANGING THE RAW MATH
-        leftFront.setDirection(DcMotor.Direction.FORWARD);
-        leftRear.setDirection(DcMotor.Direction.REVERSE);
-        rightFront.setDirection(DcMotor.Direction.FORWARD);
-        rightRear.setDirection(DcMotor.Direction.REVERSE);
+        leftFront.setDirection(DcMotor.Direction.REVERSE);
+        leftRear.setDirection(DcMotor.Direction.FORWARD);
+        rightFront.setDirection(DcMotor.Direction.REVERSE);
+        rightRear.setDirection(DcMotor.Direction.FORWARD);
 
         leftFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         leftRear.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -54,7 +55,7 @@ public class Drivetrain{
         imu = hMap.get(IMU.class, "imu");
 
         RevHubOrientationOnRobot cHubOrientation = new RevHubOrientationOnRobot( //changed for v1.0b3
-                RevHubOrientationOnRobot.LogoFacingDirection.LEFT,
+                RevHubOrientationOnRobot.LogoFacingDirection.RIGHT,
                 RevHubOrientationOnRobot.UsbFacingDirection.DOWN
         );
         imu.initialize(new IMU.Parameters(cHubOrientation));

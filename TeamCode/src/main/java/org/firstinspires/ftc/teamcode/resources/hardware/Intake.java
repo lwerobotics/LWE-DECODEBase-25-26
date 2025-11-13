@@ -12,6 +12,7 @@ import org.firstinspires.ftc.teamcode.resources.util.enums.HardwareStates;
 
 @SuppressWarnings("FieldCanBeLocal")
 public class Intake {
+    public HardwareStates state = HardwareStates.NULL;
     private DcMotor collectionMotor;
     private Telemetry telemetry;
 
@@ -25,7 +26,9 @@ public class Intake {
         collectionMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         collectionMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         collectionMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        /* telemetry */
+        /* telemetry+state */
+        state = HardwareStates.INITIALIZED;
+
         this.telemetry = ftc;
         panels.addData("Intake motor: ", HardwareStates.INITIALIZED.toString());
         ftc.addData("Intake motor: ", HardwareStates.INITIALIZED);
@@ -36,14 +39,17 @@ public class Intake {
     /* The reasoning for the minimal functions here is because most of the function of the system can be done via the opmode. */
     public void in(double power) {
         collectionMotor.setPower(power);
+        state = HardwareStates.ON;
     }
 
     /** @noinspection unused*/
     public void out(double power) {
         collectionMotor.setPower(-power);
+        state = HardwareStates.ON;
     }
 
     public void stop() {
         collectionMotor.setPower(0.0);
+        state = HardwareStates.OFF;
     }
 }
