@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.opmodes.teleop;
 
+import com.bylazar.configurables.annotations.Configurable;
 import com.bylazar.telemetry.PanelsTelemetry;
 import com.bylazar.telemetry.TelemetryManager;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
@@ -12,11 +13,18 @@ import org.firstinspires.ftc.teamcode.resources.hardware.Outtake;
 import org.firstinspires.ftc.teamcode.resources.hardware.Possession;
 import org.firstinspires.ftc.teamcode.resources.util.enums.GamepadConstants;
 import org.firstinspires.ftc.teamcode.resources.util.enums.HardwareStates;
+import org.firstinspires.ftc.teamcode.resources.util.functions.FilterStickInput;
+import org.firstinspires.ftc.teamcode.resources.util.functions.PIDController;
 
 
-@TeleOp(name = "PracticeOp")
+@TeleOp(name = "PID Controller Feature Branch")
+@Configurable
 @SuppressWarnings({"FieldCanBeLocal", "IfStatementWithIdenticalBranches"})
-public class PracticeTeleOp extends OpMode {
+public class PracticeTeleOp_PIDFeatureBranch extends OpMode {
+    public static double kP = 0.0;
+    public static double kI = 0.0;
+    public static double kD = 0.0;
+    public static double reference = 300.0; //check how velocity is ACTUALLY measured, then tweak and try out
     private Drivetrain drivetrain;
     private Intake intake;
     private Outtake outtake;
@@ -24,6 +32,8 @@ public class PracticeTeleOp extends OpMode {
     private Gamepad driverOp;
     private Gamepad toolOp;
     private TelemetryManager panelsTelemetry;
+    private PIDController velocityController;
+    private FilterStickInput fsi;
     private boolean intakeToggle, outtakeToggle, gateToggle, holderToggle = false;
 
     @Override
@@ -37,6 +47,8 @@ public class PracticeTeleOp extends OpMode {
         driverOp = gamepad1;
         toolOp = gamepad2;
         panelsTelemetry = PanelsTelemetry.INSTANCE.getTelemetry();
+        velocityController = new PIDController();
+        fsi = new FilterStickInput();
 
         intake.initMotor(panelsTelemetry, telemetry, hardwareMap);
         outtake.initOuttake(panelsTelemetry, telemetry, hardwareMap);
@@ -47,7 +59,10 @@ public class PracticeTeleOp extends OpMode {
     @Override
     public void loop() {
         /* drive */
-        drivetrain.drive(driverOp.left_stick_x, driverOp.left_stick_y, driverOp.right_stick_x * GamepadConstants.TURN_SENSITIVITY.getEnumValue()); //test this wednesday
+        drivetrain.drive(
+                fsi.filterStickInput(driverOp.left_stick_x) * 1,
+                fsi.filterStickInput(driverOp.left_stick_y) * 1,
+                fsi.filterStickInput(driverOp.right_stick_x) * GamepadConstants.TURN_SENSITIVITY.getEnumValue());
 
         /* intake */
         if (toolOp.aWasPressed()) {
@@ -66,12 +81,14 @@ public class PracticeTeleOp extends OpMode {
         }
 
         if (outtakeToggle == true) {
-            outtake.on(0.55);
+            double power = velocityController.update(reference, outtake.leftFlywheel.getVelocity(), kP, kI, kD);
+            outtake.on(power);
         } else {
+            velocityController.resetController();
             outtake.off();
         }
 
-        /* servo control */
+        /* servo */
         if (toolOp.rightBumperWasPressed()) {
             gateToggle = !gateToggle;
         }
@@ -127,5 +144,10 @@ public class PracticeTeleOp extends OpMode {
             System.out.println("Left flywheel velocity: " + outtake.leftFlywheel.getVelocity());
             System.out.println("Right flywheel velocity: " + outtake.rightFlywheel.getVelocity());
         }
+
+        /* panels graph */
+        panelsTelemetry.addData("REFERENCE", reference); //please panels i need this
+        panelsTelemetry.addData("VELOCITY", outtake.leftFlywheel.getVelocity());
+        panelsTelemetry.update();
     }
 }

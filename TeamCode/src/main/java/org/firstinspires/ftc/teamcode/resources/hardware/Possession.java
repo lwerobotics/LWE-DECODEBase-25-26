@@ -41,12 +41,12 @@ public class Possession {
     /* gate methods */
     public void allow() {
         gateServo.setPosition(0.9);
-        servoState = HardwareStates.OPEN;
+        //servoState = HardwareStates.OPEN;
     }
 
     public void block() {
         gateServo.setPosition(0.0);
-        servoState = HardwareStates.CLOSED;
+        //servoState = HardwareStates.CLOSED;
     }
 
     /* holder methods */
