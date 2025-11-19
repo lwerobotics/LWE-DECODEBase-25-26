@@ -14,7 +14,7 @@ import org.firstinspires.ftc.teamcode.resources.util.enums.GamepadConstants;
 import org.firstinspires.ftc.teamcode.resources.util.enums.HardwareStates;
 
 
-@TeleOp(name = "PracticeOp")
+@TeleOp(name = "PracticeOp", group = "Full TeleOps")
 @SuppressWarnings({"FieldCanBeLocal", "IfStatementWithIdenticalBranches"})
 public class PracticeTeleOp extends OpMode {
     private Drivetrain drivetrain;

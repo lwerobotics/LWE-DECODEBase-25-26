@@ -17,14 +17,14 @@ import org.firstinspires.ftc.teamcode.resources.util.functions.FilterStickInput;
 import org.firstinspires.ftc.teamcode.resources.util.functions.PIDController;
 
 
-@TeleOp(name = "PID Controller Feature Branch")
+@TeleOp(name = "PID Controller TestOp", group = "Feature Branches")
 @Configurable
 @SuppressWarnings({"FieldCanBeLocal", "IfStatementWithIdenticalBranches"})
 public class PracticeTeleOp_PIDFeatureBranch extends OpMode {
     public static double kP = 0.0;
     public static double kI = 0.0;
     public static double kD = 0.0;
-    public static double reference = 300.0; //check how velocity is ACTUALLY measured, then tweak and try out
+    public static double reference = 0.55; //check how velocity is ACTUALLY measured, then tweak and try out
     private Drivetrain drivetrain;
     private Intake intake;
     private Outtake outtake;
@@ -147,7 +147,7 @@ public class PracticeTeleOp_PIDFeatureBranch extends OpMode {
 
         /* panels graph */
         panelsTelemetry.addData("REFERENCE", reference); //please panels i need this
-        panelsTelemetry.addData("VELOCITY", outtake.leftFlywheel.getVelocity());
+        panelsTelemetry.addData("POWER", outtake.rightFlywheel.getPower());
         panelsTelemetry.update();
     }
 }

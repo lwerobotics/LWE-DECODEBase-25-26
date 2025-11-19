@@ -13,7 +13,7 @@ import org.firstinspires.ftc.teamcode.resources.hardware.Possession;
 import org.firstinspires.ftc.teamcode.resources.util.enums.HardwareStates;
 
 
-@TeleOp(name = "CompOp (v1.0.0)")
+@TeleOp(name = "CompOp (v1.0.0)", group = "Full TeleOps")
 @SuppressWarnings("FieldCanBeLocal")
 public class CompetitionTeleOp extends OpMode {
     private Drivetrain drivetrain;

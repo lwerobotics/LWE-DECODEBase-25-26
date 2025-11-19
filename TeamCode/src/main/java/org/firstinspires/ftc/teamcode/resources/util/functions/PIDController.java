@@ -22,7 +22,7 @@ public class PIDController {
         integralSum += error * timer.seconds();
         double deriv = (error - lastError) / timer.seconds();
 
-        timer.reset();
+        //timer.reset();
 
         double output = (error * kP) + (deriv * kD)+ (integralSum * kI);
         return output;
