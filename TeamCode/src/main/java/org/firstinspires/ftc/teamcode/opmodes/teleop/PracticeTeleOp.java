@@ -127,5 +127,11 @@ public class PracticeTeleOp extends OpMode {
             System.out.println("Left flywheel velocity: " + outtake.leftFlywheel.getVelocity());
             System.out.println("Right flywheel velocity: " + outtake.rightFlywheel.getVelocity());
         }
+
+        /* graphing */
+        panelsTelemetry.addData("leftFront", drivetrain.leftFront.getPower());
+        panelsTelemetry.addData("leftRear", drivetrain.leftRear.getPower());
+        panelsTelemetry.addData("rightFront", drivetrain.rightFront.getPower());
+        panelsTelemetry.addData("rightRear", drivetrain.rightRear.getPower());
     }
 }

@@ -14,7 +14,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.resources.util.enums.HardwareStates;
 
 public class Drivetrain{
-    private DcMotor rightFront, leftFront, rightRear, leftRear;
+    public DcMotor rightFront, leftFront, rightRear, leftRear;
     private IMU imu;
 
     /** Parameters for the initialization function for all hardware necessary for the drivetrain to function (updated 10/10/25)
@@ -76,6 +76,20 @@ public class Drivetrain{
 
         panels.update();
         ftc.update();
+    }
+
+    public void initAutonomousDrive(@NonNull HardwareMap hMap, @NonNull TelemetryManager panels, @NonNull Telemetry ftc) {
+        initDrivetrain(hMap, panels, ftc);
+
+        leftFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        leftRear.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rightFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rightRear.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+        leftFront.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        leftRear.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        rightFront.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        rightRear.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
 
     /** Parameters for the power of each drive motor. (updated 10/10/25)

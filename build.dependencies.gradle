@@ -3,6 +3,7 @@ repositories {
     google() // Needed for androidx
     maven { url = 'https://maven.pedropathing.com' }
     maven { url = "https://mymaven.bylazar.com/releases" }
+    maven { url = "https://jitpack.io" }
 }
 
 dependencies {
@@ -18,5 +19,6 @@ dependencies {
     implementation 'com.pedropathing:ftc:2.0.3'
     implementation 'com.pedropathing:telemetry:1.0.0'
     implementation 'com.bylazar:fullpanels:1.0.7'
+    implementation 'com.github.Thermal-Equilibrium:homeostasis-FTC:1.0.8'
 }
 

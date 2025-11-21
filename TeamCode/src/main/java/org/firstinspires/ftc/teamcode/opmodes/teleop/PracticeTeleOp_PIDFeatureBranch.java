@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.opmodes.teleop;
 
+import com.ThermalEquilibrium.homeostasis.Parameters.PIDCoefficients;
 import com.bylazar.configurables.annotations.Configurable;
 import com.bylazar.telemetry.PanelsTelemetry;
 import com.bylazar.telemetry.TelemetryManager;
@@ -18,13 +19,14 @@ import org.firstinspires.ftc.teamcode.resources.util.functions.PIDController;
 
 
 @TeleOp(name = "PID Controller TestOp", group = "Feature Branches")
-@Configurable
 @SuppressWarnings({"FieldCanBeLocal", "IfStatementWithIdenticalBranches"})
+@Configurable
 public class PracticeTeleOp_PIDFeatureBranch extends OpMode {
     public static double kP = 0.0;
     public static double kI = 0.0;
     public static double kD = 0.0;
-    public static double reference = 0.55; //check how velocity is ACTUALLY measured, then tweak and try out
+    public static double reference = 0.55;
+    public static double threshold = 0.55;
     private Drivetrain drivetrain;
     private Intake intake;
     private Outtake outtake;
@@ -33,6 +35,7 @@ public class PracticeTeleOp_PIDFeatureBranch extends OpMode {
     private Gamepad toolOp;
     private TelemetryManager panelsTelemetry;
     private PIDController velocityController;
+    private PIDCoefficients coefficients;
     private FilterStickInput fsi;
     private boolean intakeToggle, outtakeToggle, gateToggle, holderToggle = false;
 
@@ -48,6 +51,7 @@ public class PracticeTeleOp_PIDFeatureBranch extends OpMode {
         toolOp = gamepad2;
         panelsTelemetry = PanelsTelemetry.INSTANCE.getTelemetry();
         velocityController = new PIDController();
+        coefficients = new PIDCoefficients(kP, kI, kD);
         fsi = new FilterStickInput();
 
         intake.initMotor(panelsTelemetry, telemetry, hardwareMap);
@@ -81,7 +85,7 @@ public class PracticeTeleOp_PIDFeatureBranch extends OpMode {
         }
 
         if (outtakeToggle == true) {
-            double power = velocityController.update(reference, outtake.leftFlywheel.getVelocity(), kP, kI, kD);
+            double power = velocityController.update(reference, outtake.leftFlywheel.getPower(), kP, kI, kD);
             outtake.on(power);
         } else {
             velocityController.resetController();
