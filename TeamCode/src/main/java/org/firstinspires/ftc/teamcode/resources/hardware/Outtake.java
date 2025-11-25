@@ -14,6 +14,7 @@ import org.firstinspires.ftc.teamcode.resources.util.enums.HardwareStates;
 public class Outtake {
     public DcMotorEx leftFlywheel, rightFlywheel;
     public HardwareStates state = HardwareStates.NULL;
+    public double power;
     private Telemetry telemetry;
 
     /** Parameters for the initialization function of the given flywheel motor (updated 10/16/25)
@@ -33,6 +34,7 @@ public class Outtake {
         rightFlywheel.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         /* telemetry+states */
         state = HardwareStates.INITIALIZED;
+        power = 0.50;
 
         this.telemetry = ftc;
         panels.addData("Left flywheel: ", HardwareStates.INITIALIZED.toString());
@@ -44,7 +46,7 @@ public class Outtake {
         telemetry.update();
     }
 
-    public void on(double power) { //test this and edit as need be
+    public void on() { //test this and edit as need be
         leftFlywheel.setPower(-power);
         rightFlywheel.setPower(power);
         state = HardwareStates.ON;

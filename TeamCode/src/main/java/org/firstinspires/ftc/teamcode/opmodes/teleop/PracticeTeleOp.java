@@ -12,6 +12,7 @@ import org.firstinspires.ftc.teamcode.resources.hardware.Outtake;
 import org.firstinspires.ftc.teamcode.resources.hardware.Possession;
 import org.firstinspires.ftc.teamcode.resources.util.enums.GamepadConstants;
 import org.firstinspires.ftc.teamcode.resources.util.enums.HardwareStates;
+import org.firstinspires.ftc.teamcode.resources.util.functions.FilterStickInput;
 
 
 @TeleOp(name = "PracticeOp", group = "Full TeleOps")
@@ -24,6 +25,7 @@ public class PracticeTeleOp extends OpMode {
     private Gamepad driverOp;
     private Gamepad toolOp;
     private TelemetryManager panelsTelemetry;
+    private FilterStickInput fsi;
     private boolean intakeToggle, outtakeToggle, gateToggle, holderToggle = false;
 
     @Override
@@ -37,6 +39,7 @@ public class PracticeTeleOp extends OpMode {
         driverOp = gamepad1;
         toolOp = gamepad2;
         panelsTelemetry = PanelsTelemetry.INSTANCE.getTelemetry();
+        fsi = new FilterStickInput();
 
         intake.initMotor(panelsTelemetry, telemetry, hardwareMap);
         outtake.initOuttake(panelsTelemetry, telemetry, hardwareMap);
@@ -47,7 +50,10 @@ public class PracticeTeleOp extends OpMode {
     @Override
     public void loop() {
         /* drive */
-        drivetrain.drive(driverOp.left_stick_x, driverOp.left_stick_y, driverOp.right_stick_x * GamepadConstants.TURN_SENSITIVITY.getEnumValue()); //test this wednesday
+        drivetrain.drive(
+                fsi.filterStickInput(driverOp.left_stick_x) * 1,
+                fsi.filterStickInput(driverOp.left_stick_y) * 1,
+                fsi.filterStickInput(driverOp.right_stick_x) * GamepadConstants.TURN_SENSITIVITY.getEnumValue());
 
         /* intake */
         if (toolOp.aWasPressed()) {
@@ -66,7 +72,7 @@ public class PracticeTeleOp extends OpMode {
         }
 
         if (outtakeToggle == true) {
-            outtake.on(0.55);
+            outtake.on();
         } else {
             outtake.off();
         }
@@ -118,6 +124,51 @@ public class PracticeTeleOp extends OpMode {
         } else if (toolOp.left_trigger < 0.65) {
             telemetry.addData("Reversed is: ", HardwareStates.OFF);
             panelsTelemetry.addData("Reversed is: ", HardwareStates.OFF.toString());
+            telemetry.update();
+            panelsTelemetry.update();
+        }
+
+        /* flywheel power incrementer */
+        if (driverOp.dpadUpWasPressed()) {
+            if (outtake.power >= 0.0 && outtake.power <= 1.0) {
+                outtake.power = outtake.power + 0.01;
+            } else if (outtake.power == 1.0) {
+                telemetry.addLine("Max power!!!");
+                panelsTelemetry.addLine("Max power!!!");
+                telemetry.update();
+                panelsTelemetry.update();
+            }
+
+            telemetry.addData("Power: ", outtake.power);
+            panelsTelemetry.addData("Power: ", outtake.power);
+            telemetry.update();
+            panelsTelemetry.update();
+        } else if (driverOp.dpadDownWasPressed()) {
+            if (outtake.power >= 0.0 && outtake.power <= 1.0) {
+                outtake.power = outtake.power - 0.01;
+            } else if (outtake.power == 0.0) {
+                telemetry.addLine("Min power!!!");
+                panelsTelemetry.addLine("Min power!!!");
+                telemetry.update();
+                panelsTelemetry.update();
+            }
+
+            telemetry.addData("Power: ", outtake.power);
+            panelsTelemetry.addData("Power: ", outtake.power);
+            telemetry.update();
+            panelsTelemetry.update();
+        }
+
+        /* the silly */
+        if (driverOp.right_trigger > 0.65) {
+            if (intakeToggle == false && holderToggle == false) {
+                intake.stop();
+                intake.in(1.0);
+                possession.pull();
+            }
+        } else if (driverOp.right_trigger < 0.65) {
+            telemetry.addData("Forward incrementer is: ", HardwareStates.OFF);
+            panelsTelemetry.addData("Forward incrementer is: ", HardwareStates.OFF.toString());
             telemetry.update();
             panelsTelemetry.update();
         }

@@ -13,7 +13,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 public class Constants {
     /* THIS FILE IS TO BE EDITED WITH THE CORRECT NUMBERS ONCE IT IS ACTUALLY TIME FOR AUTOING <3 */
     public static FollowerConstants followerConstants = new FollowerConstants()
-            .mass(5.0); //CHANGE THIS ONCE WEIGHED
+            .mass(12.247); //CHANGE THIS ONCE WEIGHED
     public static PathConstraints pathConstraints = new PathConstraints(0.99, 100, 1, 1);
     public static MecanumConstants driveConstants = new MecanumConstants()
             .maxPower(1)
@@ -21,10 +21,10 @@ public class Constants {
             .rightRearMotorName("rightRear")
             .leftFrontMotorName("leftFront")
             .leftRearMotorName("leftRear")
-            .rightFrontMotorDirection(DcMotorSimple.Direction.FORWARD)
+            .rightFrontMotorDirection(DcMotorSimple.Direction.REVERSE)
             .rightRearMotorDirection(DcMotorSimple.Direction.FORWARD)
             .leftFrontMotorDirection(DcMotorSimple.Direction.REVERSE)
-            .leftRearMotorDirection(DcMotorSimple.Direction.REVERSE);
+            .leftRearMotorDirection(DcMotorSimple.Direction.FORWARD);
     public static DriveEncoderConstants localizerConstants = new DriveEncoderConstants()
             .rightFrontMotorName("rightFront")
             .rightRearMotorName("rightRear")
@@ -34,8 +34,8 @@ public class Constants {
             .rightRearEncoderDirection(Encoder.FORWARD)
             .leftFrontEncoderDirection(Encoder.FORWARD)
             .leftRearEncoderDirection(Encoder.FORWARD)
-            .robotWidth(18) //CHANGE THESE TWO ONCE BOT IS DISASSEMBLED
-            .robotLength(18)
+            .robotWidth(16) //CHANGE THESE TWO ONCE BOT IS DISASSEMBLED
+            .robotLength(17)
             .forwardTicksToInches(0.0) //CHANCE THESE THREE ONCE TUNED
             .strafeTicksToInches(0.0)
             .turnTicksToInches(0.0);

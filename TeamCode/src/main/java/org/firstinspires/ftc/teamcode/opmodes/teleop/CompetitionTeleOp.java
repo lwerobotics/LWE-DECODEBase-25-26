@@ -10,10 +10,12 @@ import org.firstinspires.ftc.teamcode.resources.hardware.Drivetrain;
 import org.firstinspires.ftc.teamcode.resources.hardware.Intake;
 import org.firstinspires.ftc.teamcode.resources.hardware.Outtake;
 import org.firstinspires.ftc.teamcode.resources.hardware.Possession;
+import org.firstinspires.ftc.teamcode.resources.util.enums.GamepadConstants;
 import org.firstinspires.ftc.teamcode.resources.util.enums.HardwareStates;
+import org.firstinspires.ftc.teamcode.resources.util.functions.FilterStickInput;
 
 
-@TeleOp(name = "CompOp (v1.0.0)", group = "Full TeleOps")
+@TeleOp(name = "CompOp (v1.1.0rc1)", group = "Full TeleOps")
 @SuppressWarnings("FieldCanBeLocal")
 public class CompetitionTeleOp extends OpMode {
     private Drivetrain drivetrain;
@@ -23,6 +25,7 @@ public class CompetitionTeleOp extends OpMode {
     private Gamepad driverOp;
     private Gamepad toolOp;
     private TelemetryManager panelsTelemetry;
+    private FilterStickInput fsi;
     private boolean intakeToggle, outtakeToggle, gateToggle, holderToggle = false;
 
     @Override
@@ -36,6 +39,7 @@ public class CompetitionTeleOp extends OpMode {
         driverOp = gamepad1;
         toolOp = gamepad2;
         panelsTelemetry = PanelsTelemetry.INSTANCE.getTelemetry();
+        fsi = new FilterStickInput();
 
         intake.initMotor(panelsTelemetry, telemetry, hardwareMap);
         outtake.initOuttake(panelsTelemetry, telemetry, hardwareMap);
@@ -46,11 +50,20 @@ public class CompetitionTeleOp extends OpMode {
     @Override
     public void loop() {
         /* drive */
-        drivetrain.drive(driverOp.left_stick_x, driverOp.left_stick_y, driverOp.right_stick_x); //test this wednesday
+        drivetrain.drive(
+                fsi.filterStickInput(driverOp.left_stick_x) * 1,
+                fsi.filterStickInput(driverOp.left_stick_y) * 1,
+                fsi.filterStickInput(driverOp.right_stick_x) * GamepadConstants.TURN_SENSITIVITY.getEnumValue());
 
         /* intake */
         if (toolOp.aWasPressed()) {
             intakeToggle = !intakeToggle;
+        }
+
+        if (intakeToggle == true) {
+            intake.in(1.0);
+        } else {
+            intake.stop();
         }
 
         /* outtake */
@@ -58,24 +71,56 @@ public class CompetitionTeleOp extends OpMode {
             outtakeToggle = !outtakeToggle;
         }
 
-        /* possession */
-//        if (toolOp.leftBumperWasPressed()) {
-//            gateToggle = !gateToggle;
-//        }
+        if (outtakeToggle == true) {
+            outtake.on();
+        } else {
+            outtake.off();
+        }
 
+        /* servo control */
+        if (toolOp.rightBumperWasPressed()) {
+            gateToggle = !gateToggle;
+        }
+
+        if (gateToggle == true) {
+            possession.allow();
+
+            panelsTelemetry.addData("Servo: ", HardwareStates.OPEN.toString());
+            telemetry.addData("Servo: ", HardwareStates.OPEN);
+            panelsTelemetry.update();
+            telemetry.update();
+        } else {
+            possession.block();
+
+            panelsTelemetry.addData("Servo: ", HardwareStates.CLOSED.toString());
+            telemetry.addData("Servo: ", HardwareStates.CLOSED);
+            panelsTelemetry.update();
+            telemetry.update();
+        }
+
+        /* ramp */
         if (toolOp.xWasPressed()) {
             holderToggle = !holderToggle;
         }
 
-        /* intake+possession reverse */
-        if (toolOp.left_trigger > 0.65) { //this should work please test; probably need to lower the number cus of like sensitivity or wtv
-            intake.in(-1.0);
-            possession.repel();
+        if (holderToggle == true) {
+            possession.pull();
+        } else {
+            possession.stop();
+        }
 
-            telemetry.addData("Reversed is: ", HardwareStates.ON);
-            panelsTelemetry.addData("Reversed is: ", HardwareStates.ON.toString());
-            telemetry.update();
-            panelsTelemetry.update();
+        /* intake+possession reverse */
+        if (toolOp.left_trigger > 0.65) {
+            if (intakeToggle == false && holderToggle == false) {
+                intake.stop();
+                intake.in(-1.0);
+                possession.repel();
+
+                telemetry.addData("Reversed is: ", HardwareStates.ON);
+                panelsTelemetry.addData("Reversed is: ", HardwareStates.ON.toString());
+                telemetry.update();
+                panelsTelemetry.update();
+            }
         } else if (toolOp.left_trigger < 0.65) {
             telemetry.addData("Reversed is: ", HardwareStates.OFF);
             panelsTelemetry.addData("Reversed is: ", HardwareStates.OFF.toString());
@@ -83,54 +128,61 @@ public class CompetitionTeleOp extends OpMode {
             panelsTelemetry.update();
         }
 
+        /* flywheel power incrementer */
+        if (driverOp.dpadUpWasPressed()) {
+            if (outtake.power >= 0.0 && outtake.power <= 1.0) {
+                outtake.power = outtake.power + 0.01;
+            } else if (outtake.power == 1.0) {
+                telemetry.addLine("Max power!!!");
+                panelsTelemetry.addLine("Max power!!!");
+                telemetry.update();
+                panelsTelemetry.update();
+            }
 
-        /* toggles */
-        if (intakeToggle == true) {
-            intake.in(1.0);
+            telemetry.addData("Power: ", outtake.power);
+            panelsTelemetry.addData("Power: ", outtake.power);
+            telemetry.update();
+            panelsTelemetry.update();
+        } else if (driverOp.dpadDownWasPressed()) {
+            if (outtake.power >= 0.0 && outtake.power <= 1.0) {
+                outtake.power = outtake.power - 0.01;
+            } else if (outtake.power == 0.0) {
+                telemetry.addLine("Min power!!!");
+                panelsTelemetry.addLine("Min power!!!");
+                telemetry.update();
+                panelsTelemetry.update();
+            }
 
-            telemetry.addData("Intake: ", HardwareStates.ON);
-            panelsTelemetry.addData("Intake: ", HardwareStates.ON.toString());
-        } else {
-            intake.stop();
-
-            telemetry.addData("Intake: ", HardwareStates.OFF);
-            panelsTelemetry.addData("Intake: ", HardwareStates.OFF.toString());
+            telemetry.addData("Power: ", outtake.power);
+            panelsTelemetry.addData("Power: ", outtake.power);
+            telemetry.update();
+            panelsTelemetry.update();
         }
-        telemetry.update();
-        panelsTelemetry.update();
 
-        if (outtakeToggle == true) {
-            outtake.on(0.63);
-
-            telemetry.addData("Outtake: ", HardwareStates.ON);
-            panelsTelemetry.addData("Outtake: ", HardwareStates.ON.toString());
-        } else {
-            outtake.off();
-
-            telemetry.addData("Outtake ", HardwareStates.OFF);
-            panelsTelemetry.addData("Outtake: ", HardwareStates.OFF.toString());
+        /* the silly */
+        if (driverOp.right_trigger > 0.65) {
+            if (intakeToggle == false && holderToggle == false) {
+                intake.stop();
+                intake.in(1.0);
+                possession.pull();
+            }
+        } else if (driverOp.right_trigger < 0.65) {
+            telemetry.addData("Forward incrementer is: ", HardwareStates.OFF);
+            panelsTelemetry.addData("Forward incrementer is: ", HardwareStates.OFF.toString());
+            telemetry.update();
+            panelsTelemetry.update();
         }
-        telemetry.update();
-        panelsTelemetry.update();
 
-//        if (gateToggle == true) {
-//            possession.allow();
-//        } else {
-//            possession.block();
-//        }
-
-        if (holderToggle == true) {
-            possession.pull();
-
-            telemetry.addData("Ramp: ", HardwareStates.ON);
-            panelsTelemetry.addData("Ramp: ", HardwareStates.ON.toString());
-        } else {
-            possession.stop();
-
-            telemetry.addData("Ramp: ", HardwareStates.OFF);
-            panelsTelemetry.addData("Ramp: ", HardwareStates.OFF.toString());
+        /* curious experiment */
+        if (driverOp.backWasReleased()) { //please logcat i need this
+            System.out.println("Left flywheel velocity: " + outtake.leftFlywheel.getVelocity());
+            System.out.println("Right flywheel velocity: " + outtake.rightFlywheel.getVelocity());
         }
-        telemetry.update();
-        panelsTelemetry.update();
+
+        /* graphing */
+        panelsTelemetry.addData("leftFront", drivetrain.leftFront.getPower());
+        panelsTelemetry.addData("leftRear", drivetrain.leftRear.getPower());
+        panelsTelemetry.addData("rightFront", drivetrain.rightFront.getPower());
+        panelsTelemetry.addData("rightRear", drivetrain.rightRear.getPower());
     }
 }

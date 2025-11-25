@@ -4,7 +4,6 @@ import androidx.annotation.NonNull;
 
 import com.bylazar.telemetry.TelemetryManager;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.IMU;
@@ -78,7 +77,7 @@ public class Drivetrain{
         ftc.update();
     }
 
-    public void initAutonomousDrive(@NonNull HardwareMap hMap, @NonNull TelemetryManager panels, @NonNull Telemetry ftc) {
+    public void setDriveMode(@NonNull HardwareMap hMap, @NonNull TelemetryManager panels, @NonNull Telemetry ftc, DcMotor.RunMode mode) {
         initDrivetrain(hMap, panels, ftc);
 
         leftFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -86,10 +85,10 @@ public class Drivetrain{
         rightFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         rightRear.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
-        leftFront.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        leftRear.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        rightFront.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        rightRear.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        leftFront.setMode(mode);
+        leftRear.setMode(mode);
+        rightFront.setMode(mode);
+        rightRear.setMode(mode);
     }
 
     /** Parameters for the power of each drive motor. (updated 10/10/25)

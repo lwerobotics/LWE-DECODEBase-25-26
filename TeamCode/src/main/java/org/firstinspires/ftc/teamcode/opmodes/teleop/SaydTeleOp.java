@@ -1,8 +1,5 @@
 package org.firstinspires.ftc.teamcode.opmodes.teleop;
 
-import com.ThermalEquilibrium.homeostasis.Controllers.Feedback.BasicPID;
-import com.ThermalEquilibrium.homeostasis.Parameters.PIDCoefficients;
-import com.bylazar.configurables.annotations.Configurable;
 import com.bylazar.telemetry.PanelsTelemetry;
 import com.bylazar.telemetry.TelemetryManager;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
@@ -16,18 +13,11 @@ import org.firstinspires.ftc.teamcode.resources.hardware.Possession;
 import org.firstinspires.ftc.teamcode.resources.util.enums.GamepadConstants;
 import org.firstinspires.ftc.teamcode.resources.util.enums.HardwareStates;
 import org.firstinspires.ftc.teamcode.resources.util.functions.FilterStickInput;
-import org.firstinspires.ftc.teamcode.resources.util.functions.PIDController;
 
 
-@TeleOp(name = "PID Controller TestOp", group = "Feature Branches")
-@SuppressWarnings({"FieldCanBeLocal", "IfStatementWithIdenticalBranches"})
-@Configurable
-public class PracticeTeleOp_PIDFeatureBranch extends OpMode {
-    public static double kP = 0.0;
-    public static double kI = 0.0;
-    public static double kD = 0.0;
-    public static double reference = 0.55;
-    public static double threshold = 0.55;
+@TeleOp(name = "CompOp (v1.1.0rc1)", group = "Full TeleOps")
+@SuppressWarnings("FieldCanBeLocal")
+public class SaydTeleOp extends OpMode {
     private Drivetrain drivetrain;
     private Intake intake;
     private Outtake outtake;
@@ -35,9 +25,6 @@ public class PracticeTeleOp_PIDFeatureBranch extends OpMode {
     private Gamepad driverOp;
     private Gamepad toolOp;
     private TelemetryManager panelsTelemetry;
-    private PIDController velocityController;
-    private PIDCoefficients coefficients;
-    private BasicPID pidController;
     private FilterStickInput fsi;
     private boolean intakeToggle, outtakeToggle, gateToggle, holderToggle = false;
 
@@ -52,9 +39,6 @@ public class PracticeTeleOp_PIDFeatureBranch extends OpMode {
         driverOp = gamepad1;
         toolOp = gamepad2;
         panelsTelemetry = PanelsTelemetry.INSTANCE.getTelemetry();
-        velocityController = new PIDController();
-        coefficients = new PIDCoefficients(kP, kI, kD);
-        pidController = new BasicPID(coefficients);
         fsi = new FilterStickInput();
 
         intake.initMotor(panelsTelemetry, telemetry, hardwareMap);
@@ -66,7 +50,7 @@ public class PracticeTeleOp_PIDFeatureBranch extends OpMode {
     @Override
     public void loop() {
         /* drive */
-        drivetrain.drive(
+        drivetrain.driveField(
                 fsi.filterStickInput(driverOp.left_stick_x) * 1,
                 fsi.filterStickInput(driverOp.left_stick_y) * 1,
                 fsi.filterStickInput(driverOp.right_stick_x) * GamepadConstants.TURN_SENSITIVITY.getEnumValue());
@@ -88,15 +72,12 @@ public class PracticeTeleOp_PIDFeatureBranch extends OpMode {
         }
 
         if (outtakeToggle == true) {
-            //double power = velocityController.update(reference, outtake.leftFlywheel.getPower(), kP, kI, kD);
-            double power = pidController.calculate(reference, outtake.leftFlywheel.getPower());
             outtake.on();
         } else {
-            velocityController.resetController();
             outtake.off();
         }
 
-        /* servo */
+        /* servo control */
         if (toolOp.rightBumperWasPressed()) {
             gateToggle = !gateToggle;
         }
@@ -147,15 +128,61 @@ public class PracticeTeleOp_PIDFeatureBranch extends OpMode {
             panelsTelemetry.update();
         }
 
+        /* flywheel power incrementer */
+        if (driverOp.dpadUpWasPressed()) {
+            if (outtake.power >= 0.0 && outtake.power <= 1.0) {
+                outtake.power = outtake.power + 0.01;
+            } else if (outtake.power == 1.0) {
+                telemetry.addLine("Max power!!!");
+                panelsTelemetry.addLine("Max power!!!");
+                telemetry.update();
+                panelsTelemetry.update();
+            }
+
+            telemetry.addData("Power: ", outtake.power);
+            panelsTelemetry.addData("Power: ", outtake.power);
+            telemetry.update();
+            panelsTelemetry.update();
+        } else if (driverOp.dpadDownWasPressed()) {
+            if (outtake.power >= 0.0 && outtake.power <= 1.0) {
+                outtake.power = outtake.power - 0.01;
+            } else if (outtake.power == 0.0) {
+                telemetry.addLine("Min power!!!");
+                panelsTelemetry.addLine("Min power!!!");
+                telemetry.update();
+                panelsTelemetry.update();
+            }
+
+            telemetry.addData("Power: ", outtake.power);
+            panelsTelemetry.addData("Power: ", outtake.power);
+            telemetry.update();
+            panelsTelemetry.update();
+        }
+
+        /* the silly */
+        if (driverOp.right_trigger > 0.65) {
+            if (intakeToggle == false && holderToggle == false) {
+                intake.stop();
+                intake.in(1.0);
+                possession.pull();
+            }
+        } else if (driverOp.right_trigger < 0.65) {
+            telemetry.addData("Forward incrementer is: ", HardwareStates.OFF);
+            panelsTelemetry.addData("Forward incrementer is: ", HardwareStates.OFF.toString());
+            telemetry.update();
+            panelsTelemetry.update();
+        }
+
         /* curious experiment */
         if (driverOp.backWasReleased()) { //please logcat i need this
             System.out.println("Left flywheel velocity: " + outtake.leftFlywheel.getVelocity());
             System.out.println("Right flywheel velocity: " + outtake.rightFlywheel.getVelocity());
         }
 
-        /* panels graph */
-        panelsTelemetry.addData("REFERENCE", reference); //please panels i need this
-        panelsTelemetry.addData("POWER", outtake.rightFlywheel.getPower());
-        panelsTelemetry.update();
+        /* graphing */
+        panelsTelemetry.addData("leftFront", drivetrain.leftFront.getPower());
+        panelsTelemetry.addData("leftRear", drivetrain.leftRear.getPower());
+        panelsTelemetry.addData("rightFront", drivetrain.rightFront.getPower());
+        panelsTelemetry.addData("rightRear", drivetrain.rightRear.getPower());
     }
 }
