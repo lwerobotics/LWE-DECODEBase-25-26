@@ -17,7 +17,7 @@ import org.firstinspires.ftc.teamcode.resources.util.functions.FilterStickInput;
 
 @TeleOp(name = "CompOp (v1.1.0rc1)", group = "Full TeleOps")
 @SuppressWarnings("FieldCanBeLocal")
-public class SaydTeleOp extends OpMode {
+public class SyedTeleOp extends OpMode {
     private Drivetrain drivetrain;
     private Intake intake;
     private Outtake outtake;
@@ -53,7 +53,7 @@ public class SaydTeleOp extends OpMode {
         drivetrain.driveField(
                 fsi.filterStickInput(driverOp.left_stick_x) * 1,
                 fsi.filterStickInput(driverOp.left_stick_y) * 1,
-                fsi.filterStickInput(driverOp.right_stick_x) * GamepadConstants.TURN_SENSITIVITY.getEnumValue());
+                fsi.filterStickInput(-driverOp.right_stick_x) * GamepadConstants.TURN_SENSITIVITY.getEnumValue());
 
         /* intake */
         if (toolOp.aWasPressed()) {
