@@ -16,7 +16,7 @@ import org.firstinspires.ftc.teamcode.resources.util.functions.FilterStickInput;
 
 
 @TeleOp(name = "PracticeOp", group = "Full TeleOps")
-@SuppressWarnings({"FieldCanBeLocal", "IfStatementWithIdenticalBranches"})
+@SuppressWarnings({"FieldCanBeLocal", "IfStatementWithIdenticalBranches", "ConstantValue"})
 public class PracticeTeleOp extends OpMode {
     private Drivetrain drivetrain;
     private Intake intake;
@@ -86,16 +86,12 @@ public class PracticeTeleOp extends OpMode {
             possession.allow();
 
             panelsTelemetry.addData("Servo: ", HardwareStates.OPEN.toString());
-            telemetry.addData("Servo: ", HardwareStates.OPEN);
             panelsTelemetry.update();
-            telemetry.update();
         } else {
             possession.block();
 
             panelsTelemetry.addData("Servo: ", HardwareStates.CLOSED.toString());
-            telemetry.addData("Servo: ", HardwareStates.CLOSED);
             panelsTelemetry.update();
-            telemetry.update();
         }
 
         /* ramp */
@@ -116,15 +112,11 @@ public class PracticeTeleOp extends OpMode {
                 intake.in(-1.0);
                 possession.repel();
 
-                telemetry.addData("Reversed is: ", HardwareStates.ON);
                 panelsTelemetry.addData("Reversed is: ", HardwareStates.ON.toString());
-                telemetry.update();
                 panelsTelemetry.update();
             }
         } else if (toolOp.left_trigger < 0.65) {
-            telemetry.addData("Reversed is: ", HardwareStates.OFF);
             panelsTelemetry.addData("Reversed is: ", HardwareStates.OFF.toString());
-            telemetry.update();
             panelsTelemetry.update();
         }
 
@@ -134,29 +126,21 @@ public class PracticeTeleOp extends OpMode {
                 outtake.power = outtake.power + 0.01;
             } else if (outtake.power == 1.0) {
                 telemetry.addLine("Max power!!!");
-                panelsTelemetry.addLine("Max power!!!");
                 telemetry.update();
-                panelsTelemetry.update();
             }
 
             telemetry.addData("Power: ", outtake.power);
-            panelsTelemetry.addData("Power: ", outtake.power);
             telemetry.update();
-            panelsTelemetry.update();
         } else if (driverOp.dpadDownWasPressed()) {
             if (outtake.power >= 0.0 && outtake.power <= 1.0) {
                 outtake.power = outtake.power - 0.01;
             } else if (outtake.power == 0.0) {
                 telemetry.addLine("Min power!!!");
-                panelsTelemetry.addLine("Min power!!!");
                 telemetry.update();
-                panelsTelemetry.update();
             }
 
             telemetry.addData("Power: ", outtake.power);
-            panelsTelemetry.addData("Power: ", outtake.power);
             telemetry.update();
-            panelsTelemetry.update();
         }
 
         /* the silly */
@@ -167,16 +151,8 @@ public class PracticeTeleOp extends OpMode {
                 possession.pull();
             }
         } else if (driverOp.right_trigger < 0.65) {
-            telemetry.addData("Forward incrementer is: ", HardwareStates.OFF);
             panelsTelemetry.addData("Forward incrementer is: ", HardwareStates.OFF.toString());
-            telemetry.update();
             panelsTelemetry.update();
-        }
-
-        /* curious experiment */
-        if (driverOp.backWasReleased()) { //please logcat i need this
-            System.out.println("Left flywheel velocity: " + outtake.leftFlywheel.getVelocity());
-            System.out.println("Right flywheel velocity: " + outtake.rightFlywheel.getVelocity());
         }
 
         /* graphing */
@@ -184,5 +160,6 @@ public class PracticeTeleOp extends OpMode {
         panelsTelemetry.addData("leftRear", drivetrain.leftRear.getPower());
         panelsTelemetry.addData("rightFront", drivetrain.rightFront.getPower());
         panelsTelemetry.addData("rightRear", drivetrain.rightRear.getPower());
+        panelsTelemetry.addData("flywheel", outtake.rightFlywheel.getPower());
     }
 }

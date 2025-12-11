@@ -3,13 +3,16 @@ package org.firstinspires.ftc.teamcode.opmodes.auto;
 import com.bylazar.telemetry.PanelsTelemetry;
 import com.bylazar.telemetry.TelemetryManager;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.resources.hardware.Drivetrain;
 
-@Autonomous(name = "Test Leave (SDK)")
+@Disabled
+@SuppressWarnings("FieldCanBeLocal")
+@Autonomous(name = "Test Leave Auto (Encoder Drive SDK)")
 public class TestLeaveAuto extends LinearOpMode {
     private Drivetrain drivetrain;
     private ElapsedTime runtime;

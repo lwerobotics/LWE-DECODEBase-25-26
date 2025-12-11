@@ -11,6 +11,7 @@ import com.pedropathing.geometry.BezierLine;
 import com.pedropathing.geometry.Pose;
 import com.pedropathing.paths.PathChain;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
@@ -18,6 +19,7 @@ import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 @SuppressWarnings("FieldCanBeLocal")
 @Autonomous(name = "Test Leave Auto (Pedro)")
 @Configurable
+@Disabled
 public class TestLeaveAuto_Pedro extends LinearOpMode {
     /*DO NOT ATTEMPT TO RUN THIS */
     public Follower follower;
@@ -26,6 +28,7 @@ public class TestLeaveAuto_Pedro extends LinearOpMode {
     private int state; //for the state machine
 
     @Override
+    @SuppressWarnings("StatementWithEmptyBody")
     public void runOpMode() throws InterruptedException {
         panelsTelemetry = PanelsTelemetry.INSTANCE.getTelemetry();
 

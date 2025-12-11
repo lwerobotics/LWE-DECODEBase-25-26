@@ -6,6 +6,7 @@ import com.bylazar.telemetry.TelemetryManager;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
+@SuppressWarnings("FieldCanBeLocal")
 public class IncrementPower {
     private double power;
     private boolean negCheck;

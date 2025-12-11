@@ -5,6 +5,7 @@ import com.ThermalEquilibrium.homeostasis.Parameters.PIDCoefficients;
 import com.bylazar.configurables.annotations.Configurable;
 import com.bylazar.telemetry.PanelsTelemetry;
 import com.bylazar.telemetry.TelemetryManager;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.Gamepad;
@@ -18,7 +19,7 @@ import org.firstinspires.ftc.teamcode.resources.util.enums.HardwareStates;
 import org.firstinspires.ftc.teamcode.resources.util.functions.FilterStickInput;
 import org.firstinspires.ftc.teamcode.resources.util.functions.PIDController;
 
-
+@Disabled
 @TeleOp(name = "PID Controller TestOp", group = "Feature Branches")
 @SuppressWarnings({"FieldCanBeLocal", "IfStatementWithIdenticalBranches"})
 @Configurable
