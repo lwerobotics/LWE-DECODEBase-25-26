@@ -9,8 +9,8 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.teamcode.resources.hardware.Drivetrain;
 
 @SuppressWarnings("FieldCanBeLocal")
-@Autonomous(name = "CompAuto (Any Side)")
-public class CompAuto extends LinearOpMode {
+@Autonomous(name = "CompAuto (Audience Side)")
+public class CompAutoAudience extends LinearOpMode {
     private Drivetrain drivetrain;
     private ElapsedTime runtime;
     private SDKAutoRes res;
@@ -32,7 +32,7 @@ public class CompAuto extends LinearOpMode {
         drivetrain.rightFront.setPower(-1);
         drivetrain.rightRear.setPower(1);
 
-        sleep(300); //hilarious if this works
+        sleep(220); //hilarious if this works
 
         drivetrain.setGlobalPowers(0.0);
     }
