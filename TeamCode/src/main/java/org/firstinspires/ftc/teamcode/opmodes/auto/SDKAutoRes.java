@@ -3,8 +3,10 @@ package org.firstinspires.ftc.teamcode.opmodes.auto;
 import org.firstinspires.ftc.teamcode.resources.hardware.Drivetrain;
 
 public class SDKAutoRes extends TestLeaveAuto {
-    private final Drivetrain drivetrain = new Drivetrain();
-    public SDKAutoRes() {}
+    private Drivetrain drivetrain;
+    public SDKAutoRes(Drivetrain subsystem) {
+        subsystem = drivetrain;
+    }
 
     public void forward(double multiplier) {
         drivetrain.leftFront.setPower(1*multiplier);
