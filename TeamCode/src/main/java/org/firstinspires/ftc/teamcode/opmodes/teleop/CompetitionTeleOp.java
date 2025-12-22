@@ -16,7 +16,7 @@ import org.firstinspires.ftc.teamcode.resources.util.functions.FilterStickInput;
 
 
 @TeleOp(name = "CompOp (v1.1.0)", group = "Full TeleOps")
-@SuppressWarnings("FieldCanBeLocal")
+@SuppressWarnings({"FieldCanBeLocal", "ConstantValue"})
 public class CompetitionTeleOp extends OpMode {
     private Drivetrain drivetrain;
     private Intake intake;
@@ -121,9 +121,11 @@ public class CompetitionTeleOp extends OpMode {
         }
 
         /* flywheel power incrementer */
-        if (driverOp.dpad_up) {
-            if (outtake.power > 0.0 && outtake.power < 1.0) {
-                outtake.power = outtake.power + 0.01;
+        if (driverOp.dpadUpWasPressed()) {
+            if (outtake.power >= 0.0 && outtake.power < 1.0) {
+                outtake.power += 0.01;
+                telemetry.addData("Power: ", outtake.power);
+                telemetry.update();
             } else if (outtake.power == 1.0) {
                 telemetry.addLine("Max power!!!");
                 telemetry.update();
@@ -131,15 +133,17 @@ public class CompetitionTeleOp extends OpMode {
 
             telemetry.addData("Power: ", outtake.power);
             telemetry.update();
-        } else if (driverOp.dpad_down) {
-            if (outtake.power > 0.0 && outtake.power < 1.0) {
-                outtake.power = outtake.power - 0.01;
+        } else if (driverOp.dpadDownWasPressed()) {
+            if (outtake.power > 0.0 && outtake.power <= 1.0) {
+                outtake.power -= 0.01;
+                telemetry.addData("Power: ", outtake.power);
+                telemetry.update();
             } else if (outtake.power == 0.0) {
                 telemetry.addLine("Min power!!!");
                 telemetry.update();
             }
 
-            telemetry.addData("Power: ", outtake.power * 100+"%");
+            telemetry.addData("Power: ", outtake.power);
             telemetry.update();
         }
 

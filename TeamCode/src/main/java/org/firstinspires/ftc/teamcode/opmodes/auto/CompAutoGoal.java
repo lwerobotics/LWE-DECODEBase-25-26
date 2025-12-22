@@ -20,18 +20,14 @@ public class CompAutoGoal extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
         drivetrain = new Drivetrain();
         runtime = new ElapsedTime();
-        res = new SDKAutoRes();
+        res = new SDKAutoRes(drivetrain);
         panelsTelemetry = PanelsTelemetry.INSTANCE.getTelemetry();
 
         drivetrain.initDrivetrain(hardwareMap, panelsTelemetry, telemetry);
 
         waitForStart();
 
-        drivetrain.leftFront.setPower(1);
-        drivetrain.leftRear.setPower(-1);
-        drivetrain.rightFront.setPower(-1);
-        drivetrain.rightRear.setPower(1);
-
+        res.forward(1);
         sleep(340); //hilarious if this works
 
         drivetrain.setGlobalPowers(0.0);
