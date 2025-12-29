@@ -9,6 +9,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.resources.hardware.Drivetrain;
+import org.firstinspires.ftc.teamcode.resources.util.functions.SDKAutoRes;
 
 @Disabled
 @SuppressWarnings("FieldCanBeLocal")
@@ -28,7 +29,7 @@ public class TestLeaveAuto extends LinearOpMode {
         drivetrain = new Drivetrain();
         runtime = new ElapsedTime();
         panelsTelemetry = PanelsTelemetry.INSTANCE.getTelemetry();
-        res = new SDKAutoRes();
+        res = new SDKAutoRes(drivetrain);
 
         drivetrain.initDrivetrain(hardwareMap, panelsTelemetry, telemetry);
 

@@ -7,6 +7,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.resources.hardware.Drivetrain;
+import org.firstinspires.ftc.teamcode.resources.util.functions.SDKAutoRes;
 
 @SuppressWarnings("FieldCanBeLocal")
 @Autonomous(name = "CompAuto (Goal Side)")

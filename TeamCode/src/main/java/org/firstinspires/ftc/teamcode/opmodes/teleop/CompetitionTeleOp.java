@@ -41,10 +41,10 @@ public class CompetitionTeleOp extends OpMode {
         panelsTelemetry = PanelsTelemetry.INSTANCE.getTelemetry();
         fsi = new FilterStickInput();
 
-        intake.initMotor(panelsTelemetry, telemetry, hardwareMap);
-        outtake.initOuttake(panelsTelemetry, telemetry, hardwareMap);
-        possession.initPossession(hardwareMap, panelsTelemetry, telemetry);
-        drivetrain.initDrivetrain(hardwareMap, panelsTelemetry, telemetry);
+        intake.initIntake(hardwareMap);
+        outtake.initOuttake(hardwareMap);
+        possession.initPossession(hardwareMap);
+        drivetrain.initDrivetrain(hardwareMap);
     }
 
     @Override
@@ -75,23 +75,6 @@ public class CompetitionTeleOp extends OpMode {
             outtake.on();
         } else {
             outtake.off();
-        }
-
-        /* servo control */
-        if (toolOp.rightBumperWasPressed()) {
-            gateToggle = !gateToggle;
-        }
-
-        if (gateToggle == true) {
-            possession.allow();
-
-            panelsTelemetry.addData("Servo: ", HardwareStates.OPEN.toString());
-            panelsTelemetry.update();
-        } else {
-            possession.block();
-
-            panelsTelemetry.addData("Servo: ", HardwareStates.CLOSED.toString());
-            panelsTelemetry.update();
         }
 
         /* ramp */

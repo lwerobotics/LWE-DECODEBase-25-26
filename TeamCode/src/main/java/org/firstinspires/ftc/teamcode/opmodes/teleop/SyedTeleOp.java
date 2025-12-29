@@ -16,7 +16,7 @@ import org.firstinspires.ftc.teamcode.resources.util.enums.HardwareStates;
 import org.firstinspires.ftc.teamcode.resources.util.functions.FilterStickInput;
 
 @Disabled
-@TeleOp(name = "Syed's TeleOp (ONLY USE IF SYED IS DRIVER!!!)", group = "Full TeleOps")
+@TeleOp(name = "Syed's TeleOp (ONLY USE IF SYED IS DRIVER!!!)", group = "In-dev TeleOps")
 @SuppressWarnings({"FieldCanBeLocal", "IfStatementWithIdenticalBranches","ConstantValue"})
 public class SyedTeleOp extends OpMode {
     private Drivetrain drivetrain;
@@ -42,10 +42,10 @@ public class SyedTeleOp extends OpMode {
         panelsTelemetry = PanelsTelemetry.INSTANCE.getTelemetry();
         fsi = new FilterStickInput();
 
-        intake.initMotor(panelsTelemetry, telemetry, hardwareMap);
-        outtake.initOuttake(panelsTelemetry, telemetry, hardwareMap);
-        possession.initPossession(hardwareMap, panelsTelemetry, telemetry);
-        drivetrain.initDrivetrain(hardwareMap, panelsTelemetry, telemetry);
+        intake.initIntake(hardwareMap);
+        outtake.initOuttake(hardwareMap);
+        possession.initPossession(hardwareMap);
+        drivetrain.initDrivetrain(hardwareMap);
     }
 
     @Override
@@ -76,27 +76,6 @@ public class SyedTeleOp extends OpMode {
             outtake.on();
         } else {
             outtake.off();
-        }
-
-        /* servo control */
-        if (toolOp.rightBumperWasPressed()) {
-            gateToggle = !gateToggle;
-        }
-
-        if (gateToggle == true) {
-            possession.allow();
-
-            panelsTelemetry.addData("Servo: ", HardwareStates.OPEN.toString());
-            telemetry.addData("Servo: ", HardwareStates.OPEN);
-            panelsTelemetry.update();
-            telemetry.update();
-        } else {
-            possession.block();
-
-            panelsTelemetry.addData("Servo: ", HardwareStates.CLOSED.toString());
-            telemetry.addData("Servo: ", HardwareStates.CLOSED);
-            panelsTelemetry.update();
-            telemetry.update();
         }
 
         /* ramp */

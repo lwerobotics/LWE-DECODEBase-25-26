@@ -2,34 +2,29 @@ package org.firstinspires.ftc.teamcode.resources.hardware;
 
 import androidx.annotation.NonNull;
 
-import com.bylazar.telemetry.TelemetryManager;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.IMU;
 
-import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.resources.util.enums.HardwareStates;
 
 public class Drivetrain{
     public DcMotor rightFront, leftFront, rightRear, leftRear;
+    public HardwareStates state = HardwareStates.NULL;
     private IMU imu;
 
     /** Parameters for the initialization function for all hardware necessary for the drivetrain to function (updated 10/10/25)
      * @param hMap The hardware map used to register hardware into the robot (like motors, servos , actuators, etc.)
-     * @param panels The telemetry that sends to Panels
-     * @param ftc The telemetry that sends to the Driver Hub
      */
-    public void initDrivetrain(@NonNull HardwareMap hMap, @NonNull TelemetryManager panels, @NonNull Telemetry ftc) {
+    public void initDrivetrain(@NonNull HardwareMap hMap) {
         /* motor mapping */
         rightFront = hMap.get(DcMotor.class, "rightFront");
         leftFront = hMap.get(DcMotor.class, "leftFront");
         rightRear = hMap.get(DcMotor.class, "rightRear");
         leftRear = hMap.get(DcMotor.class, "leftRear");
         /* motor config */
-        //THIS IS THE ONLY SEGMENT OF CODE IM ALLOWING YOU TO TOUCH YOU GOT IT
-        //WORKING WITHOUT CHANGING THE RAW MATH
         leftFront.setDirection(DcMotor.Direction.REVERSE);
         leftRear.setDirection(DcMotor.Direction.FORWARD);
         rightFront.setDirection(DcMotor.Direction.REVERSE);
@@ -53,32 +48,19 @@ public class Drivetrain{
         /* imu mapping+config */
         imu = hMap.get(IMU.class, "imu");
 
-        RevHubOrientationOnRobot cHubOrientation = new RevHubOrientationOnRobot( //changed for v1.0b3
+        RevHubOrientationOnRobot cHubOrientation = new RevHubOrientationOnRobot( //TO-DO: change for v1.1.1a
                 RevHubOrientationOnRobot.LogoFacingDirection.RIGHT,
                 RevHubOrientationOnRobot.UsbFacingDirection.DOWN
         );
         imu.initialize(new IMU.Parameters(cHubOrientation));
         imu.resetYaw();
 
-        /* telemetry */
-        panels.addData("Right front motor: ", HardwareStates.INITIALIZED.toString());
-        panels.addData("Right rear motor: ", HardwareStates.INITIALIZED.toString());
-        panels.addData("Left front motor: ", HardwareStates.INITIALIZED.toString());
-        panels.addData("Left rear motor: ", HardwareStates.INITIALIZED.toString());
-        panels.addData("Imu: ", HardwareStates.INITIALIZED.toString());
-
-        ftc.addData("Right front motor: ", HardwareStates.INITIALIZED);
-        ftc.addData("Right rear motor: ", HardwareStates.INITIALIZED);
-        ftc.addData("Left front motor: ", HardwareStates.INITIALIZED);
-        ftc.addData("Left rear motor: ", HardwareStates.INITIALIZED);
-        ftc.addData("Imu: ", HardwareStates.INITIALIZED);
-
-        panels.update();
-        ftc.update();
+        /* state control */
+        state = HardwareStates.INITIALIZED;
     }
 
-    public void setDriveMode(@NonNull HardwareMap hMap, @NonNull TelemetryManager panels, @NonNull Telemetry ftc, DcMotor.RunMode mode) {
-        initDrivetrain(hMap, panels, ftc);
+    public void setDriveMode(@NonNull HardwareMap hMap, DcMotor.RunMode mode) {
+        initDrivetrain(hMap);
 
         leftFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         leftRear.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -118,6 +100,8 @@ public class Drivetrain{
         leftRear.setPower(maxSpeed * (drivePowers[1] / maxPower));
         rightFront.setPower(maxSpeed * (drivePowers[2] / maxPower));
         rightRear.setPower(maxSpeed * (drivePowers[3] / maxPower));
+
+        state = HardwareStates.ON;
     }
 
     /** Parameters for the power of each drive motor (updated 9/13/25)
@@ -146,5 +130,11 @@ public class Drivetrain{
         leftRear.setPower(power);
         rightFront.setPower(power);
         rightRear.setPower(power);
+
+        if (power == 0.0) {
+            state = HardwareStates.OFF;
+        } else {
+            state = HardwareStates.ON;
+        }
     }
 }

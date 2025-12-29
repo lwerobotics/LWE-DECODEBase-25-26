@@ -2,12 +2,10 @@ package org.firstinspires.ftc.teamcode.resources.hardware;
 
 import androidx.annotation.NonNull;
 
-import com.bylazar.telemetry.TelemetryManager;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
-import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.resources.util.enums.HardwareStates;
 
 @SuppressWarnings("FieldCanBeLocal")
@@ -15,38 +13,26 @@ public class Outtake {
     public DcMotorEx leftFlywheel, rightFlywheel;
     public HardwareStates state = HardwareStates.NULL;
     public double power;
-    private Telemetry telemetry;
 
-    /** Parameters for the initialization function of the given flywheel motor (updated 10/16/25)
-     * @param hMap The hardware map used to register hardware to the robot (like motors, servos , actuators, etc.)
-     */
-    public void initOuttake(@NonNull TelemetryManager panels, @NonNull Telemetry ftc, @NonNull HardwareMap hMap) {
-        /* motor mapping */
+
+    public void initOuttake(@NonNull HardwareMap hMap) {
+        /* motor config */
         leftFlywheel = hMap.get(DcMotorEx.class, "leftFlywheel");
         rightFlywheel = hMap.get(DcMotorEx.class, "rightFlywheel");
 
-        leftFlywheel.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        rightFlywheel.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        leftFlywheel.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+        rightFlywheel.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
 
         leftFlywheel.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         rightFlywheel.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         leftFlywheel.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         rightFlywheel.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        /* telemetry+states */
+        /* state control+power settings */
         state = HardwareStates.INITIALIZED;
         power = 0.50;
-
-        this.telemetry = ftc;
-        panels.addData("Left flywheel: ", HardwareStates.INITIALIZED.toString());
-        panels.addData("Right flywheel: ", HardwareStates.INITIALIZED.toString());
-        telemetry.addData("Left flywheel: ", HardwareStates.INITIALIZED);
-        telemetry.addData("Right flywheel: ", HardwareStates.INITIALIZED);
-
-        panels.update();
-        telemetry.update();
     }
 
-    public void on() { //test this and edit as need be
+    public void on() {
         leftFlywheel.setPower(-power);
         rightFlywheel.setPower(power);
         state = HardwareStates.ON;

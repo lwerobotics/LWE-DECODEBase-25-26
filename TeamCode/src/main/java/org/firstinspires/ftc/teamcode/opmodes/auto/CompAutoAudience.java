@@ -7,6 +7,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.resources.hardware.Drivetrain;
+import org.firstinspires.ftc.teamcode.resources.util.functions.SDKAutoRes;
 
 @SuppressWarnings("FieldCanBeLocal")
 @Autonomous(name = "CompAuto (Audience Side)")
@@ -23,7 +24,7 @@ public class CompAutoAudience extends LinearOpMode {
         res = new SDKAutoRes(drivetrain);
         panelsTelemetry = PanelsTelemetry.INSTANCE.getTelemetry();
 
-        drivetrain.initDrivetrain(hardwareMap, panelsTelemetry, telemetry);
+        drivetrain.initDrivetrain(hardwareMap);
 
         waitForStart();
 

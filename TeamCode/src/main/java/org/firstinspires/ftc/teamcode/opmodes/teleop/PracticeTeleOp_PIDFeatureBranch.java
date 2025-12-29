@@ -1,46 +1,44 @@
 package org.firstinspires.ftc.teamcode.opmodes.teleop;
 
-import com.ThermalEquilibrium.homeostasis.Controllers.Feedback.BasicPID;
-import com.ThermalEquilibrium.homeostasis.Parameters.PIDCoefficients;
 import com.bylazar.configurables.annotations.Configurable;
 import com.bylazar.telemetry.PanelsTelemetry;
 import com.bylazar.telemetry.TelemetryManager;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Gamepad;
+import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 
 import org.firstinspires.ftc.teamcode.resources.hardware.Drivetrain;
+import org.firstinspires.ftc.teamcode.resources.hardware.Endgame;
 import org.firstinspires.ftc.teamcode.resources.hardware.Intake;
 import org.firstinspires.ftc.teamcode.resources.hardware.Outtake;
 import org.firstinspires.ftc.teamcode.resources.hardware.Possession;
 import org.firstinspires.ftc.teamcode.resources.util.enums.GamepadConstants;
 import org.firstinspires.ftc.teamcode.resources.util.enums.HardwareStates;
 import org.firstinspires.ftc.teamcode.resources.util.functions.FilterStickInput;
-import org.firstinspires.ftc.teamcode.resources.util.functions.PIDController;
+import org.firstinspires.ftc.teamcode.resources.util.functions.PFController;
 
-@Disabled
-@TeleOp(name = "PID Controller TestOp", group = "Feature Branches")
-@SuppressWarnings({"FieldCanBeLocal", "IfStatementWithIdenticalBranches"})
 @Configurable
+@TeleOp(name = "PracticeOp (Flywheel PID Test)", group = "In-dev TeleOps")
+@SuppressWarnings({"FieldCanBeLocal", "FieldMayBeFinal"})
 public class PracticeTeleOp_PIDFeatureBranch extends OpMode {
-    public static double kP = 0.0;
-    public static double kI = 0.0;
-    public static double kD = 0.0;
-    public static double reference = 0.55;
-    public static double threshold = 0.55;
     private Drivetrain drivetrain;
     private Intake intake;
     private Outtake outtake;
     private Possession possession;
+    private Endgame endgame;
     private Gamepad driverOp;
     private Gamepad toolOp;
     private TelemetryManager panelsTelemetry;
-    private PIDController velocityController;
-    private PIDCoefficients coefficients;
-    private BasicPID pidController;
     private FilterStickInput fsi;
-    private boolean intakeToggle, outtakeToggle, gateToggle, holderToggle = false;
+    private PIDFCoefficients pidfCoefficients;
+    private PFController flywheelController;
+    public static double P = 0.0;
+    public static double F = 0.0;
+    private boolean intakeToggle, outtakeToggle, gateToggle, holderToggle, endgameToggle = false;
+    private HardwareStates reverseRampState = HardwareStates.NULL;
+    private HardwareStates manualPwrControlState = HardwareStates.NULL;
 
     @Override
     public void init() {
@@ -49,19 +47,25 @@ public class PracticeTeleOp_PIDFeatureBranch extends OpMode {
         intake = new Intake();
         outtake = new Outtake();
         possession = new Possession();
+        endgame = new Endgame();
 
         driverOp = gamepad1;
         toolOp = gamepad2;
         panelsTelemetry = PanelsTelemetry.INSTANCE.getTelemetry();
-        velocityController = new PIDController();
-        coefficients = new PIDCoefficients(kP, kI, kD);
-        pidController = new BasicPID(coefficients);
         fsi = new FilterStickInput();
+        pidfCoefficients = new PIDFCoefficients(P, 0.0, 0.0, F);
 
-        intake.initMotor(panelsTelemetry, telemetry, hardwareMap);
-        outtake.initOuttake(panelsTelemetry, telemetry, hardwareMap);
-        possession.initPossession(hardwareMap, panelsTelemetry, telemetry);
-        drivetrain.initDrivetrain(hardwareMap, panelsTelemetry, telemetry);
+
+        intake.initIntake(hardwareMap);
+        outtake.initOuttake(hardwareMap);
+        possession.initPossession(hardwareMap);
+        drivetrain.initDrivetrain(hardwareMap);
+
+        /* set for pid control */
+        outtake.leftFlywheel.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        outtake.rightFlywheel.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        outtake.leftFlywheel.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        outtake.rightFlywheel.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
 
     @Override
@@ -89,33 +93,9 @@ public class PracticeTeleOp_PIDFeatureBranch extends OpMode {
         }
 
         if (outtakeToggle == true) {
-            //double power = velocityController.update(reference, outtake.leftFlywheel.getPower(), kP, kI, kD);
-            double power = pidController.calculate(reference, outtake.leftFlywheel.getPower());
             outtake.on();
         } else {
-            velocityController.resetController();
             outtake.off();
-        }
-
-        /* servo */
-        if (toolOp.rightBumperWasPressed()) {
-            gateToggle = !gateToggle;
-        }
-
-        if (gateToggle == true) {
-            possession.allow();
-
-            panelsTelemetry.addData("Servo: ", HardwareStates.OPEN.toString());
-            telemetry.addData("Servo: ", HardwareStates.OPEN);
-            panelsTelemetry.update();
-            telemetry.update();
-        } else {
-            possession.block();
-
-            panelsTelemetry.addData("Servo: ", HardwareStates.CLOSED.toString());
-            telemetry.addData("Servo: ", HardwareStates.CLOSED);
-            panelsTelemetry.update();
-            telemetry.update();
         }
 
         /* ramp */
@@ -129,34 +109,90 @@ public class PracticeTeleOp_PIDFeatureBranch extends OpMode {
             possession.stop();
         }
 
+        /* endgame (TEST TS) */
+        if (toolOp.leftBumperWasPressed()) {
+            endgameToggle = !endgameToggle;
+        }
+
+        if (endgameToggle == true) {
+            endgame.extend();
+        } else {
+            endgame.retract();
+        }
+
         /* intake+possession reverse */
         if (toolOp.left_trigger > 0.65) {
             if (intakeToggle == false && holderToggle == false) {
                 intake.stop();
                 intake.in(-1.0);
                 possession.repel();
-
-                telemetry.addData("Reversed is: ", HardwareStates.ON);
-                panelsTelemetry.addData("Reversed is: ", HardwareStates.ON.toString());
-                telemetry.update();
-                panelsTelemetry.update();
+                reverseRampState = HardwareStates.ON;
             }
         } else if (toolOp.left_trigger < 0.65) {
-            telemetry.addData("Reversed is: ", HardwareStates.OFF);
-            panelsTelemetry.addData("Reversed is: ", HardwareStates.OFF.toString());
-            telemetry.update();
-            panelsTelemetry.update();
+            reverseRampState = HardwareStates.OFF;
         }
 
-        /* curious experiment */
-        if (driverOp.backWasReleased()) { //please logcat i need this
-            System.out.println("Left flywheel velocity: " + outtake.leftFlywheel.getVelocity());
-            System.out.println("Right flywheel velocity: " + outtake.rightFlywheel.getVelocity());
+        /* flywheel power incrementer (REPLACE WITH PIDF SOON ASF!!!!) */
+        if (driverOp.dpadUpWasPressed()) {
+            if (outtake.power >= 0.0 && outtake.power < 1.0) {
+                outtake.power = outtake.power + 0.01;
+            } else if (outtake.power == 1.0) {
+                System.out.println("bleh");
+            }
+        } else if (driverOp.dpadDownWasPressed()) {
+            if (outtake.power > 0.0 && outtake.power <= 1.0) {
+                outtake.power = outtake.power - 0.01;
+            } else if (outtake.power == 0.0) {
+                System.out.println("blah");
+            }
         }
 
-        /* panels graph */
-        panelsTelemetry.addData("REFERENCE", reference); //please panels i need this
-        panelsTelemetry.addData("POWER", outtake.rightFlywheel.getPower());
+        /* the silly */
+        if (driverOp.right_trigger > 0.65) {
+            if (intakeToggle == false && holderToggle == false) {
+                intake.stop();
+                intake.in(1.0);
+                possession.pull();
+            }
+        } else if (driverOp.right_trigger < 0.65) {
+            System.out.println("bluh");
+        }
+
+        /* telemetry block */
+        //telemetry.addLine("-----===GAME PERIOD===-----");
+        //put stuff like time remaining, teleop or endgame, etc. here
+        telemetry.addLine("-----===HARDWARE STATUSES===-----");
+        telemetry.addData("Drivetrain: ", drivetrain.state);
+        telemetry.addData("Intake: ", intake.state);
+        telemetry.addData("Outtake: ", outtake.state);
+        telemetry.addData("Ramp: ", possession.state);
+        telemetry.addData("Slides: ", endgame.state);
+        telemetry.addLine("-----===POWER LEVELS===-----");
+        telemetry.addData("Outtake power: ", (outtake.power)*100);
+        telemetry.addLine("-----===UTILITY STATUSES===-----");
+        telemetry.addData("Ramp reverse: ", reverseRampState);
+        telemetry.addData("Manual flywheel control: ", manualPwrControlState);
+        //ensure panels actually shows the stringed version lol
+        panelsTelemetry.addLine("-----===HARDWARE STATUSES===-----");
+        panelsTelemetry.addData("Drivetrain: ", drivetrain.state);
+        panelsTelemetry.addData("Intake: ", intake.state);
+        panelsTelemetry.addData("Outtake: ", outtake.state);
+        panelsTelemetry.addData("Ramp: ", possession.state);
+        panelsTelemetry.addData("Slides: ", endgame.state);
+        panelsTelemetry.addLine("-----===POWER LEVELS===-----");
+        panelsTelemetry.addData("Outtake power: ", (outtake.power)*100);
+        panelsTelemetry.addLine("-----===UTILITY STATUSES===-----");
+        panelsTelemetry.addData("Ramp reverse: ", reverseRampState);
+        panelsTelemetry.addData("Manual flywheel control: ", manualPwrControlState);
+
+        telemetry.update();
         panelsTelemetry.update();
+
+        /* graphing */
+        panelsTelemetry.addData("leftFront", drivetrain.leftFront.getPower());
+        panelsTelemetry.addData("leftRear", drivetrain.leftRear.getPower());
+        panelsTelemetry.addData("rightFront", drivetrain.rightFront.getPower());
+        panelsTelemetry.addData("rightRear", drivetrain.rightRear.getPower());
+        panelsTelemetry.addData("flywheel", outtake.rightFlywheel.getPower());
     }
 }
