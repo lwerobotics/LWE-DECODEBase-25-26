@@ -17,12 +17,12 @@ public class Possession {
     }
 
     public void pull() {
-        holderServo.setPower(1.0);
+        holderServo.setPower(-1.0);
         state = HardwareStates.ON;
     }
 
     public void repel() {
-        holderServo.setPower(-1.0);
+        holderServo.setPower(1.0);
         state = HardwareStates.REVERSE;
     }
 

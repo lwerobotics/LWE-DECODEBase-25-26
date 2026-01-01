@@ -94,21 +94,21 @@ public class PracticeTeleOp extends OpMode {
         }
 
         /* endgame (TEST TS) */
-        if (toolOp.leftBumperWasPressed()) {
-            endgameToggle = !endgameToggle;
-        }
-
-        if (endgameToggle == true) {
-            endgame.extend();
-        } else {
-            endgame.retract();
-        }
+//        if (toolOp.leftBumperWasPressed()) {
+//            endgameToggle = !endgameToggle;
+//        }
+//
+//        if (endgameToggle == true) {
+//            endgame.extend();
+//        } else {
+//            endgame.retract();
+//        }
 
         /* intake+possession reverse */
         if (toolOp.left_trigger > 0.65) {
             if (intakeToggle == false && holderToggle == false) {
                 intake.stop();
-                intake.in(-1.0);
+                intake.out(1.0);
                 possession.repel();
                 reverseRampState = HardwareStates.ON;
             }
@@ -152,7 +152,7 @@ public class PracticeTeleOp extends OpMode {
         telemetry.addData("Ramp: ", possession.state);
         telemetry.addData("Slides: ", endgame.state);
         telemetry.addLine("-----===POWER LEVELS===-----");
-        telemetry.addData("Outtake power: ", (outtake.power)*100);
+        telemetry.addData("Outtake power: ", (outtake.power)*100+"%");
         telemetry.addLine("-----===UTILITY STATUSES===-----");
         telemetry.addData("Ramp reverse: ", reverseRampState);
         telemetry.addData("Manual flywheel control: ", manualPwrControlState);

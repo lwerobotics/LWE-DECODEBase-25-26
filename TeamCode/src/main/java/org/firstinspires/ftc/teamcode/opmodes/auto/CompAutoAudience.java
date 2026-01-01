@@ -28,7 +28,10 @@ public class CompAutoAudience extends LinearOpMode {
 
         waitForStart();
 
-        res.forward(1);
+        drivetrain.leftFront.setPower(1.0);
+        drivetrain.leftRear.setPower(-1.0);
+        drivetrain.rightFront.setPower(-1.0);
+        drivetrain.rightRear.setPower(1.0);
         sleep(230); //hilarious if this works
 
         drivetrain.setGlobalPowers(0.0);

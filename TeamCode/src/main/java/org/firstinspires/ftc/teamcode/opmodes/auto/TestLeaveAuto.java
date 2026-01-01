@@ -31,7 +31,7 @@ public class TestLeaveAuto extends LinearOpMode {
         panelsTelemetry = PanelsTelemetry.INSTANCE.getTelemetry();
         res = new SDKAutoRes(drivetrain);
 
-        drivetrain.initDrivetrain(hardwareMap, panelsTelemetry, telemetry);
+        drivetrain.initDrivetrain(hardwareMap);
 
 //        telemetry.addData("Starting at",  "%7d :%7d",
 //                drivetrain.leftFront.getCurrentPosition(),

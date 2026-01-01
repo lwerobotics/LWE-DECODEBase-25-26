@@ -49,8 +49,8 @@ public class Drivetrain{
         imu = hMap.get(IMU.class, "imu");
 
         RevHubOrientationOnRobot cHubOrientation = new RevHubOrientationOnRobot( //TO-DO: change for v1.1.1a
-                RevHubOrientationOnRobot.LogoFacingDirection.RIGHT,
-                RevHubOrientationOnRobot.UsbFacingDirection.DOWN
+                RevHubOrientationOnRobot.LogoFacingDirection.UP,
+                RevHubOrientationOnRobot.UsbFacingDirection.BACKWARD
         );
         imu.initialize(new IMU.Parameters(cHubOrientation));
         imu.resetYaw();

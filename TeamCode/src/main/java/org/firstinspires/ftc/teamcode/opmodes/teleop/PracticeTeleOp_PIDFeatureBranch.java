@@ -32,10 +32,9 @@ public class PracticeTeleOp_PIDFeatureBranch extends OpMode {
     private Gamepad toolOp;
     private TelemetryManager panelsTelemetry;
     private FilterStickInput fsi;
-    private PIDFCoefficients pidfCoefficients;
     private PFController flywheelController;
-    public static double P = 0.0;
-    public static double F = 0.0;
+    public static double P = 1.0;
+    public static double F = 17.4;
     private boolean intakeToggle, outtakeToggle, gateToggle, holderToggle, endgameToggle = false;
     private HardwareStates reverseRampState = HardwareStates.NULL;
     private HardwareStates manualPwrControlState = HardwareStates.NULL;
@@ -53,13 +52,14 @@ public class PracticeTeleOp_PIDFeatureBranch extends OpMode {
         toolOp = gamepad2;
         panelsTelemetry = PanelsTelemetry.INSTANCE.getTelemetry();
         fsi = new FilterStickInput();
-        pidfCoefficients = new PIDFCoefficients(P, 0.0, 0.0, F);
+        flywheelController = new PFController();
 
 
         intake.initIntake(hardwareMap);
         outtake.initOuttake(hardwareMap);
         possession.initPossession(hardwareMap);
         drivetrain.initDrivetrain(hardwareMap);
+        flywheelController.initController(outtake.leftFlywheel, outtake.rightFlywheel, 1500, 900, P, F);
 
         /* set for pid control */
         outtake.leftFlywheel.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -93,7 +93,8 @@ public class PracticeTeleOp_PIDFeatureBranch extends OpMode {
         }
 
         if (outtakeToggle == true) {
-            outtake.on();
+            outtake.leftFlywheel.setVelocity(10);
+            outtake.rightFlywheel.setVelocity(1800);
         } else {
             outtake.off();
         }
@@ -110,15 +111,15 @@ public class PracticeTeleOp_PIDFeatureBranch extends OpMode {
         }
 
         /* endgame (TEST TS) */
-        if (toolOp.leftBumperWasPressed()) {
-            endgameToggle = !endgameToggle;
-        }
-
-        if (endgameToggle == true) {
-            endgame.extend();
-        } else {
-            endgame.retract();
-        }
+//        if (toolOp.leftBumperWasPressed()) {
+//            endgameToggle = !endgameToggle;
+//        }
+//
+//        if (endgameToggle == true) {
+//            endgame.extend();
+//        } else {
+//            endgame.retract();
+//        }
 
         /* intake+possession reverse */
         if (toolOp.left_trigger > 0.65) {
@@ -158,6 +159,17 @@ public class PracticeTeleOp_PIDFeatureBranch extends OpMode {
             System.out.println("bluh");
         }
 
+        /* flywheel pidf stuff */
+        PIDFCoefficients pidfCoefficients = new PIDFCoefficients(P, 0.0, 0.0, F);
+        flywheelController.update(pidfCoefficients, outtake.leftFlywheel);
+        outtake.rightFlywheel.setVelocity(outtake.leftFlywheel.getVelocity()*-1);
+
+        double currentVelL = outtake.leftFlywheel.getVelocity();
+        double currentVelR = outtake.rightFlywheel.getVelocity();
+
+        double leftError = flywheelController.targetVel - currentVelL;
+        double rightError = flywheelController.targetVel - currentVelR;
+
         /* telemetry block */
         //telemetry.addLine("-----===GAME PERIOD===-----");
         //put stuff like time remaining, teleop or endgame, etc. here
@@ -168,7 +180,13 @@ public class PracticeTeleOp_PIDFeatureBranch extends OpMode {
         telemetry.addData("Ramp: ", possession.state);
         telemetry.addData("Slides: ", endgame.state);
         telemetry.addLine("-----===POWER LEVELS===-----");
-        telemetry.addData("Outtake power: ", (outtake.power)*100);
+        telemetry.addData("Outtake power: ", (outtake.power)*100+"%");
+        telemetry.addLine("-----===PIDF TUNING===-----");
+        telemetry.addData("Target velocity: ", flywheelController.highVel);
+        telemetry.addData("Current velocity (left flywheel): ", outtake.leftFlywheel.getVelocity());
+        telemetry.addData("Left flywheel error: ", leftError);
+        telemetry.addData("Current velocity (right flywheel): ", outtake.rightFlywheel.getVelocity());
+        telemetry.addData("Right flywheel error: ", rightError);
         telemetry.addLine("-----===UTILITY STATUSES===-----");
         telemetry.addData("Ramp reverse: ", reverseRampState);
         telemetry.addData("Manual flywheel control: ", manualPwrControlState);
@@ -180,7 +198,12 @@ public class PracticeTeleOp_PIDFeatureBranch extends OpMode {
         panelsTelemetry.addData("Ramp: ", possession.state);
         panelsTelemetry.addData("Slides: ", endgame.state);
         panelsTelemetry.addLine("-----===POWER LEVELS===-----");
-        panelsTelemetry.addData("Outtake power: ", (outtake.power)*100);
+        panelsTelemetry.addData("Outtake power: ", (outtake.power)*100+"%");
+        panelsTelemetry.addLine("-----===PIDF TUNING===-----");
+        panelsTelemetry.addData("Target velocity: ", flywheelController.highVel);
+        panelsTelemetry.addData("Current velocity (left flywheel): ", currentVelL);
+        panelsTelemetry.addData("Left flywheel error: ", leftError);
+        panelsTelemetry.addData("Current velocity (right flywheel): ", currentVelR);
         panelsTelemetry.addLine("-----===UTILITY STATUSES===-----");
         panelsTelemetry.addData("Ramp reverse: ", reverseRampState);
         panelsTelemetry.addData("Manual flywheel control: ", manualPwrControlState);
@@ -193,6 +216,9 @@ public class PracticeTeleOp_PIDFeatureBranch extends OpMode {
         panelsTelemetry.addData("leftRear", drivetrain.leftRear.getPower());
         panelsTelemetry.addData("rightFront", drivetrain.rightFront.getPower());
         panelsTelemetry.addData("rightRear", drivetrain.rightRear.getPower());
-        panelsTelemetry.addData("flywheel", outtake.rightFlywheel.getPower());
+        panelsTelemetry.addData("flywheelR", outtake.rightFlywheel.getVelocity());
+        panelsTelemetry.addData("flywheelL", outtake.leftFlywheel.getVelocity());
+        panelsTelemetry.addData("errorL", leftError);
+        panelsTelemetry.addData("errorR", rightError);
     }
 }

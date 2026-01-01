@@ -22,13 +22,13 @@ public class Intake {
 
 
     public void in(double power) {
-        collectionServo.setPower(power);
+        collectionServo.setPower(-power);
         state = HardwareStates.ON;
     }
 
     /** @noinspection unused*/
     public void out(double power) {
-        collectionServo.setPower(-power);
+        collectionServo.setPower(power);
         state = HardwareStates.REVERSE;
     }
 
