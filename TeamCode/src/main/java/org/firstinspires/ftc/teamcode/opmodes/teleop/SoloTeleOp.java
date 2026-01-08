@@ -57,7 +57,7 @@ public class SoloTeleOp extends OpMode {
         drivetrain.drive(
                 fsi.filterStickInput(driverOp.left_stick_x) * 1,
                 fsi.filterStickInput(driverOp.left_stick_y) * 1,
-                fsi.filterStickInput(driverOp.right_stick_x) * GamepadConstants.TURN_SENSITIVITY.getEnumValue());
+                fsi.filterStickInput(-driverOp.right_stick_x) * GamepadConstants.TURN_SENSITIVITY.getEnumValue());
 
         /* intake */
         if (driverOp.aWasPressed()) {
