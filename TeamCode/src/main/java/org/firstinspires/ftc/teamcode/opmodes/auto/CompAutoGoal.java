@@ -31,14 +31,15 @@ public class CompAutoGoal extends LinearOpMode {
 
         waitForStart();
 
-        drivetrain.leftFront.setPower(1.0);
-        drivetrain.leftRear.setPower(-1.0);
-        drivetrain.rightFront.setPower(-1.0);
-        drivetrain.rightRear.setPower(1.0);
-        outtake.leftFlywheel.setPower(0.5);
-        outtake.rightFlywheel.setPower(0.5);
+//        drivetrain.leftFront.setPower(1.0);
+//        drivetrain.leftRear.setPower(-1.0);
+//        drivetrain.rightFront.setPower(-1.0);
+//        drivetrain.rightRear.setPower(1.0);
+//
+//        sleep(340); //hilarious if this works
 
-        sleep(340); //hilarious if this works
+        outtake.rightFlywheel.setVelocity(1000);
+        outtake.leftFlywheel.setVelocity(1000);
 
         drivetrain.setGlobalPowers(0.0);
     }

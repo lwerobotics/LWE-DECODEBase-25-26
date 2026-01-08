@@ -27,9 +27,10 @@ public class SoloTeleOp extends OpMode {
     private Gamepad driverOp;
     private TelemetryManager panelsTelemetry;
     private FilterStickInput fsi;
-    private boolean intakeToggle, outtakeToggle, gateToggle, holderToggle, endgameToggle = false;
+    private boolean intakeToggle, outtakeToggle, gateToggle, holderToggle, endgameToggle, testToggle = false;
     private HardwareStates reverseRampState = HardwareStates.NULL;
     private HardwareStates manualPwrControlState = HardwareStates.NULL;
+    private HardwareStates testUpdateStatus = HardwareStates.NULL;
 
     @Override
     public void init() {
@@ -92,14 +93,25 @@ public class SoloTeleOp extends OpMode {
         }
 
         /* endgame (TEST TS) */
+//        if (driverOp.leftBumperWasPressed()) {
+//            endgameToggle = !endgameToggle;
+//        }
+//
+//        if (endgameToggle == true) {
+//            endgame.extend();
+//        } else {
+//            endgame.retract();
+//        }
+
+        /* seeing something */
         if (driverOp.leftBumperWasPressed()) {
-            endgameToggle = !endgameToggle;
+            testToggle = !testToggle;
         }
 
-        if (endgameToggle == true) {
-            endgame.extend();
+        if (testToggle == true) {
+            testUpdateStatus = HardwareStates.ON;
         } else {
-            endgame.retract();
+            testUpdateStatus = HardwareStates.OFF;
         }
 
         /* intake+possession reverse */
@@ -150,10 +162,12 @@ public class SoloTeleOp extends OpMode {
         telemetry.addData("Ramp: ", possession.state);
         telemetry.addData("Slides: ", endgame.state);
         telemetry.addLine("-----===POWER LEVELS===-----");
-        telemetry.addData("Outtake power: ", (outtake.power)*100);
-        telemetry.addLine("-----===UTILITY STATUSES===-----");
+        telemetry.addData("Outtake power: ", ((outtake.power)*100)+"%");
+        telemetry.addLine("-----===UTILITY/TEST STATUSES===-----");
         telemetry.addData("Ramp reverse: ", reverseRampState);
         telemetry.addData("Manual flywheel control: ", manualPwrControlState);
+        telemetry.addData("Are you updating? ", testUpdateStatus);
+
         //ensure panels actually shows the stringed version lol
         panelsTelemetry.addLine("-----===HARDWARE STATUSES===-----");
         panelsTelemetry.addData("Drivetrain: ", drivetrain.state);
