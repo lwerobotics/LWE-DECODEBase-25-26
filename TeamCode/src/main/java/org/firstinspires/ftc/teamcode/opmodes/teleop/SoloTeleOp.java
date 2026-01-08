@@ -92,15 +92,15 @@ public class SoloTeleOp extends OpMode {
         }
 
         /* endgame (TEST TS) */
-        if (driverOp.leftBumperWasPressed()) {
-            endgameToggle = !endgameToggle;
-        }
-
-        if (endgameToggle == true) {
-            endgame.extend();
-        } else {
-            endgame.retract();
-        }
+//        if (driverOp.leftBumperWasPressed()) {
+//            endgameToggle = !endgameToggle;
+//        }
+//
+//        if (endgameToggle == true) {
+//            endgame.extend();
+//        } else {
+//            endgame.retract();
+//        }
 
         /* intake+possession reverse */
         if (driverOp.left_trigger > 0.65) {
