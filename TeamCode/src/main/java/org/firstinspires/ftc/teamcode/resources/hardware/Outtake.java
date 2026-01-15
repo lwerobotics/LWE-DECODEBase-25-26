@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.teamcode.resources.util.enums.HardwareStates;
@@ -22,11 +23,12 @@ public class Outtake {
 
         leftFlywheel.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
         rightFlywheel.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+        rightFlywheel.setDirection(DcMotorSimple.Direction.REVERSE);
 
         leftFlywheel.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         rightFlywheel.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        leftFlywheel.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        rightFlywheel.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        leftFlywheel.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        rightFlywheel.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         /* state control+power settings */
         state = HardwareStates.INITIALIZED;
         power = 0.50;
@@ -34,7 +36,7 @@ public class Outtake {
 
     public void on() {
         leftFlywheel.setPower(-power);
-        rightFlywheel.setPower(power);
+        rightFlywheel.setPower(-power);
         state = HardwareStates.ON;
     }
 
