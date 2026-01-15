@@ -15,6 +15,7 @@ import org.firstinspires.ftc.teamcode.resources.util.enums.GamepadConstants;
 import org.firstinspires.ftc.teamcode.resources.util.enums.HardwareStates;
 import org.firstinspires.ftc.teamcode.resources.util.functions.FilterStickInput;
 
+@Disabled
 @TeleOp(name = "Syed's TeleOp (ONLY USE IF SYED IS DRIVER!!!)", group = "In-dev TeleOps")
 @SuppressWarnings({"FieldCanBeLocal", "IfStatementWithIdenticalBranches","ConstantValue"})
 public class SyedTeleOp extends OpMode {

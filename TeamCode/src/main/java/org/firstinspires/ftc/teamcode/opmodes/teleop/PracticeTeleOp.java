@@ -28,7 +28,9 @@ public class PracticeTeleOp extends OpMode {
     private Gamepad toolOp;
     private TelemetryManager panelsTelemetry;
     private FilterStickInput fsi;
-    private boolean intakeToggle, outtakeToggle, gateToggle, holderToggle, endgameToggle = false;
+    private boolean driveToggle, intakeToggle, outtakeToggle, holderToggle, endgameToggle = false;
+    private double driveMode = GamepadConstants.NORMAL.getEnumValue();
+    private double turnMode = GamepadConstants.TURN_SENSITIVITY.getEnumValue();
     private HardwareStates reverseRampState = HardwareStates.NULL;
     private HardwareStates manualPwrControlState = HardwareStates.NULL;
 
@@ -56,9 +58,20 @@ public class PracticeTeleOp extends OpMode {
     public void loop() {
         /* drive */
         drivetrain.drive(
-                fsi.filterStickInput(driverOp.left_stick_x) * 1,
-                fsi.filterStickInput(driverOp.left_stick_y) * 1,
-                fsi.filterStickInput(-driverOp.right_stick_x) * GamepadConstants.TURN_SENSITIVITY.getEnumValue());
+                fsi.filterStickInput(driverOp.left_stick_x) * driveMode,
+                fsi.filterStickInput(driverOp.left_stick_y) * driveMode,
+                fsi.filterStickInput(-driverOp.right_stick_x) * turnMode);
+
+        /* gearshift */
+        if (driverOp.xWasPressed()) {
+            driveMode = GamepadConstants.NORMAL.getEnumValue();
+            turnMode = GamepadConstants.TURN_SENSITIVITY.getEnumValue();
+        }
+
+        if (driverOp.aWasPressed()) {
+            driveMode = GamepadConstants.SLOW.getEnumValue();
+            turnMode = GamepadConstants.SLOW_TURN.getEnumValue();
+        }
 
         /* intake */
         if (toolOp.aWasPressed()) {
@@ -142,9 +155,17 @@ public class PracticeTeleOp extends OpMode {
             System.out.println("bluh");
         }
 
+        /* to get a name or to not get a name that is the question */
+        String modename = "NULL";
+        if (driveMode == 1) {
+            modename = "NORMAL";
+        } else if (driveMode == 0.50) {
+            modename = "PRECISION";
+        }
+
         /* telemetry block */
-        //telemetry.addLine("-----===GAME PERIOD===-----");
-        //put stuff like time remaining, teleop or endgame, etc. here
+        telemetry.addLine("-----===DRIVE STATUSES===-----");
+        telemetry.addLine("Drive mode: "+modename);
         telemetry.addLine("-----===HARDWARE STATUSES===-----");
         telemetry.addData("Drivetrain: ", drivetrain.state);
         telemetry.addData("Intake: ", intake.state);
