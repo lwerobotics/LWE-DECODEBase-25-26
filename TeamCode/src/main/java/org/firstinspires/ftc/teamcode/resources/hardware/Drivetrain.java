@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.resources.hardware;
 
+import static java.lang.Thread.sleep;
+
 import androidx.annotation.NonNull;
 
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
@@ -13,6 +15,7 @@ import org.firstinspires.ftc.teamcode.resources.util.enums.HardwareStates;
 public class Drivetrain{
     public DcMotor rightFront, leftFront, rightRear, leftRear;
     public HardwareStates state = HardwareStates.NULL;
+    private static final double COUNTS_PER_INCH = 280 / (4 * 3.1415);
     private IMU imu;
 
     /** Parameters for the initialization function for all hardware necessary for the drivetrain to function (updated 10/10/25)
@@ -136,5 +139,34 @@ public class Drivetrain{
         } else {
             state = HardwareStates.ON;
         }
+    }
+
+    public void driveDistance(double inches) throws InterruptedException {
+        int ms = (int)(Math.abs(inches) * COUNTS_PER_INCH);
+        boolean goForward = ms > 0;
+
+        driveTime(ms, goForward);
+    }
+
+    public void driveTime(double milliseconds, boolean goForward) throws InterruptedException {
+        double multiplier;
+
+        if (goForward) {
+            multiplier = -1.0;
+        } else {
+            multiplier = 1.0;
+        }
+
+        drive(multiplier * 0.8, 0, 0);
+        sleep((long)milliseconds);
+        //smooth braking
+        drive(multiplier * 0.6, 0, 0);
+        sleep(100);
+        drive(multiplier * 0.4, 0, 0);
+        sleep(100);
+        drive(multiplier * 0.2, 0, 0);
+        sleep(100);
+        drive(multiplier * 0.1, 0, 0);
+        sleep(200);
     }
 }
