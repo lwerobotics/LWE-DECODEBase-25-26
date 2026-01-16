@@ -28,7 +28,7 @@ public class PracticeTeleOp extends OpMode {
     private Gamepad toolOp;
     private TelemetryManager panelsTelemetry;
     private FilterStickInput fsi;
-    private boolean driveToggle, intakeToggle, outtakeToggle, holderToggle, endgameToggle = false;
+    private boolean driveToggle, intakeToggle, outtakeToggle, holderToggle, endgameToggle, endgameReverseToggle = false;
     private double driveMode = GamepadConstants.NORMAL.getEnumValue();
     private double turnMode = GamepadConstants.TURN_SENSITIVITY.getEnumValue();
     private HardwareStates reverseRampState = HardwareStates.NULL;
@@ -107,15 +107,25 @@ public class PracticeTeleOp extends OpMode {
         }
 
         /* endgame (TEST TS) */
-//        if (toolOp.leftBumperWasPressed()) {
-//            endgameToggle = !endgameToggle;
-//        }
-//
-//        if (endgameToggle == true) {
-//            endgame.extend();
-//        } else {
-//            endgame.retract();
-//        }
+        if (toolOp.leftBumperWasPressed()) {
+            endgameToggle = !endgameToggle;
+        }
+
+        if (toolOp.rightBumperWasPressed()) {
+            endgameReverseToggle = !endgameReverseToggle;
+        }
+
+        if (endgameToggle == true) {
+            endgame.extend();
+        } else {
+            endgame.brake();
+        }
+
+        if (endgameReverseToggle == true) {
+            endgame.retract();
+        } else {
+            endgame.brake();
+        }
 
         /* intake+possession reverse */
         if (toolOp.left_trigger > 0.65) {

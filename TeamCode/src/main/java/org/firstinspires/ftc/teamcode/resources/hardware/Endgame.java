@@ -9,7 +9,8 @@ import org.firstinspires.ftc.teamcode.resources.util.enums.HardwareStates;
 
 public class Endgame {
     public HardwareStates state = HardwareStates.NULL;
-    private DcMotor leftSlide, rightSlide;
+    private DcMotor leftSlide;
+    private DcMotor rightSlide;
 
     public void initMotors(@NonNull HardwareMap hMap) {
         /* motor declaration+config */
@@ -28,13 +29,13 @@ public class Endgame {
 
     public void extend() {
         leftSlide.setPower(1.0);
-        rightSlide.setPower(1.0);
+        rightSlide.setPower(-1.0);
         state = HardwareStates.ON;
     }
 
     public void retract() {
         leftSlide.setPower(-1.0);
-        rightSlide.setPower(-1.0);
+        rightSlide.setPower(1.0);
         state = HardwareStates.REVERSE;
     }
 

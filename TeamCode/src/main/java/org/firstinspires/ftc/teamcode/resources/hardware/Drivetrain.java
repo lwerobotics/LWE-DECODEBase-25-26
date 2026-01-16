@@ -168,5 +168,6 @@ public class Drivetrain{
         sleep(100);
         drive(multiplier * 0.1, 0, 0);
         sleep(200);
+        setGlobalPowers(0.0);
     }
 }
