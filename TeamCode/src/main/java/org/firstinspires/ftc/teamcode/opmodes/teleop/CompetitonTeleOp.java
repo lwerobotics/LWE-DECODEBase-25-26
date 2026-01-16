@@ -16,9 +16,9 @@ import org.firstinspires.ftc.teamcode.resources.util.enums.HardwareStates;
 import org.firstinspires.ftc.teamcode.resources.util.functions.FilterStickInput;
 
 
-@TeleOp(name = "PracticeOp", group = "In-dev TeleOps")
+@TeleOp(name = "CompOp (v1.2.0)", group = "Full TeleOps")
 @SuppressWarnings({"FieldCanBeLocal", "FieldMayBeFinal"})
-public class PracticeTeleOp extends OpMode {
+public class CompetitonTeleOp extends OpMode {
     private Drivetrain drivetrain;
     private Intake intake;
     private Outtake outtake;
