@@ -16,7 +16,7 @@ import org.firstinspires.ftc.teamcode.resources.util.enums.HardwareStates;
 import org.firstinspires.ftc.teamcode.resources.util.functions.FilterStickInput;
 
 
-@TeleOp(name = "CompOp (v1.2.0)", group = "Full TeleOps")
+@TeleOp(name = "CompOp", group = "Full TeleOps")
 @SuppressWarnings({"FieldCanBeLocal", "FieldMayBeFinal"})
 public class CompetitonTeleOp extends OpMode {
     private Drivetrain drivetrain;
@@ -133,19 +133,21 @@ public class CompetitonTeleOp extends OpMode {
         } else {
             endgame.brake();
         }
-
+        String roundotk = String.format("%.2f", outtake.power);
+        double userOuttakePower = Double.parseDouble(roundotk);
         /* flywheel power incrementer (REPLACE WITH PIDF SOON AS POSSIBLE!!!!) */
         if (driverOp.dpadUpWasPressed()) {
-            if (outtake.power >= 0.0 && outtake.power < 1.0) {
-                outtake.power = outtake.power + 0.01;
-            } else if (outtake.power == 1.0) {
-                System.out.println("bleh");
+            if ( userOuttakePower >= 0.0 &&
+                    userOuttakePower < 1.0) {
+                outtake.power = userOuttakePower + 0.01;
+                roundotk = String.format("%.2f", outtake.power);
+                userOuttakePower = Double.parseDouble(roundotk);
             }
         } else if (driverOp.dpadDownWasPressed()) {
-            if (outtake.power > 0.0 && outtake.power <= 1.0) {
-                outtake.power = outtake.power - 0.01;
-            } else if (outtake.power == 0.0) {
-                System.out.println("blah");
+            if (userOuttakePower > 0.0 && (userOuttakePower) <= 1.0) {
+                outtake.power =userOuttakePower - 0.01;
+                roundotk = String.format("%.2f", outtake.power);
+                userOuttakePower = Double.parseDouble(roundotk);
             }
         }
 
@@ -178,7 +180,7 @@ public class CompetitonTeleOp extends OpMode {
         telemetry.addData("Ramp: ", possession.state);
         telemetry.addData("Slides: ", endgame.state);
         telemetry.addLine("-----===POWER LEVELS===-----");
-        telemetry.addData("Outtake power: ", (outtake.power)*100+"%");
+        telemetry.addData("Outtake power: ", (int)(userOuttakePower*100) + "%");
         telemetry.addLine("-----===UTILITY STATUSES===-----");
         telemetry.addData("Ramp reverse: ", reverseRampState);
         telemetry.addData("Manual flywheel control: ", manualPwrControlState);
@@ -190,10 +192,9 @@ public class CompetitonTeleOp extends OpMode {
         panelsTelemetry.addData("Ramp: ", possession.state);
         panelsTelemetry.addData("Slides: ", endgame.state);
         panelsTelemetry.addLine("-----===POWER LEVELS===-----");
-        panelsTelemetry.addData("Outtake power: ", (outtake.power)*100);
+        panelsTelemetry.addData("Outtake power: ", (userOuttakePower * 100));
         panelsTelemetry.addLine("-----===UTILITY STATUSES===-----");
         panelsTelemetry.addData("Ramp reverse: ", reverseRampState);
-        panelsTelemetry.addData("Manual flywheel control: ", manualPwrControlState);
 
         telemetry.update();
         panelsTelemetry.update();
