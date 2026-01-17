@@ -79,21 +79,14 @@ public class CompetitonTeleOp extends OpMode {
             intakeToggle = !intakeToggle;
         }
 
-        if (intakeToggle == true) {
+        if (toolOp.left_trigger > 0.65) {
+            intake.out(1.0);
+            reverseRampState = HardwareStates.ON;
+        } else if (intakeToggle) {
             intake.in(1.0);
         } else {
             intake.stop();
-        }
-
-        /* outtake */
-        if (toolOp.yWasPressed()) {
-            outtakeToggle = !outtakeToggle;
-        }
-
-        if (outtakeToggle == true) {
-            outtake.on();
-        } else {
-            outtake.off();
+            reverseRampState = HardwareStates.OFF;
         }
 
         /* ramp */
@@ -101,10 +94,23 @@ public class CompetitonTeleOp extends OpMode {
             holderToggle = !holderToggle;
         }
 
-        if (holderToggle == true) {
+        if (toolOp.left_trigger > 0.65) {
+            possession.repel();
+        } else if (holderToggle) {
             possession.pull();
         } else {
             possession.stop();
+        }
+
+        /* outtake */
+        if (toolOp.yWasPressed()) {
+            outtakeToggle = !outtakeToggle;
+        }
+
+        if (outtakeToggle) {
+            outtake.on();
+        } else {
+            outtake.off();
         }
 
         /* endgame (TEST TS) */
@@ -116,28 +122,16 @@ public class CompetitonTeleOp extends OpMode {
             endgameReverseToggle = !endgameReverseToggle;
         }
 
-        if (endgameToggle == true) {
+        if (endgameToggle) {
             endgame.extend();
         } else {
             endgame.brake();
         }
 
-        if (endgameReverseToggle == true) {
+        if (endgameReverseToggle) {
             endgame.retract();
         } else {
             endgame.brake();
-        }
-
-        /* intake+possession reverse */
-        if (toolOp.left_trigger > 0.65) {
-            if (intakeToggle == false && holderToggle == false) {
-                intake.stop();
-                intake.out(1.0);
-                possession.repel();
-                reverseRampState = HardwareStates.ON;
-            }
-        } else if (toolOp.left_trigger < 0.65) {
-            reverseRampState = HardwareStates.OFF;
         }
 
         /* flywheel power incrementer (REPLACE WITH PIDF SOON AS POSSIBLE!!!!) */
@@ -157,7 +151,7 @@ public class CompetitonTeleOp extends OpMode {
 
         /* the silly */
         if (driverOp.right_trigger > 0.65) {
-            if (intakeToggle == false && holderToggle == false) {
+            if (!intakeToggle && !holderToggle) {
                 intake.stop();
                 intake.in(1.0);
                 possession.pull();
@@ -209,6 +203,8 @@ public class CompetitonTeleOp extends OpMode {
         panelsTelemetry.addData("leftRear", drivetrain.leftRear.getPower());
         panelsTelemetry.addData("rightFront", drivetrain.rightFront.getPower());
         panelsTelemetry.addData("rightRear", drivetrain.rightRear.getPower());
-        panelsTelemetry.addData("flywheel", outtake.rightFlywheel.getPower());
+        panelsTelemetry.addData("leftFlywheel", outtake.rightFlywheel.getPower());
+        panelsTelemetry.addData("rightFlywheel", outtake.rightFlywheel.getPower());
+
     }
 }
