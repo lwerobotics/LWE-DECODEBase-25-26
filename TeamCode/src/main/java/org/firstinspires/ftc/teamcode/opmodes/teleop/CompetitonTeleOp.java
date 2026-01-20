@@ -157,6 +157,7 @@ public class CompetitonTeleOp extends OpMode {
                 intake.stop();
                 intake.in(1.0);
                 possession.pull();
+                possession.pull();
             }
         } else if (driverOp.right_trigger < 0.65) {
             System.out.println("bluh");
