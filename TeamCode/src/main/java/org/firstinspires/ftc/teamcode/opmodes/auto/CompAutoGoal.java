@@ -8,7 +8,6 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.resources.hardware.Drivetrain;
 import org.firstinspires.ftc.teamcode.resources.hardware.Outtake;
-import org.firstinspires.ftc.teamcode.resources.util.functions.SDKAutoRes;
 
 @SuppressWarnings("FieldCanBeLocal")
 @Autonomous(name = "CompAuto (Goal Side)")
@@ -16,7 +15,6 @@ public class CompAutoGoal extends LinearOpMode {
     private Drivetrain drivetrain;
     private Outtake outtake;
     private ElapsedTime runtime;
-    private SDKAutoRes res;
     private TelemetryManager panelsTelemetry;
 
     @Override
@@ -24,7 +22,6 @@ public class CompAutoGoal extends LinearOpMode {
         drivetrain = new Drivetrain();
         outtake = new Outtake();
         runtime = new ElapsedTime();
-        res = new SDKAutoRes(drivetrain);
         panelsTelemetry = PanelsTelemetry.INSTANCE.getTelemetry();
 
         drivetrain.initDrivetrain(hardwareMap);

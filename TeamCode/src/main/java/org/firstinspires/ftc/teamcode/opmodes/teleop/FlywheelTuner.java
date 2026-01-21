@@ -11,6 +11,7 @@ import org.firstinspires.ftc.teamcode.resources.hardware.Outtake;
 
 @Configurable
 @TeleOp(group = "Utility Tele-Ops", name = "Flywheel Tuner")
+@SuppressWarnings({"FieldMayBeFinal", "FieldCanBeLocal"})
 public class FlywheelTuner extends OpMode {
     public static double P = 0.0;
     public static double F = 0.0;
@@ -70,6 +71,14 @@ public class FlywheelTuner extends OpMode {
         double curVel = outtake.leftFlywheel.getVelocity();
         double error = currentTarget - curVel;
 
-        //add telemetry later
+        /* telemetry */
+        telemetry.addLine("-----===VELOCITY MANAGEMENT===-----");
+        telemetry.addData("Target velocity: ", currentTarget);
+        telemetry.addData("Current velocity: ", curVel);
+        telemetry.addData("Error: ", "%.2f", error);
+        telemetry.addLine("-----===COEFFICIENTS===-----");
+        telemetry.addData("Tuning P", "%.4f (DPad U/D): ", P);
+        telemetry.addData("Tuning F", "%.4f (DPad L/R): ", F);
+        telemetry.addData("Step index", "%.4f (B Button): ", stepSizes[index]);
     }
 }
