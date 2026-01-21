@@ -1,6 +1,8 @@
 package org.firstinspires.ftc.teamcode.opmodes.teleop;
 
 import com.bylazar.configurables.annotations.Configurable;
+import com.bylazar.telemetry.PanelsTelemetry;
+import com.bylazar.telemetry.TelemetryManager;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -70,6 +72,14 @@ public class FlywheelTuner extends OpMode {
         double curVel = outtake.leftFlywheel.getVelocity();
         double error = currentTarget - curVel;
 
-        //add telemetry later
+        /* telemetry */
+        telemetry.addLine("-----===VELOCITY MANAGEMENT===-----");
+        telemetry.addData("Target velocity: ", currentTarget);
+        telemetry.addData("Current velocity: ", curVel);
+        telemetry.addData("Error: ", "%.2f", error);
+        telemetry.addLine("-----===COEFFICIENTS===-----");
+        telemetry.addData("Tuning P", "%.4f (DPad U/D): ", P);
+        telemetry.addData("Tuning F", "%.4f (DPad L/R): ", F);
+        telemetry.addData("Step index", "%.4f (B Button): ", stepSizes[index]);
     }
 }
