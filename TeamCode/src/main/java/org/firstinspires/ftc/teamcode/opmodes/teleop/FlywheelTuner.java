@@ -19,8 +19,8 @@ public class FlywheelTuner extends OpMode {
     public static double F = 0.0;
 
     public static double D = 0.0;
-    private double highVel = 1200;
-    private double lowVel = 900;
+    public static double highVel = 1500;
+    public static double lowVel = 900;
     private double currentTarget;
     private double[] stepSizes;
     private int index;
@@ -46,21 +46,21 @@ public class FlywheelTuner extends OpMode {
         currentTarget = highVel;
         stepSizes = new double[]{10.0, 1.0, 0.1, 0.001, 0.0001};
 
-        integral = 0.0;
-        derivative = prevError-error;
-        prevError = error;
+//        integral = 0.0;
+//        derivative = prevError-error;
+//        prevError = error;
+//
+//        velocity = (P * error) + (D * derivative);
 
-        velocity = (P * error) + (D * derivative);
-
-        PIDFCoefficients pidfCoefficients = new PIDFCoefficients(P, 0.0, D, F);
+        PIDFCoefficients pidfCoefficients = new PIDFCoefficients(P, 0.0, 0.0, F);
         outtake.initOuttake(hardwareMap);
         outtake.leftFlywheel.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, pidfCoefficients);
-        outtake.rightFlywheel.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, pidfCoefficients);
+//        outtake.rightFlywheel.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, pidfCoefficients);
     }
 
     @Override
     public void loop() {
-        error = outtake.leftFlywheel.getVelocity() - currentTarget; //this MIGHT work... (god have mercy on my soul)
+//        error = outtake.leftFlywheel.getVelocity() - currentTarget; this MIGHT work... (god have mercy on my soul)
 
         if (tunerOp.yWasPressed()) {
             if (currentTarget == highVel) {
@@ -88,15 +88,9 @@ public class FlywheelTuner extends OpMode {
             P -= stepSizes[index];
         }
 
-        if (tunerOp.aWasPressed()) {
-            flywheelToggle = !flywheelToggle;
-        }
-
-        if (flywheelToggle == true) {
-            outtake.leftFlywheel.setVelocity(velocity);
-        } else {
-            outtake.off();
-        }
+        PIDFCoefficients pidfCoefficients = new PIDFCoefficients(P, 0.0, 0.0, F);
+        outtake.leftFlywheel.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, pidfCoefficients);
+        outtake.leftFlywheel.setVelocity(currentTarget);
 
         double curVel = outtake.leftFlywheel.getVelocity();
         double error = currentTarget - curVel;
@@ -108,7 +102,7 @@ public class FlywheelTuner extends OpMode {
         telemetry.addData("Error: ", "%.2f", error);
         telemetry.addLine("-----===COEFFICIENTS===-----");
         telemetry.addData("Tuning P", "%.4f (DPad U/D): ", P);
-        telemetry.addData("Tuning D", "%.4f: (Panels)", D);
+//        telemetry.addData("Tuning D", "%.4f: (Panels)", D);
         telemetry.addData("Tuning F", "%.4f (DPad L/R): ", F);
         telemetry.addData("Step index", "%.4f (B Button): ", stepSizes[index]);
         /* graphing */

@@ -185,6 +185,7 @@ public class PracticeTeleOp extends OpMode {
         telemetry.addData("Slides: ", endgame.state);
         telemetry.addLine("-----===POWER LEVELS===-----");
         telemetry.addData("Outtake power: ", (outtake.power)*100+"%");
+        telemetry.addData("Outtake velocity: ", outtake.leftFlywheel.getVelocity());
         telemetry.addLine("-----===UTILITY STATUSES===-----");
         telemetry.addData("Ramp reverse: ", reverseRampState);
         telemetry.addData("Manual flywheel control: ", manualPwrControlState);
