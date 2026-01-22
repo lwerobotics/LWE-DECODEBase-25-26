@@ -1,6 +1,8 @@
 package org.firstinspires.ftc.teamcode.opmodes.teleop;
 
 import com.bylazar.configurables.annotations.Configurable;
+import com.bylazar.telemetry.PanelsTelemetry;
+import com.bylazar.telemetry.TelemetryManager;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -27,6 +29,8 @@ public class FlywheelTuner extends OpMode {
     private Outtake outtake;
     private Gamepad tunerOp;
 
+    private TelemetryManager panelsTelemetry;
+
     /* luke's declarations */
     private double prevError;
     private double error;
@@ -37,6 +41,7 @@ public class FlywheelTuner extends OpMode {
     @Override
     public void init() {
         outtake = new Outtake();
+        panelsTelemetry = PanelsTelemetry.INSTANCE.getTelemetry();
         tunerOp = gamepad1;
         currentTarget = highVel;
         stepSizes = new double[]{10.0, 1.0, 0.1, 0.001, 0.0001};
@@ -106,5 +111,9 @@ public class FlywheelTuner extends OpMode {
         telemetry.addData("Tuning D", "%.4f: (Panels)", D);
         telemetry.addData("Tuning F", "%.4f (DPad L/R): ", F);
         telemetry.addData("Step index", "%.4f (B Button): ", stepSizes[index]);
+        /* graphing */
+        panelsTelemetry.addData("Target velocity", currentTarget);
+        panelsTelemetry.addData("Current velocity", curVel);
+        panelsTelemetry.addData("Error", error);
     }
 }
