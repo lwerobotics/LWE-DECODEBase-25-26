@@ -16,21 +16,23 @@ import org.firstinspires.ftc.teamcode.resources.util.enums.HardwareStates;
 import org.firstinspires.ftc.teamcode.resources.util.functions.FilterStickInput;
 
 
-@TeleOp(name = "SoloOp", group = "Full TeleOps")
+@TeleOp(name = "CompOp", group = "Full TeleOps")
 @SuppressWarnings({"FieldCanBeLocal", "FieldMayBeFinal"})
-public class SoloTeleOp extends OpMode {
+public class SoloOp extends OpMode {
     private Drivetrain drivetrain;
     private Intake intake;
     private Outtake outtake;
     private Possession possession;
     private Endgame endgame;
     private Gamepad driverOp;
+    private Gamepad toolOp;
     private TelemetryManager panelsTelemetry;
     private FilterStickInput fsi;
-    private boolean intakeToggle, outtakeToggle, gateToggle, holderToggle, endgameToggle, testToggle = false;
+    private boolean driveToggle, intakeToggle, outtakeToggle, holderToggle, endgameToggle, endgameReverseToggle = false;
+    private double driveMode = GamepadConstants.NORMAL.getEnumValue();
+    private double turnMode = GamepadConstants.TURN_SENSITIVITY.getEnumValue();
     private HardwareStates reverseRampState = HardwareStates.NULL;
     private HardwareStates manualPwrControlState = HardwareStates.NULL;
-    private HardwareStates testUpdateStatus = HardwareStates.NULL;
 
     @Override
     public void init() {
@@ -42,6 +44,7 @@ public class SoloTeleOp extends OpMode {
         endgame = new Endgame();
 
         driverOp = gamepad1;
+        toolOp = gamepad1;
         panelsTelemetry = PanelsTelemetry.INSTANCE.getTelemetry();
         fsi = new FilterStickInput();
 
@@ -49,101 +52,108 @@ public class SoloTeleOp extends OpMode {
         outtake.initOuttake(hardwareMap);
         possession.initPossession(hardwareMap);
         drivetrain.initDrivetrain(hardwareMap);
+        endgame.initMotors(hardwareMap);
     }
 
     @Override
     public void loop() {
         /* drive */
         drivetrain.drive(
-                fsi.filterStickInput(driverOp.left_stick_x) * 1,
-                fsi.filterStickInput(driverOp.left_stick_y) * 1,
-                fsi.filterStickInput(-driverOp.right_stick_x) * GamepadConstants.TURN_SENSITIVITY.getEnumValue());
+                fsi.filterStickInput(driverOp.left_stick_x) * driveMode,
+                fsi.filterStickInput(driverOp.left_stick_y) * driveMode,
+                fsi.filterStickInput(-driverOp.right_stick_x) * turnMode);
+
+        /* gearshift */
+        if (driverOp.xWasPressed()) {
+            driveMode = GamepadConstants.NORMAL.getEnumValue();
+            turnMode = GamepadConstants.TURN_SENSITIVITY.getEnumValue();
+        }
+
+        if (driverOp.aWasPressed()) {
+            driveMode = GamepadConstants.SLOW.getEnumValue();
+            turnMode = GamepadConstants.SLOW_TURN.getEnumValue();
+        }
 
         /* intake */
-        if (driverOp.aWasPressed()) {
+        if (toolOp.aWasPressed()) {
             intakeToggle = !intakeToggle;
         }
 
-        if (intakeToggle == true) {
+        if (toolOp.left_trigger > 0.65) {
+            intake.out(1.0);
+            reverseRampState = HardwareStates.ON;
+        } else if (intakeToggle) {
             intake.in(1.0);
         } else {
             intake.stop();
-        }
-
-        /* outtake */
-        if (driverOp.yWasPressed()) {
-            outtakeToggle = !outtakeToggle;
-        }
-
-        if (outtakeToggle == true) {
-            outtake.on();
-        } else {
-            outtake.off();
+            reverseRampState = HardwareStates.OFF;
         }
 
         /* ramp */
-        if (driverOp.xWasPressed()) {
+        if (toolOp.xWasPressed()) {
             holderToggle = !holderToggle;
         }
 
-        if (holderToggle == true) {
+        if (toolOp.left_trigger > 0.65) {
+            possession.repel();
+        } else if (holderToggle) {
             possession.pull();
         } else {
             possession.stop();
         }
 
-        /* endgame (TEST TS) */
-//        if (driverOp.leftBumperWasPressed()) {
-//            endgameToggle = !endgameToggle;
-//        }
-//
-//        if (endgameToggle == true) {
-//            endgame.extend();
-//        } else {
-//            endgame.retract();
-//        }
-
-        /* seeing something */
-        if (driverOp.leftBumperWasPressed()) {
-            testToggle = !testToggle;
+        /* outtake */
+        if (toolOp.yWasPressed()) {
+            outtakeToggle = !outtakeToggle;
         }
 
-        if (testToggle == true) {
-            testUpdateStatus = HardwareStates.ON;
+        if (outtakeToggle) {
+            outtake.on();
         } else {
-            testUpdateStatus = HardwareStates.OFF;
+            outtake.off();
         }
 
-        /* intake+possession reverse */
-        if (driverOp.left_trigger > 0.65) {
-            if (intakeToggle == false && holderToggle == false) {
-                intake.stop();
-                intake.in(-1.0);
-                possession.repel();
-                reverseRampState = HardwareStates.ON;
-            }
-        } else if (driverOp.left_trigger < 0.65) {
-            reverseRampState = HardwareStates.OFF;
+        /* endgame (TEST TS) */
+        if (toolOp.leftBumperWasPressed()) {
+            endgameToggle = !endgameToggle;
         }
 
-        /* flywheel power incrementer (REPLACE WITH PIDF SOON ASF!!!!) */
+        if (toolOp.rightBumperWasPressed()) {
+            endgameReverseToggle = !endgameReverseToggle;
+        }
+
+        if (endgameToggle) {
+            endgame.extend();
+        } else {
+            endgame.brake();
+        }
+
+        if (endgameReverseToggle) {
+            endgame.retract();
+        } else {
+            endgame.brake();
+        }
+        String roundotk = String.format("%.2f", outtake.power);
+        double userOuttakePower = Double.parseDouble(roundotk);
+        /* flywheel power incrementer (REPLACE WITH PIDF SOON AS POSSIBLE!!!!) */
         if (driverOp.dpadUpWasPressed()) {
-            if (outtake.power >= 0.0 && outtake.power < 1.0) {
-                outtake.power = outtake.power + 0.01;
-            } else if (outtake.power == 1.0) {
-                System.out.println("bleh");
+            if ( userOuttakePower >= 0.0 &&
+                    userOuttakePower < 1.0) {
+                outtake.power = userOuttakePower + 0.01;
+                roundotk = String.format("%.2f", outtake.power);
+                userOuttakePower = Double.parseDouble(roundotk);
             }
         } else if (driverOp.dpadDownWasPressed()) {
-            if (outtake.power > 0.0 && outtake.power <= 1.0) {
-                outtake.power = outtake.power - 0.01;
-            } else if (outtake.power == 0.0) {
-                System.out.println("blah");
+            if (userOuttakePower > 0.0 && (userOuttakePower) <= 1.0) {
+                outtake.power =userOuttakePower - 0.01;
+                roundotk = String.format("%.2f", outtake.power);
+                userOuttakePower = Double.parseDouble(roundotk);
             }
         }
 
         /* the silly */
         if (driverOp.right_trigger > 0.65) {
-            if (intakeToggle == false && holderToggle == false) {
+            if (!intakeToggle && !holderToggle) {
                 intake.stop();
                 intake.in(1.0);
                 possession.pull();
@@ -152,9 +162,17 @@ public class SoloTeleOp extends OpMode {
             System.out.println("bluh");
         }
 
+        /* to get a name or to not get a name that is the question */
+        String modename = "NULL";
+        if (driveMode == 1) {
+            modename = "NORMAL";
+        } else if (driveMode == 0.50) {
+            modename = "PRECISION";
+        }
+
         /* telemetry block */
-        //telemetry.addLine("-----===GAME PERIOD===-----");
-        //put stuff like time remaining, teleop or endgame, etc. here
+        telemetry.addLine("-----===DRIVE STATUSES===-----");
+        telemetry.addLine("Drive mode: "+modename);
         telemetry.addLine("-----===HARDWARE STATUSES===-----");
         telemetry.addData("Drivetrain: ", drivetrain.state);
         telemetry.addData("Intake: ", intake.state);
@@ -162,12 +180,11 @@ public class SoloTeleOp extends OpMode {
         telemetry.addData("Ramp: ", possession.state);
         telemetry.addData("Slides: ", endgame.state);
         telemetry.addLine("-----===POWER LEVELS===-----");
-        telemetry.addData("Outtake power: ", ((outtake.power)*100)+"%");
-        telemetry.addLine("-----===UTILITY/TEST STATUSES===-----");
+        telemetry.addData("Outtake power: ", (int)(userOuttakePower*100) + "%");
+        telemetry.addLine("-----===UTILITY STATUSES===-----");
         telemetry.addData("Ramp reverse: ", reverseRampState);
-        telemetry.addData("Manual flywheel control: ", manualPwrControlState);
-        telemetry.addData("Are you updating? ", testUpdateStatus);
-
+        telemetry.addData("Left flywheel port: ", outtake.leftFlywheel.getPortNumber());
+        telemetry.addData("Right flywheel port: ", outtake.rightFlywheel.getPortNumber());
         //ensure panels actually shows the stringed version lol
         panelsTelemetry.addLine("-----===HARDWARE STATUSES===-----");
         panelsTelemetry.addData("Drivetrain: ", drivetrain.state);
@@ -176,10 +193,9 @@ public class SoloTeleOp extends OpMode {
         panelsTelemetry.addData("Ramp: ", possession.state);
         panelsTelemetry.addData("Slides: ", endgame.state);
         panelsTelemetry.addLine("-----===POWER LEVELS===-----");
-        panelsTelemetry.addData("Outtake power: ", (outtake.power)*100);
+        panelsTelemetry.addData("Outtake power: ", (userOuttakePower * 100));
         panelsTelemetry.addLine("-----===UTILITY STATUSES===-----");
         panelsTelemetry.addData("Ramp reverse: ", reverseRampState);
-        panelsTelemetry.addData("Manual flywheel control: ", manualPwrControlState);
 
         telemetry.update();
         panelsTelemetry.update();
@@ -189,6 +205,8 @@ public class SoloTeleOp extends OpMode {
         panelsTelemetry.addData("leftRear", drivetrain.leftRear.getPower());
         panelsTelemetry.addData("rightFront", drivetrain.rightFront.getPower());
         panelsTelemetry.addData("rightRear", drivetrain.rightRear.getPower());
-        panelsTelemetry.addData("flywheel", outtake.rightFlywheel.getPower());
+        panelsTelemetry.addData("leftFlywheel", outtake.rightFlywheel.getPower());
+        panelsTelemetry.addData("rightFlywheel", outtake.rightFlywheel.getPower());
+
     }
 }
