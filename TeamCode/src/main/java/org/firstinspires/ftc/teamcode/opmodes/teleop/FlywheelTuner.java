@@ -1,8 +1,6 @@
 package org.firstinspires.ftc.teamcode.opmodes.teleop;
 
 import com.bylazar.configurables.annotations.Configurable;
-import com.bylazar.telemetry.PanelsTelemetry;
-import com.bylazar.telemetry.TelemetryManager;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -17,14 +15,24 @@ import org.firstinspires.ftc.teamcode.resources.hardware.Outtake;
 public class FlywheelTuner extends OpMode {
     public static double P = 0.0;
     public static double F = 0.0;
+
+    public static double D = 0.0;
     private double highVel = 1200;
     private double lowVel = 900;
     private double currentTarget;
     private double[] stepSizes;
     private int index;
     private double curPrecision;
+    private boolean flywheelToggle;
     private Outtake outtake;
     private Gamepad tunerOp;
+
+    /* luke's declarations */
+    private double prevError;
+    private double error;
+    private double integral;
+    private double derivative;
+    private double velocity;
 
     @Override
     public void init() {
@@ -33,7 +41,13 @@ public class FlywheelTuner extends OpMode {
         currentTarget = highVel;
         stepSizes = new double[]{10.0, 1.0, 0.1, 0.001, 0.0001};
 
-        PIDFCoefficients pidfCoefficients = new PIDFCoefficients(P, 0.0, 0.0, F);
+        integral = 0.0;
+        derivative = prevError-error;
+        prevError = error;
+
+        velocity = (P * error) + (D * derivative);
+
+        PIDFCoefficients pidfCoefficients = new PIDFCoefficients(P, 0.0, D, F);
         outtake.initOuttake(hardwareMap);
         outtake.leftFlywheel.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, pidfCoefficients);
         outtake.rightFlywheel.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, pidfCoefficients);
@@ -41,6 +55,8 @@ public class FlywheelTuner extends OpMode {
 
     @Override
     public void loop() {
+        error = outtake.leftFlywheel.getVelocity() - currentTarget; //this MIGHT work... (god have mercy on my soul)
+
         if (tunerOp.yWasPressed()) {
             if (currentTarget == highVel) {
                 currentTarget = lowVel;
@@ -63,12 +79,19 @@ public class FlywheelTuner extends OpMode {
         if (tunerOp.dpadUpWasPressed()) {
             P += stepSizes[index];
         }
-        if (gamepad1.dpadDownWasPressed()) {
+        if (tunerOp.dpadDownWasPressed()) {
             P -= stepSizes[index];
         }
 
-        outtake.leftFlywheel.setVelocity(currentTarget);
-        outtake.rightFlywheel.setVelocity(currentTarget);
+        if (tunerOp.aWasPressed()) {
+            flywheelToggle = !flywheelToggle;
+        }
+
+        if (flywheelToggle == true) {
+            outtake.leftFlywheel.setVelocity(velocity);
+        } else {
+            outtake.off();
+        }
 
         double curVel = outtake.leftFlywheel.getVelocity();
         double error = currentTarget - curVel;
@@ -80,6 +103,7 @@ public class FlywheelTuner extends OpMode {
         telemetry.addData("Error: ", "%.2f", error);
         telemetry.addLine("-----===COEFFICIENTS===-----");
         telemetry.addData("Tuning P", "%.4f (DPad U/D): ", P);
+        telemetry.addData("Tuning D", "%.4f: (Panels)", D);
         telemetry.addData("Tuning F", "%.4f (DPad L/R): ", F);
         telemetry.addData("Step index", "%.4f (B Button): ", stepSizes[index]);
     }

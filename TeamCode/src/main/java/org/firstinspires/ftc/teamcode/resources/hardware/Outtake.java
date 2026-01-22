@@ -23,7 +23,7 @@ public class Outtake {
 
         leftFlywheel.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
         rightFlywheel.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
-        rightFlywheel.setDirection(DcMotorSimple.Direction.REVERSE);
+//        rightFlywheel.setDirection(DcMotorSimple.Direction.REVERSE);
 
         leftFlywheel.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         rightFlywheel.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -36,7 +36,7 @@ public class Outtake {
 
     public void on() {
         leftFlywheel.setPower(-power);
-        rightFlywheel.setPower(-power);
+        rightFlywheel.setPower(power);
         state = HardwareStates.ON;
     }
 
