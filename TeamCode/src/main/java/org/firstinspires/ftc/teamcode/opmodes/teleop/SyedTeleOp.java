@@ -44,7 +44,7 @@ public class SyedTeleOp extends OpMode {
         endgame = new Endgame();
 
         driverOp = gamepad1;
-        toolOp = gamepad2;
+        toolOp = gamepad1;
         panelsTelemetry = PanelsTelemetry.INSTANCE.getTelemetry();
         fsi = new FilterStickInput();
 
@@ -79,21 +79,14 @@ public class SyedTeleOp extends OpMode {
             intakeToggle = !intakeToggle;
         }
 
-        if (intakeToggle == true) {
+        if (toolOp.left_trigger > 0.65) {
+            intake.out(1.0);
+            reverseRampState = HardwareStates.ON;
+        } else if (intakeToggle) {
             intake.in(1.0);
         } else {
             intake.stop();
-        }
-
-        /* outtake */
-        if (toolOp.yWasPressed()) {
-            outtakeToggle = !outtakeToggle;
-        }
-
-        if (outtakeToggle == true) {
-            outtake.on();
-        } else {
-            outtake.off();
+            reverseRampState = HardwareStates.OFF;
         }
 
         /* ramp */
@@ -101,10 +94,23 @@ public class SyedTeleOp extends OpMode {
             holderToggle = !holderToggle;
         }
 
-        if (holderToggle == true) {
+        if (toolOp.left_trigger > 0.65) {
+            possession.repel();
+        } else if (holderToggle) {
             possession.pull();
         } else {
             possession.stop();
+        }
+
+        /* outtake */
+        if (toolOp.yWasPressed()) {
+            outtakeToggle = !outtakeToggle;
+        }
+
+        if (outtakeToggle) {
+            outtake.on();
+        } else {
+            outtake.off();
         }
 
         /* endgame (TEST TS) */
@@ -116,48 +122,38 @@ public class SyedTeleOp extends OpMode {
             endgameReverseToggle = !endgameReverseToggle;
         }
 
-        if (endgameToggle == true) {
+        if (endgameToggle) {
             endgame.extend();
         } else {
             endgame.brake();
         }
 
-        if (endgameReverseToggle == true) {
+        if (endgameReverseToggle) {
             endgame.retract();
         } else {
             endgame.brake();
         }
-
-        /* intake+possession reverse */
-        if (toolOp.left_trigger > 0.65) {
-            if (intakeToggle == false && holderToggle == false) {
-                intake.stop();
-                intake.out(1.0);
-                possession.repel();
-                reverseRampState = HardwareStates.ON;
-            }
-        } else if (toolOp.left_trigger < 0.65) {
-            reverseRampState = HardwareStates.OFF;
-        }
-
+        String roundotk = String.format("%.2f", outtake.power);
+        double userOuttakePower = Double.parseDouble(roundotk);
         /* flywheel power incrementer (REPLACE WITH PIDF SOON AS POSSIBLE!!!!) */
         if (driverOp.dpadUpWasPressed()) {
-            if (outtake.power >= 0.0 && outtake.power < 1.0) {
-                outtake.power = outtake.power + 0.01;
-            } else if (outtake.power == 1.0) {
-                System.out.println("bleh");
+            if ( userOuttakePower >= 0.0 &&
+                    userOuttakePower < 1.0) {
+                outtake.power = userOuttakePower + 0.01;
+                roundotk = String.format("%.2f", outtake.power);
+                userOuttakePower = Double.parseDouble(roundotk);
             }
         } else if (driverOp.dpadDownWasPressed()) {
-            if (outtake.power > 0.0 && outtake.power <= 1.0) {
-                outtake.power = outtake.power - 0.01;
-            } else if (outtake.power == 0.0) {
-                System.out.println("blah");
+            if (userOuttakePower > 0.0 && (userOuttakePower) <= 1.0) {
+                outtake.power =userOuttakePower - 0.01;
+                roundotk = String.format("%.2f", outtake.power);
+                userOuttakePower = Double.parseDouble(roundotk);
             }
         }
 
         /* the silly */
         if (driverOp.right_trigger > 0.65) {
-            if (intakeToggle == false && holderToggle == false) {
+            if (!intakeToggle && !holderToggle) {
                 intake.stop();
                 intake.in(1.0);
                 possession.pull();
@@ -184,10 +180,11 @@ public class SyedTeleOp extends OpMode {
         telemetry.addData("Ramp: ", possession.state);
         telemetry.addData("Slides: ", endgame.state);
         telemetry.addLine("-----===POWER LEVELS===-----");
-        telemetry.addData("Outtake power: ", (outtake.power)*100+"%");
+        telemetry.addData("Outtake power: ", (int)(userOuttakePower*100) + "%");
         telemetry.addLine("-----===UTILITY STATUSES===-----");
         telemetry.addData("Ramp reverse: ", reverseRampState);
-        telemetry.addData("Manual flywheel control: ", manualPwrControlState);
+        telemetry.addData("Left flywheel port: ", outtake.leftFlywheel.getPortNumber());
+        telemetry.addData("Right flywheel port: ", outtake.rightFlywheel.getPortNumber());
         //ensure panels actually shows the stringed version lol
         panelsTelemetry.addLine("-----===HARDWARE STATUSES===-----");
         panelsTelemetry.addData("Drivetrain: ", drivetrain.state);
@@ -196,10 +193,9 @@ public class SyedTeleOp extends OpMode {
         panelsTelemetry.addData("Ramp: ", possession.state);
         panelsTelemetry.addData("Slides: ", endgame.state);
         panelsTelemetry.addLine("-----===POWER LEVELS===-----");
-        panelsTelemetry.addData("Outtake power: ", (outtake.power)*100);
+        panelsTelemetry.addData("Outtake power: ", (userOuttakePower * 100));
         panelsTelemetry.addLine("-----===UTILITY STATUSES===-----");
         panelsTelemetry.addData("Ramp reverse: ", reverseRampState);
-        panelsTelemetry.addData("Manual flywheel control: ", manualPwrControlState);
 
         telemetry.update();
         panelsTelemetry.update();
@@ -209,6 +205,8 @@ public class SyedTeleOp extends OpMode {
         panelsTelemetry.addData("leftRear", drivetrain.leftRear.getPower());
         panelsTelemetry.addData("rightFront", drivetrain.rightFront.getPower());
         panelsTelemetry.addData("rightRear", drivetrain.rightRear.getPower());
-        panelsTelemetry.addData("flywheel", outtake.rightFlywheel.getPower());
+        panelsTelemetry.addData("leftFlywheel", outtake.rightFlywheel.getPower());
+        panelsTelemetry.addData("rightFlywheel", outtake.rightFlywheel.getPower());
+
     }
 }
