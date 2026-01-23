@@ -11,7 +11,7 @@ import org.firstinspires.ftc.teamcode.resources.hardware.Endgame;
 import org.firstinspires.ftc.teamcode.resources.hardware.Intake;
 import org.firstinspires.ftc.teamcode.resources.hardware.Outtake;
 import org.firstinspires.ftc.teamcode.resources.hardware.Possession;
-import org.firstinspires.ftc.teamcode.resources.util.enums.GamepadConstants;
+import org.firstinspires.ftc.teamcode.resources.util.enums.RobotConstants;
 import org.firstinspires.ftc.teamcode.resources.util.enums.HardwareStates;
 import org.firstinspires.ftc.teamcode.resources.util.functions.FilterStickInput;
 
@@ -28,9 +28,10 @@ public class PracticeTeleOp extends OpMode {
     private Gamepad toolOp;
     private TelemetryManager panelsTelemetry;
     private FilterStickInput fsi;
-    private boolean driveToggle, intakeToggle, outtakeToggle, holderToggle, endgameToggle, endgameReverseToggle = false;
-    private double driveMode = GamepadConstants.NORMAL.getEnumValue();
-    private double turnMode = GamepadConstants.TURN_SENSITIVITY.getEnumValue();
+    private boolean driveToggle, intakeToggle, outtakeToggle, holderToggle, endgameToggle, endgameReverseToggle, shooterTargetToggle = false;
+    private double driveMode = RobotConstants.NORMAL.getEnumValue();
+    private double turnMode = RobotConstants.TURN_SENSITIVITY.getEnumValue();
+    private double shooterMode = RobotConstants.LOW_TARGET.getEnumValue();
     private HardwareStates reverseRampState = HardwareStates.NULL;
     private HardwareStates manualPwrControlState = HardwareStates.NULL;
 
@@ -65,13 +66,13 @@ public class PracticeTeleOp extends OpMode {
 
         /* gearshift */
         if (driverOp.xWasPressed()) {
-            driveMode = GamepadConstants.NORMAL.getEnumValue();
-            turnMode = GamepadConstants.TURN_SENSITIVITY.getEnumValue();
+            driveMode = RobotConstants.NORMAL.getEnumValue();
+            turnMode = RobotConstants.TURN_SENSITIVITY.getEnumValue();
         }
 
         if (driverOp.aWasPressed()) {
-            driveMode = GamepadConstants.SLOW.getEnumValue();
-            turnMode = GamepadConstants.SLOW_TURN.getEnumValue();
+            driveMode = RobotConstants.SLOW.getEnumValue();
+            turnMode = RobotConstants.SLOW_TURN.getEnumValue();
         }
 
         /* intake */
@@ -86,14 +87,24 @@ public class PracticeTeleOp extends OpMode {
         }
 
         /* outtake */
-        if (toolOp.yWasPressed()) {
+        if (toolOp.yWasPressed()) { //subsystem activation
             outtakeToggle = !outtakeToggle;
         }
 
         if (outtakeToggle == true) {
-            outtake.on();
+            outtake.on(shooterMode);
         } else {
             outtake.off();
+        }
+
+        if (toolOp.bWasPressed()) {
+            shooterTargetToggle = !shooterTargetToggle;
+        }
+
+        if (shooterTargetToggle == true) {
+            shooterMode = RobotConstants.HIGH_TARGET.getEnumValue();
+        } else {
+            shooterMode = RobotConstants.LOW_TARGET.getEnumValue();
         }
 
         /* ramp */
@@ -183,23 +194,25 @@ public class PracticeTeleOp extends OpMode {
         telemetry.addData("Outtake: ", outtake.state);
         telemetry.addData("Ramp: ", possession.state);
         telemetry.addData("Slides: ", endgame.state);
-        telemetry.addLine("-----===POWER LEVELS===-----");
-        telemetry.addData("Outtake power: ", (outtake.power)*100+"%");
+        telemetry.addLine("-----===OUTTAKE VELOCITY TRACKING===-----");
+        telemetry.addData("Outtake target velocity: ", shooterMode);
+        telemetry.addData("Outtake velocity: ", Math.abs(outtake.leftFlywheel.getVelocity()));
         telemetry.addLine("-----===UTILITY STATUSES===-----");
         telemetry.addData("Ramp reverse: ", reverseRampState);
-        telemetry.addData("Manual flywheel control: ", manualPwrControlState);
-        //ensure panels actually shows the stringed version lol
+//        telemetry.addData("Manual flywheel control: ", manualPwrControlState);
+
         panelsTelemetry.addLine("-----===HARDWARE STATUSES===-----");
         panelsTelemetry.addData("Drivetrain: ", drivetrain.state);
         panelsTelemetry.addData("Intake: ", intake.state);
         panelsTelemetry.addData("Outtake: ", outtake.state);
         panelsTelemetry.addData("Ramp: ", possession.state);
         panelsTelemetry.addData("Slides: ", endgame.state);
-        panelsTelemetry.addLine("-----===POWER LEVELS===-----");
-        panelsTelemetry.addData("Outtake power: ", (outtake.power)*100);
+        panelsTelemetry.addLine("-----===OUTTAKE VELOCITY TRACKING===-----");
+        panelsTelemetry.addData("Outtake target velocity: ", shooterMode);
+        panelsTelemetry.addData("Outtake velocity: ", outtake.leftFlywheel.getVelocity());
         panelsTelemetry.addLine("-----===UTILITY STATUSES===-----");
         panelsTelemetry.addData("Ramp reverse: ", reverseRampState);
-        panelsTelemetry.addData("Manual flywheel control: ", manualPwrControlState);
+//        panelsTelemetry.addData("Manual flywheel control: ", manualPwrControlState);
 
         telemetry.update();
         panelsTelemetry.update();

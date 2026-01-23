@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 
 import org.firstinspires.ftc.teamcode.resources.util.enums.HardwareStates;
 
@@ -14,7 +15,7 @@ public class Outtake {
     public DcMotorEx leftFlywheel, rightFlywheel;
     public HardwareStates state = HardwareStates.NULL;
     public double power;
-
+    private final PIDFCoefficients pidfCoefficients = new PIDFCoefficients(60.00, 0.00, 0.00, 14.50);
 
     public void initOuttake(@NonNull HardwareMap hMap) {
         /* motor config */
@@ -31,12 +32,12 @@ public class Outtake {
         rightFlywheel.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         /* state control+power settings */
         state = HardwareStates.INITIALIZED;
-        power = 0.50;
+        leftFlywheel.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, pidfCoefficients);
     }
 
-    public void on() {
-        leftFlywheel.setPower(-power);
-        rightFlywheel.setPower(-power);
+    public void on(double target) {
+        leftFlywheel.setVelocity(-target);
+        rightFlywheel.setVelocity(-target);
         state = HardwareStates.ON;
     }
 

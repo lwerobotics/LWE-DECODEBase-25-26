@@ -11,7 +11,7 @@ import org.firstinspires.ftc.teamcode.resources.hardware.Endgame;
 import org.firstinspires.ftc.teamcode.resources.hardware.Intake;
 import org.firstinspires.ftc.teamcode.resources.hardware.Outtake;
 import org.firstinspires.ftc.teamcode.resources.hardware.Possession;
-import org.firstinspires.ftc.teamcode.resources.util.enums.GamepadConstants;
+import org.firstinspires.ftc.teamcode.resources.util.enums.RobotConstants;
 import org.firstinspires.ftc.teamcode.resources.util.enums.HardwareStates;
 import org.firstinspires.ftc.teamcode.resources.util.functions.FilterStickInput;
 
@@ -28,9 +28,10 @@ public class SyedTeleOp extends OpMode {
     private Gamepad toolOp;
     private TelemetryManager panelsTelemetry;
     private FilterStickInput fsi;
-    private boolean driveToggle, intakeToggle, outtakeToggle, holderToggle, endgameToggle, endgameReverseToggle = false;
-    private double driveMode = GamepadConstants.NORMAL.getEnumValue();
-    private double turnMode = GamepadConstants.TURN_SENSITIVITY.getEnumValue();
+    private boolean driveToggle, intakeToggle, outtakeToggle, holderToggle, endgameToggle, endgameReverseToggle, shooterTargetToggle = false;
+    private double driveMode = RobotConstants.NORMAL.getEnumValue();
+    private double turnMode = RobotConstants.TURN_SENSITIVITY.getEnumValue();
+    private double shooterMode = RobotConstants.LOW_TARGET.getEnumValue();
     private HardwareStates reverseRampState = HardwareStates.NULL;
     private HardwareStates manualPwrControlState = HardwareStates.NULL;
 
@@ -65,13 +66,13 @@ public class SyedTeleOp extends OpMode {
 
         /* gearshift */
         if (driverOp.xWasPressed()) {
-            driveMode = GamepadConstants.NORMAL.getEnumValue();
-            turnMode = GamepadConstants.TURN_SENSITIVITY.getEnumValue();
+            driveMode = RobotConstants.NORMAL.getEnumValue();
+            turnMode = RobotConstants.TURN_SENSITIVITY.getEnumValue();
         }
 
         if (driverOp.aWasPressed()) {
-            driveMode = GamepadConstants.SLOW.getEnumValue();
-            turnMode = GamepadConstants.SLOW_TURN.getEnumValue();
+            driveMode = RobotConstants.SLOW.getEnumValue();
+            turnMode = RobotConstants.SLOW_TURN.getEnumValue();
         }
 
         /* intake */
@@ -86,14 +87,24 @@ public class SyedTeleOp extends OpMode {
         }
 
         /* outtake */
-        if (toolOp.yWasPressed()) {
+        if (toolOp.yWasPressed()) { //subsystem activation
             outtakeToggle = !outtakeToggle;
         }
 
         if (outtakeToggle == true) {
-            outtake.on();
+            outtake.on(shooterMode);
         } else {
             outtake.off();
+        }
+
+        if (toolOp.bWasPressed()) {
+            shooterTargetToggle = !shooterTargetToggle;
+        }
+
+        if (shooterTargetToggle == true) {
+            shooterMode = RobotConstants.HIGH_TARGET.getEnumValue();
+        } else {
+            shooterMode = RobotConstants.LOW_TARGET.getEnumValue();
         }
 
         /* ramp */

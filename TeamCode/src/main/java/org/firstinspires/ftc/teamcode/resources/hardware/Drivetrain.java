@@ -127,7 +127,6 @@ public class Drivetrain{
     /** Parameter for setting the power of all drive motors at once (updated 10/16/25)
      * @param power The motor power desired to be given to all motors (can be used for a primitive brake)
      */
-    @SuppressWarnings("ALL")
     public void setGlobalPowers(double power) {
         leftFront.setPower(power);
         leftRear.setPower(power);
@@ -141,20 +140,24 @@ public class Drivetrain{
         }
     }
 
-    public void driveDistance(double inches) throws InterruptedException {
+    public void driveDistance(double inches) {
         int ms = (int)(Math.abs(inches) * COUNTS_PER_INCH);
         boolean goForward = ms > 0;
 
-        driveTime(ms, goForward);
+        try {
+            driveTime(ms, goForward);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public void driveTime(double milliseconds, boolean goForward) throws InterruptedException {
         double multiplier;
 
         if (goForward) {
-            multiplier = -1.0;
-        } else {
             multiplier = 1.0;
+        } else {
+            multiplier = -1.0;
         }
 
         drive(multiplier * 0.8, 0, 0);
