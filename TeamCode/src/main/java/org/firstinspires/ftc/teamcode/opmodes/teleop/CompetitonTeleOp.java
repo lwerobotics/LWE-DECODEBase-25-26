@@ -194,6 +194,8 @@ public class CompetitonTeleOp extends OpMode {
         telemetry.addData("Outtake power: ", (int)(userOuttakePower*100) + "%");
         telemetry.addLine("-----===UTILITY STATUSES===-----");
         telemetry.addData("Ramp reverse: ", reverseRampState);
+        telemetry.addData("Left flywheel port: ", outtake.leftFlywheel.getPortNumber());
+        telemetry.addData("Right flywheel port: ", outtake.rightFlywheel.getPortNumber());
         //ensure panels actually shows the stringed version lol
         panelsTelemetry.addLine("-----===HARDWARE STATUSES===-----");
         panelsTelemetry.addData("Drivetrain: ", drivetrain.state);

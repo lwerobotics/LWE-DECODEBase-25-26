@@ -27,6 +27,12 @@ public class Endgame {
         state = HardwareStates.INITIALIZED;
     }
 
+    /* THE AGENDA:
+    * 1. Find circumfrence of the belt holder at the motor head
+    * 2. Find ticks/circumfrence travelled
+    * 3. Program auto-stop to # of ticks to travel 18 inches (18 / (diameter * 3.1415)) *
+    */
+
     public void extend() {
         leftSlide.setPower(1.0);
         rightSlide.setPower(-1.0);
