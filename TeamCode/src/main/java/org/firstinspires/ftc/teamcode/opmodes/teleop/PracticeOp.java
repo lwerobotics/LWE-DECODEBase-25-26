@@ -11,14 +11,14 @@ import org.firstinspires.ftc.teamcode.resources.hardware.Endgame;
 import org.firstinspires.ftc.teamcode.resources.hardware.Intake;
 import org.firstinspires.ftc.teamcode.resources.hardware.Outtake;
 import org.firstinspires.ftc.teamcode.resources.hardware.Possession;
-import org.firstinspires.ftc.teamcode.resources.util.enums.RobotConstants;
 import org.firstinspires.ftc.teamcode.resources.util.enums.HardwareStates;
+import org.firstinspires.ftc.teamcode.resources.util.enums.RobotConstants;
 import org.firstinspires.ftc.teamcode.resources.util.functions.FilterStickInput;
 
 
-@TeleOp(name = "CompOp", group = "Full TeleOps")
+@TeleOp(name = "PracticeTeleOp", group = "In-dev TeleOps")
 @SuppressWarnings({"FieldCanBeLocal", "FieldMayBeFinal"})
-public class CompetitonTeleOp extends OpMode {
+public class PracticeOp extends OpMode {
     private Drivetrain drivetrain;
     private Intake intake;
     private Outtake outtake;
@@ -65,12 +65,12 @@ public class CompetitonTeleOp extends OpMode {
                 fsi.filterStickInput(-driverOp.right_stick_x) * turnMode);
 
         /* gearshift */
-        if (driverOp.xWasPressed()) {
+        if (driverOp.dpadRightWasPressed()) {
             driveMode = RobotConstants.NORMAL.getEnumValue();
             turnMode = RobotConstants.TURN_SENSITIVITY.getEnumValue();
         }
 
-        if (driverOp.aWasPressed()) {
+        if (driverOp.dpadLeftWasPressed()) {
             driveMode = RobotConstants.SLOW.getEnumValue();
             turnMode = RobotConstants.SLOW_TURN.getEnumValue();
         }
@@ -194,8 +194,8 @@ public class CompetitonTeleOp extends OpMode {
         telemetry.addData("Outtake power: ", (int)(userOuttakePower*100) + "%");
         telemetry.addLine("-----===UTILITY STATUSES===-----");
         telemetry.addData("Ramp reverse: ", reverseRampState);
-        telemetry.addData("Left flywheel port: ", outtake.leftFlywheel.getPortNumber());
-        telemetry.addData("Right flywheel port: ", outtake.rightFlywheel.getPortNumber());
+        telemetry.addData("Target outtake velocity: ", shooterMode);
+        telemetry.addData("Outtake velocity: ", Math.abs((outtake.leftFlywheel.getVelocity() + outtake.rightFlywheel.getVelocity()) / 2));
         //ensure panels actually shows the stringed version lol
         panelsTelemetry.addLine("-----===HARDWARE STATUSES===-----");
         panelsTelemetry.addData("Drivetrain: ", drivetrain.state);

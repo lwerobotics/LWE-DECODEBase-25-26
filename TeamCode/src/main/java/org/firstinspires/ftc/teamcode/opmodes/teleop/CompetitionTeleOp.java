@@ -11,14 +11,14 @@ import org.firstinspires.ftc.teamcode.resources.hardware.Endgame;
 import org.firstinspires.ftc.teamcode.resources.hardware.Intake;
 import org.firstinspires.ftc.teamcode.resources.hardware.Outtake;
 import org.firstinspires.ftc.teamcode.resources.hardware.Possession;
-import org.firstinspires.ftc.teamcode.resources.util.enums.RobotConstants;
 import org.firstinspires.ftc.teamcode.resources.util.enums.HardwareStates;
+import org.firstinspires.ftc.teamcode.resources.util.enums.RobotConstants;
 import org.firstinspires.ftc.teamcode.resources.util.functions.FilterStickInput;
 
 
-@TeleOp(name = "PracticeOp", group = "In-dev TeleOps")
+@TeleOp(name = "CompOp", group = "Full TeleOps")
 @SuppressWarnings({"FieldCanBeLocal", "FieldMayBeFinal"})
-public class PracticeTeleOp extends OpMode {
+public class CompetitionTeleOp extends OpMode {
     private Drivetrain drivetrain;
     private Intake intake;
     private Outtake outtake;
@@ -65,12 +65,12 @@ public class PracticeTeleOp extends OpMode {
                 fsi.filterStickInput(-driverOp.right_stick_x) * turnMode);
 
         /* gearshift */
-        if (driverOp.xWasPressed()) {
+        if (driverOp.dpadRightWasPressed()) {
             driveMode = RobotConstants.NORMAL.getEnumValue();
             turnMode = RobotConstants.TURN_SENSITIVITY.getEnumValue();
         }
 
-        if (driverOp.aWasPressed()) {
+        if (driverOp.dpadLeftWasPressed()) {
             driveMode = RobotConstants.SLOW.getEnumValue();
             turnMode = RobotConstants.SLOW_TURN.getEnumValue();
         }
@@ -80,10 +80,27 @@ public class PracticeTeleOp extends OpMode {
             intakeToggle = !intakeToggle;
         }
 
-        if (intakeToggle == true) {
+        if (toolOp.left_trigger > 0.65) {
+            intake.out(1.0);
+            reverseRampState = HardwareStates.ON;
+        } else if (intakeToggle) {
             intake.in(1.0);
         } else {
             intake.stop();
+            reverseRampState = HardwareStates.OFF;
+        }
+
+        /* ramp */
+        if (toolOp.xWasPressed()) {
+            holderToggle = !holderToggle;
+        }
+
+        if (toolOp.left_trigger > 0.65) {
+            possession.repel();
+        } else if (holderToggle) {
+            possession.pull();
+        } else {
+            possession.stop();
         }
 
         /* outtake */
@@ -107,17 +124,6 @@ public class PracticeTeleOp extends OpMode {
             shooterMode = RobotConstants.LOW_TARGET.getEnumValue();
         }
 
-        /* ramp */
-        if (toolOp.xWasPressed()) {
-            holderToggle = !holderToggle;
-        }
-
-        if (holderToggle == true) {
-            possession.pull();
-        } else {
-            possession.stop();
-        }
-
         /* endgame (TEST TS) */
         if (toolOp.leftBumperWasPressed()) {
             endgameToggle = !endgameToggle;
@@ -127,48 +133,38 @@ public class PracticeTeleOp extends OpMode {
             endgameReverseToggle = !endgameReverseToggle;
         }
 
-        if (endgameToggle == true) {
+        if (endgameToggle) {
             endgame.extend();
         } else {
             endgame.brake();
         }
 
-        if (endgameReverseToggle == true) {
+        if (endgameReverseToggle) {
             endgame.retract();
         } else {
             endgame.brake();
         }
-
-        /* intake+possession reverse */
-        if (toolOp.left_trigger > 0.65) {
-            if (intakeToggle == false && holderToggle == false) {
-                intake.stop();
-                intake.out(1.0);
-                possession.repel();
-                reverseRampState = HardwareStates.ON;
-            }
-        } else if (toolOp.left_trigger < 0.65) {
-            reverseRampState = HardwareStates.OFF;
-        }
-
+        String roundotk = String.format("%.2f", outtake.power);
+        double userOuttakePower = Double.parseDouble(roundotk);
         /* flywheel power incrementer (REPLACE WITH PIDF SOON AS POSSIBLE!!!!) */
         if (driverOp.dpadUpWasPressed()) {
-            if (outtake.power >= 0.0 && outtake.power < 1.0) {
-                outtake.power = outtake.power + 0.01;
-            } else if (outtake.power == 1.0) {
-                System.out.println("bleh");
+            if ( userOuttakePower >= 0.0 &&
+                    userOuttakePower < 1.0) {
+                outtake.power = userOuttakePower + 0.01;
+                roundotk = String.format("%.2f", outtake.power);
+                userOuttakePower = Double.parseDouble(roundotk);
             }
         } else if (driverOp.dpadDownWasPressed()) {
-            if (outtake.power > 0.0 && outtake.power <= 1.0) {
-                outtake.power = outtake.power - 0.01;
-            } else if (outtake.power == 0.0) {
-                System.out.println("blah");
+            if (userOuttakePower > 0.0 && (userOuttakePower) <= 1.0) {
+                outtake.power =userOuttakePower - 0.01;
+                roundotk = String.format("%.2f", outtake.power);
+                userOuttakePower = Double.parseDouble(roundotk);
             }
         }
 
         /* the silly */
         if (driverOp.right_trigger > 0.65) {
-            if (intakeToggle == false && holderToggle == false) {
+            if (!intakeToggle && !holderToggle) {
                 intake.stop();
                 intake.in(1.0);
                 possession.pull();
@@ -194,25 +190,23 @@ public class PracticeTeleOp extends OpMode {
         telemetry.addData("Outtake: ", outtake.state);
         telemetry.addData("Ramp: ", possession.state);
         telemetry.addData("Slides: ", endgame.state);
-        telemetry.addLine("-----===OUTTAKE VELOCITY TRACKING===-----");
-        telemetry.addData("Outtake target velocity: ", shooterMode);
-        telemetry.addData("Outtake velocity: ", Math.abs(outtake.leftFlywheel.getVelocity()));
+        telemetry.addLine("-----===POWER LEVELS===-----");
+        telemetry.addData("Outtake power: ", (int)(userOuttakePower*100) + "%");
         telemetry.addLine("-----===UTILITY STATUSES===-----");
         telemetry.addData("Ramp reverse: ", reverseRampState);
-//        telemetry.addData("Manual flywheel control: ", manualPwrControlState);
-
+        telemetry.addData("Target outtake velocity: ", shooterMode);
+        telemetry.addData("Outtake velocity: ", Math.abs((outtake.leftFlywheel.getVelocity() + outtake.rightFlywheel.getVelocity()) / 2));
+        //ensure panels actually shows the stringed version lol
         panelsTelemetry.addLine("-----===HARDWARE STATUSES===-----");
         panelsTelemetry.addData("Drivetrain: ", drivetrain.state);
         panelsTelemetry.addData("Intake: ", intake.state);
         panelsTelemetry.addData("Outtake: ", outtake.state);
         panelsTelemetry.addData("Ramp: ", possession.state);
         panelsTelemetry.addData("Slides: ", endgame.state);
-        panelsTelemetry.addLine("-----===OUTTAKE VELOCITY TRACKING===-----");
-        panelsTelemetry.addData("Outtake target velocity: ", shooterMode);
-        panelsTelemetry.addData("Outtake velocity: ", outtake.leftFlywheel.getVelocity());
+        panelsTelemetry.addLine("-----===POWER LEVELS===-----");
+        panelsTelemetry.addData("Outtake power: ", (userOuttakePower * 100));
         panelsTelemetry.addLine("-----===UTILITY STATUSES===-----");
         panelsTelemetry.addData("Ramp reverse: ", reverseRampState);
-//        panelsTelemetry.addData("Manual flywheel control: ", manualPwrControlState);
 
         telemetry.update();
         panelsTelemetry.update();
@@ -222,6 +216,8 @@ public class PracticeTeleOp extends OpMode {
         panelsTelemetry.addData("leftRear", drivetrain.leftRear.getPower());
         panelsTelemetry.addData("rightFront", drivetrain.rightFront.getPower());
         panelsTelemetry.addData("rightRear", drivetrain.rightRear.getPower());
-        panelsTelemetry.addData("flywheel", outtake.rightFlywheel.getPower());
+        panelsTelemetry.addData("leftFlywheel", outtake.rightFlywheel.getPower());
+        panelsTelemetry.addData("rightFlywheel", outtake.rightFlywheel.getPower());
+
     }
 }
