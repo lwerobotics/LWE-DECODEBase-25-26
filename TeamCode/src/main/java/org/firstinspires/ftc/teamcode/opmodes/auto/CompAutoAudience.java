@@ -9,7 +9,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.teamcode.resources.hardware.Drivetrain;
 
 @SuppressWarnings("FieldCanBeLocal")
-@Autonomous(name = "CompAuto (Audience Side)")
+@Autonomous(group = "Full Autos", name = "CompAuto (Audience Side)")
 public class CompAutoAudience extends LinearOpMode {
     private Drivetrain drivetrain;
     private ElapsedTime runtime;
