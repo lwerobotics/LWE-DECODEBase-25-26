@@ -9,6 +9,7 @@ public enum RobotConstants {
     SLOW(0.50),
     LOW_TARGET(1200),
     HIGH_TARGET(1460);
+
     private final double value;
 
     RobotConstants(double value) {

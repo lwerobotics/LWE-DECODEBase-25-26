@@ -33,6 +33,7 @@ public class Outtake {
         /* state control+power settings */
         state = HardwareStates.INITIALIZED;
         leftFlywheel.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, pidfCoefficients);
+        rightFlywheel.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, pidfCoefficients);
     }
 
     public void on(double target) {
