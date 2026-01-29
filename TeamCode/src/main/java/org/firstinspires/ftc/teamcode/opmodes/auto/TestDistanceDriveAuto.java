@@ -26,11 +26,12 @@ public class TestDistanceDriveAuto extends LinearOpMode {
 
         waitForStart();
 
-        drivetrain.drive(1.0, 0, 0);
-        sleep(380);
+//        drivetrain.driveDistance(12);
+        drivetrain.drive(1.0,0.0,1.0);
+        sleep(500);
+        drivetrain.setGlobalPowers(0.0);
         outtake.on(1200);
         sleep(5000);
-        drivetrain.setGlobalPowers(0.0);
         outtake.off();
     }
 }
