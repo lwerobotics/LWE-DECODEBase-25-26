@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.opmodes.teleop;
 
+import android.annotation.SuppressLint;
+
 import com.bylazar.telemetry.PanelsTelemetry;
 import com.bylazar.telemetry.TelemetryManager;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
@@ -18,6 +20,7 @@ import org.firstinspires.ftc.teamcode.resources.util.functions.FilterStickInput;
 
 @TeleOp(name = "PracticeTeleOp", group = "In-dev TeleOps")
 @SuppressWarnings({"FieldCanBeLocal", "FieldMayBeFinal"})
+@SuppressLint("DefaultLocale")
 public class PracticeOp extends OpMode {
     private Drivetrain drivetrain;
     private Intake intake;
@@ -216,8 +219,8 @@ public class PracticeOp extends OpMode {
         panelsTelemetry.addData("leftRear", drivetrain.leftRear.getPower());
         panelsTelemetry.addData("rightFront", drivetrain.rightFront.getPower());
         panelsTelemetry.addData("rightRear", drivetrain.rightRear.getPower());
-        panelsTelemetry.addData("leftFlywheel", outtake.rightFlywheel.getPower());
-        panelsTelemetry.addData("rightFlywheel", outtake.rightFlywheel.getPower());
-
+        panelsTelemetry.addData("Left Stick X", driverOp.left_stick_x);
+        panelsTelemetry.addData("Left Stick Y", driverOp.left_stick_y);
+        panelsTelemetry.addData("Right Stick X", driverOp.right_stick_x);
     }
 }
